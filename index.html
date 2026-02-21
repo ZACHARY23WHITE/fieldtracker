@@ -113,6 +113,34 @@
             color: var(--color-text);
         }
 
+        .entered-by-wrapper {
+            max-width: 240px;
+            margin-bottom: var(--space-16);
+        }
+
+        .entered-by-wrapper label {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .entered-by-wrapper input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            background-color: var(--color-background);
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .entered-by-wrapper input:focus {
+            outline: 2px solid var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
         .zone-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -380,15 +408,15 @@
             .zone-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .reading-inputs {
                 grid-template-columns: repeat(2, 1fr);
             }
-            
+
             .chart-bars {
                 height: 300px;
             }
-            
+
             .chart {
                 height: 350px;
             }
@@ -403,6 +431,11 @@
         <div class="section">
             <div class="section-header">
                 <h2 class="section-title">Moisture Readings</h2>
+            </div>
+
+            <div class="entered-by-wrapper">
+                <label for="enteredBy">Entered by</label>
+                <input type="text" id="enteredBy" placeholder="First name">
             </div>
 
             <div class="zone-grid" id="zoneGrid"></div>
@@ -522,8 +555,12 @@
 
         function submitReadings() {
             const timestamp = new Date();
+            const enteredByInput = document.getElementById('enteredBy');
+            const enteredBy = enteredByInput ? enteredByInput.value.trim() : '';
+
             const reading = {
                 date: timestamp.toLocaleString(),
+                enteredBy: enteredBy || null,
                 zones: []
             };
 
@@ -569,32 +606,32 @@
                 }
                 updateZoneAverage(zoneIndex);
             });
+            document.getElementById('enteredBy').value = '';
             showToast('Form cleared.');
         }
 
         const zoneColors = [
-            '#2D74A6',  // Left Field - blue
-            '#E68A3C',  // Center Field - orange
-            '#4CAF50',  // Right Field - green
-            '#9C27B0',  // 1st Base Line - purple
-            '#F44336',  // 3rd Base Line - red
-            '#00BCD4'   // Infield - cyan
+            '#2D74A6',
+            '#E68A3C',
+            '#4CAF50',
+            '#9C27B0',
+            '#F44336',
+            '#00BCD4'
         ];
 
         function updateChart() {
             const chartSvg = document.getElementById('chartSvg');
             const chartLegend = document.getElementById('chartLegend');
-            
+
             if (readingsHistory.length === 0) {
                 chartSvg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="var(--color-text-secondary)" font-size="14">No data to display</text>';
                 chartLegend.innerHTML = '';
                 return;
             }
 
-            // Prepare data structure - reverse history for chronological order
             const chronologicalHistory = [...readingsHistory].reverse();
             const zoneData = {};
-            
+
             zones.forEach(zone => {
                 zoneData[zone] = [];
             });
@@ -609,14 +646,12 @@
                 });
             });
 
-            // Chart dimensions
             const padding = { top: 20, right: 20, bottom: 40, left: 50 };
             const svgWidth = chartSvg.clientWidth || 800;
             const svgHeight = chartSvg.clientHeight || 350;
             const chartWidth = svgWidth - padding.left - padding.right;
             const chartHeight = svgHeight - padding.top - padding.bottom;
 
-            // Find min/max values
             let allValues = [];
             Object.values(zoneData).forEach(data => {
                 allValues = allValues.concat(data.map(d => d.value));
@@ -625,16 +660,13 @@
             const maxValue = Math.max(...allValues);
             const valueRange = maxValue - minValue || 1;
 
-            // Clear SVG
             chartSvg.innerHTML = '';
 
-            // Create grid lines
             const numGridLines = 5;
             for (let i = 0; i <= numGridLines; i++) {
                 const y = padding.top + (chartHeight / numGridLines) * i;
                 const value = maxValue - (valueRange / numGridLines) * i;
-                
-                // Grid line
+
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
                 line.setAttribute('x1', padding.left);
                 line.setAttribute('y1', y);
@@ -645,7 +677,6 @@
                 line.setAttribute('opacity', '0.3');
                 chartSvg.appendChild(line);
 
-                // Y-axis label
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', padding.left - 10);
                 text.setAttribute('y', y + 4);
@@ -656,11 +687,10 @@
                 chartSvg.appendChild(text);
             }
 
-            // X-axis labels
             chronologicalHistory.forEach((reading, index) => {
                 const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * index;
                 const shortDate = new Date(reading.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-                
+
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
                 text.setAttribute('x', x);
                 text.setAttribute('y', svgHeight - padding.bottom + 20);
@@ -671,19 +701,17 @@
                 chartSvg.appendChild(text);
             });
 
-            // Draw lines for each zone
             Object.keys(zoneData).forEach((zoneName, zoneIndex) => {
                 const data = zoneData[zoneName];
                 if (data.length === 0) return;
 
                 const color = zoneColors[zoneIndex % zoneColors.length];
 
-                // Create path
                 let pathD = '';
                 data.forEach((point, i) => {
                     const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
                     const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
-                    
+
                     if (i === 0) {
                         pathD += `M ${x} ${y}`;
                     } else {
@@ -697,7 +725,6 @@
                 path.setAttribute('stroke', color);
                 chartSvg.appendChild(path);
 
-                // Add points
                 data.forEach(point => {
                     const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
                     const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
@@ -709,8 +736,7 @@
                     circle.setAttribute('fill', color);
                     circle.setAttribute('class', 'chart-point');
                     circle.style.cursor = 'pointer';
-                    
-                    // Tooltip
+
                     circle.addEventListener('mouseenter', (e) => {
                         const tooltip = document.getElementById('chartTooltip');
                         tooltip.innerHTML = `<strong>${zoneName}</strong><br>${point.date}<br>Value: ${point.value.toFixed(1)}`;
@@ -718,7 +744,7 @@
                         tooltip.style.top = `${e.pageY - 40}px`;
                         tooltip.classList.add('show');
                     });
-                    
+
                     circle.addEventListener('mouseleave', () => {
                         const tooltip = document.getElementById('chartTooltip');
                         tooltip.classList.remove('show');
@@ -728,7 +754,6 @@
                 });
             });
 
-            // Update legend
             chartLegend.innerHTML = '';
             zones.forEach((zone, index) => {
                 const item = document.createElement('div');
@@ -749,7 +774,7 @@
 
         function updateHistory() {
             const historyList = document.getElementById('historyList');
-            
+
             if (readingsHistory.length === 0) {
                 historyList.innerHTML = '<div class="empty-state">No readings recorded yet. Submit your first reading above!</div>';
                 return;
@@ -764,7 +789,7 @@
                 const leftDiv = document.createElement('div');
                 const dateDiv = document.createElement('div');
                 dateDiv.className = 'history-date';
-                dateDiv.textContent = reading.date;
+                dateDiv.textContent = reading.date + (reading.enteredBy ? ` \u2022 ${reading.enteredBy}` : '');
                 leftDiv.appendChild(dateDiv);
 
                 const zonesDiv = document.createElement('div');
@@ -784,49 +809,40 @@
             }
 
             try {
-                // Create CSV header
-                let csv = 'Date,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
-                
-                // Add data rows
+                let csv = 'Date,Entered By,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
+
                 readingsHistory.forEach(reading => {
-                    const row = ['"' + reading.date + '"'];
-                    
-                    // Add zone averages in order
+                    const row = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"'];
+
                     zones.forEach(zoneName => {
                         const zone = reading.zones.find(z => z.name === zoneName);
                         row.push(zone ? zone.average.toFixed(1) : '');
                     });
-                    
+
                     csv += row.join(',') + '\n';
                 });
 
-                // Create blob with BOM for better Excel compatibility
                 const BOM = '\uFEFF';
                 const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
-                
-                // Create download link with macOS compatibility
+
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 const fileName = `baseball-field-moisture-${new Date().toISOString().split('T')[0]}.csv`;
-                
-                // Set attributes
+
                 link.href = url;
                 link.download = fileName;
-                
-                // Force download by adding to body, clicking, and removing
+
                 document.body.appendChild(link);
-                
-                // Use setTimeout to ensure link is in DOM before clicking
+
                 setTimeout(() => {
                     link.click();
-                    
-                    // Cleanup after a delay to ensure download starts
+
                     setTimeout(() => {
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
                     }, 100);
                 }, 10);
-                
+
                 showToast(`Exporting ${readingsHistory.length} reading(s)...`);
             } catch (error) {
                 console.error('Export error:', error);
@@ -841,9 +857,8 @@
             const reader = new FileReader();
             reader.onload = function(e) {
                 try {
-                    // Try parsing as JSON first
                     const importedData = JSON.parse(e.target.result);
-                    
+
                     if (!Array.isArray(importedData)) {
                         showToast('Invalid file format. Please upload a valid export file.');
                         return;
@@ -854,31 +869,30 @@
                     updateHistory();
                     showToast(`Successfully imported ${importedData.length} reading(s)!`);
                 } catch (error) {
-                    // If JSON parsing fails, try CSV
                     try {
                         const csvData = e.target.result;
                         const lines = csvData.split('\n').filter(line => line.trim());
-                        
+
                         if (lines.length < 2) {
                             showToast('CSV file appears to be empty.');
                             return;
                         }
-                        
-                        // Skip header row
+
                         const dataLines = lines.slice(1);
                         const importedReadings = [];
-                        
+
                         dataLines.forEach(line => {
                             const values = line.split(',');
-                            if (values.length < 7) return;
-                            
+                            if (values.length < 8) return;
+
                             const reading = {
-                                date: values[0],
+                                date: values[0].replace(/"/g, ''),
+                                enteredBy: values[1].replace(/"/g, '') || null,
                                 zones: []
                             };
-                            
+
                             zones.forEach((zoneName, index) => {
-                                const value = parseFloat(values[index + 1]);
+                                const value = parseFloat(values[index + 2]);
                                 if (!isNaN(value)) {
                                     reading.zones.push({
                                         name: zoneName,
@@ -887,17 +901,17 @@
                                     });
                                 }
                             });
-                            
+
                             if (reading.zones.length > 0) {
                                 importedReadings.push(reading);
                             }
                         });
-                        
+
                         if (importedReadings.length === 0) {
                             showToast('No valid data found in CSV file.');
                             return;
                         }
-                        
+
                         readingsHistory = importedReadings;
                         updateChart();
                         updateHistory();
@@ -908,8 +922,7 @@
                 }
             };
             reader.readAsText(file);
-            
-            // Reset file input
+
             event.target.value = '';
         }
 
@@ -927,4 +940,3 @@
     </script>
 </body>
 </html>
-
