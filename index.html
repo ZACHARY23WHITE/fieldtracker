@@ -472,7 +472,39 @@
 
     <div class="toast" id="toast"></div>
 
-    <script>
+    <!-- ===================== FIREBASE SDK (CDN) ===================== -->
+    <script type="module">
+        // --- Firebase imports from CDN (no npm needed) ---
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
+        import {
+            getFirestore,
+            collection,
+            addDoc,
+            query,
+            orderBy,
+            onSnapshot,
+            Timestamp
+        } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
+
+        // --- Your Firebase config ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBFmnx84dDnmUn205rBWJvKA5Y9_dPZyNM",
+            authDomain: "groundscrew-17d39.firebaseapp.com",
+            projectId: "groundscrew-17d39",
+            storageBucket: "groundscrew-17d39.firebasestorage.app",
+            messagingSenderId: "861664780343",
+            appId: "1:861664780343:web:ac491fc17e6eab25719fb2",
+            measurementId: "G-XB95M4KK65"
+        };
+
+        // --- Initialize Firebase & Firestore ---
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // ================================================================
+        //  APP CODE
+        // ================================================================
+
         const zones = [
             'Left Field',
             'Center Field',
@@ -484,6 +516,7 @@
 
         let readingsHistory = [];
 
+        // ---------- Zone grid ----------
         function initializeZoneGrid() {
             const grid = document.getElementById('zoneGrid');
             grid.innerHTML = '';
@@ -553,13 +586,14 @@
             }
         }
 
-        function submitReadings() {
-            const timestamp = new Date();
+        // ---------- Submit → save to Firestore ----------
+        async function submitReadings() {
             const enteredByInput = document.getElementById('enteredBy');
             const enteredBy = enteredByInput ? enteredByInput.value.trim() : '';
 
             const reading = {
-                date: timestamp.toLocaleString(),
+                timestamp: Timestamp.now(),
+                date: new Date().toLocaleString(),
                 enteredBy: enteredBy || null,
                 zones: []
             };
@@ -592,12 +626,46 @@
                 return;
             }
 
-            readingsHistory.unshift(reading);
-            updateChart();
-            updateHistory();
-            showToast('Readings submitted successfully!');
+            // Save to Firestore
+            try {
+                await addDoc(collection(db, "moistureReadings"), reading);
+                showToast('Readings saved to Firebase!');
+            } catch (error) {
+                console.error("Error saving to Firebase:", error);
+                showToast('Error saving — check console for details.');
+            }
         }
 
+        // ---------- Real-time listener — keeps chart & history in sync ----------
+        function listenForReadings() {
+            const q = query(
+                collection(db, "moistureReadings"),
+                orderBy("timestamp", "asc")
+            );
+
+            onSnapshot(q, (snapshot) => {
+                readingsHistory = [];
+                snapshot.forEach((doc) => {
+                    const data = doc.data();
+                    readingsHistory.push({
+                        id: doc.id,
+                        date: data.date || data.timestamp?.toDate().toLocaleString() || 'Unknown',
+                        enteredBy: data.enteredBy || null,
+                        zones: data.zones || []
+                    });
+                });
+
+                // Reverse so newest is first (for history display)
+                readingsHistory.reverse();
+                updateChart();
+                updateHistory();
+            }, (error) => {
+                console.error("Firestore listener error:", error);
+                showToast('Error loading data from Firebase.');
+            });
+        }
+
+        // ---------- Clear form ----------
         function clearForm() {
             zones.forEach((zone, zoneIndex) => {
                 for (let i = 1; i <= 6; i++) {
@@ -610,6 +678,7 @@
             showToast('Form cleared.');
         }
 
+        // ---------- Chart ----------
         const zoneColors = [
             '#2D74A6',
             '#E68A3C',
@@ -772,6 +841,7 @@
             });
         }
 
+        // ---------- History list ----------
         function updateHistory() {
             const historyList = document.getElementById('historyList');
 
@@ -802,6 +872,7 @@
             });
         }
 
+        // ---------- Export CSV ----------
         function exportData() {
             if (readingsHistory.length === 0) {
                 showToast('No data to export. Submit some readings first!');
@@ -836,7 +907,6 @@
 
                 setTimeout(() => {
                     link.click();
-
                     setTimeout(() => {
                         document.body.removeChild(link);
                         URL.revokeObjectURL(url);
@@ -846,28 +916,38 @@
                 showToast(`Exporting ${readingsHistory.length} reading(s)...`);
             } catch (error) {
                 console.error('Export error:', error);
-                showToast('Error exporting data. Please try right-clicking the Export button and select "Save Link As..."');
+                showToast('Error exporting data. Please try again.');
             }
         }
 
+        // ---------- Import ----------
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
 
             const reader = new FileReader();
-            reader.onload = function(e) {
+            reader.onload = async function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
 
                     if (!Array.isArray(importedData)) {
-                        showToast('Invalid file format. Please upload a valid export file.');
+                        showToast('Invalid file format.');
                         return;
                     }
 
-                    readingsHistory = importedData;
-                    updateChart();
-                    updateHistory();
-                    showToast(`Successfully imported ${importedData.length} reading(s)!`);
+                    // Save each imported reading to Firestore
+                    let count = 0;
+                    for (const reading of importedData) {
+                        await addDoc(collection(db, "moistureReadings"), {
+                            timestamp: Timestamp.now(),
+                            date: reading.date || new Date().toLocaleString(),
+                            enteredBy: reading.enteredBy || null,
+                            zones: reading.zones || []
+                        });
+                        count++;
+                    }
+
+                    showToast(`Imported ${count} reading(s) to Firebase!`);
                 } catch (error) {
                     try {
                         const csvData = e.target.result;
@@ -879,22 +959,17 @@
                         }
 
                         const dataLines = lines.slice(1);
-                        const importedReadings = [];
+                        let count = 0;
 
-                        dataLines.forEach(line => {
+                        for (const line of dataLines) {
                             const values = line.split(',');
-                            if (values.length < 8) return;
+                            if (values.length < 8) continue;
 
-                            const reading = {
-                                date: values[0].replace(/"/g, ''),
-                                enteredBy: values[1].replace(/"/g, '') || null,
-                                zones: []
-                            };
-
+                            const zonesArr = [];
                             zones.forEach((zoneName, index) => {
                                 const value = parseFloat(values[index + 2]);
                                 if (!isNaN(value)) {
-                                    reading.zones.push({
+                                    zonesArr.push({
                                         name: zoneName,
                                         average: value,
                                         readings: [value]
@@ -902,30 +977,28 @@
                                 }
                             });
 
-                            if (reading.zones.length > 0) {
-                                importedReadings.push(reading);
+                            if (zonesArr.length > 0) {
+                                await addDoc(collection(db, "moistureReadings"), {
+                                    timestamp: Timestamp.now(),
+                                    date: values[0].replace(/"/g, ''),
+                                    enteredBy: values[1].replace(/"/g, '') || null,
+                                    zones: zonesArr
+                                });
+                                count++;
                             }
-                        });
-
-                        if (importedReadings.length === 0) {
-                            showToast('No valid data found in CSV file.');
-                            return;
                         }
 
-                        readingsHistory = importedReadings;
-                        updateChart();
-                        updateHistory();
-                        showToast(`Successfully imported ${importedReadings.length} reading(s) from CSV!`);
+                        showToast(`Imported ${count} reading(s) from CSV to Firebase!`);
                     } catch (csvError) {
-                        showToast('Error reading file. Please ensure it\'s a valid CSV or JSON file.');
+                        showToast('Error reading file.');
                     }
                 }
             };
             reader.readAsText(file);
-
             event.target.value = '';
         }
 
+        // ---------- Toast ----------
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -936,7 +1009,15 @@
             }, 3000);
         }
 
+        // ---------- Boot ----------
         initializeZoneGrid();
+        listenForReadings();   // Start real-time sync from Firestore
+
+        // Expose functions to onclick handlers (module scope doesn't auto-expose)
+        window.submitReadings = submitReadings;
+        window.clearForm = clearForm;
+        window.exportData = exportData;
+        window.importData = importData;
     </script>
 </body>
 </html>
