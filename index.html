@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baseball Field Moisture Tracker</title>
+    <style>
+        :root {
+            --color-cream-50: rgba(252, 252, 249, 1);
+            --color-cream-100: rgba(255, 255, 253, 1);
+            --color-gray-200: rgba(245, 245, 245, 1);
+            --color-gray-300: rgba(167, 169, 169, 1);
+            --color-slate-500: rgba(98, 108, 113, 1);
+            --color-brown-600: rgba(94, 82, 64, 1);
+            --color-charcoal-700: rgba(31, 33, 33, 1);
+            --color-charcoal-800: rgba(38, 40, 40, 1);
+            --color-slate-900: rgba(19, 52, 59, 1);
+            --color-teal-300: rgba(50, 184, 198, 1);
+            --color-teal-500: rgba(33, 128, 141, 1);
+            --color-teal-600: rgba(29, 116, 128, 1);
+            --color-teal-700: rgba(26, 104, 115, 1);
+            --color-brown-600-rgb: 94, 82, 64;
+            --color-teal-500-rgb: 33, 128, 141;
+            --color-slate-900-rgb: 19, 52, 59;
+            --color-background: var(--color-cream-50);
+            --color-surface: var(--color-cream-100);
+            --color-text: var(--color-slate-900);
+            --color-text-secondary: var(--color-slate-500);
+            --color-primary: var(--color-teal-500);
+            --color-primary-hover: var(--color-teal-600);
+            --color-primary-active: var(--color-teal-700);
+            --color-border: rgba(var(--color-brown-600-rgb), 0.2);
+            --color-btn-primary-text: var(--color-cream-50);
+            --color-secondary: rgba(var(--color-brown-600-rgb), 0.12);
+            --color-secondary-hover: rgba(var(--color-brown-600-rgb), 0.2);
+            --font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --space-8: 8px;
+            --space-12: 12px;
+            --space-16: 16px;
+            --space-20: 20px;
+            --space-24: 24px;
+            --radius-base: 8px;
+            --radius-lg: 12px;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --color-gray-200-rgb: 245, 245, 245;
+                --color-gray-300-rgb: 167, 169, 169;
+                --color-gray-400-rgb: 119, 124, 124;
+                --color-teal-300-rgb: 50, 184, 198;
+                --color-background: var(--color-charcoal-700);
+                --color-surface: var(--color-charcoal-800);
+                --color-text: var(--color-gray-200);
+                --color-text-secondary: rgba(var(--color-gray-300-rgb), 0.7);
+                --color-primary: var(--color-teal-300);
+                --color-border: rgba(var(--color-gray-400-rgb), 0.3);
+                --color-btn-primary-text: var(--color-slate-900);
+                --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
+                --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-family-base);
+            background-color: var(--color-background);
+            color: var(--color-text);
+            line-height: 1.6;
+            padding: var(--space-20);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: var(--space-8);
+            color: var(--color-text);
+        }
+
+        .subtitle {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--space-24);
+            font-size: 14px;
+        }
+
+        .section {
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            padding: var(--space-20);
+            margin-bottom: var(--space-20);
+            border: 1px solid var(--color-border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-16);
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .zone-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--space-16);
+            margin-bottom: var(--space-20);
+        }
+
+        .zone-card {
+            background-color: var(--color-background);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-16);
+        }
+
+        .zone-name {
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+            color: var(--color-text);
+            font-size: 16px;
+        }
+
+        .reading-inputs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8);
+            margin-bottom: var(--space-12);
+        }
+
+        .reading-input {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .reading-input label {
+            font-size: 11px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+        }
+
+        .reading-input input {
+            width: 100%;
+            padding: 6px 8px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            background-color: var(--color-surface);
+            color: var(--color-text);
+            font-size: 14px;
+        }
+
+        .reading-input input:focus {
+            outline: 2px solid var(--color-primary);
+            border-color: var(--color-primary);
+        }
+
+        .zone-average {
+            padding: var(--space-12);
+            background-color: var(--color-secondary);
+            border-radius: var(--radius-base);
+            text-align: center;
+            font-weight: 600;
+            color: var(--color-text);
+        }
+
+        .zone-average-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .zone-average-value {
+            font-size: 24px;
+            color: var(--color-primary);
+        }
+
+        .button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: var(--radius-base);
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .button-primary {
+            background-color: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+
+        .button-primary:hover {
+            background-color: var(--color-primary-hover);
+        }
+
+        .button-primary:active {
+            background-color: var(--color-primary-active);
+        }
+
+        .button-secondary {
+            background-color: var(--color-secondary);
+            color: var(--color-text);
+        }
+
+        .button-secondary:hover {
+            background-color: var(--color-secondary-hover);
+        }
+
+        .button-group {
+            display: flex;
+            gap: var(--space-12);
+            justify-content: flex-end;
+        }
+
+        .chart-container {
+            margin-top: var(--space-24);
+            padding: var(--space-20);
+            background-color: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+
+        .chart-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: var(--space-16);
+            color: var(--color-text);
+        }
+
+        .chart {
+            width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .chart-canvas {
+            width: 100%;
+            height: 350px;
+            position: relative;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            background-color: var(--color-background);
+        }
+
+        .chart-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke-width: 2.5;
+            transition: stroke-width 0.2s;
+        }
+
+        .chart-line:hover {
+            stroke-width: 3.5;
+        }
+
+        .chart-point {
+            transition: r 0.2s;
+        }
+
+        .chart-point:hover {
+            r: 6;
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--space-12);
+            justify-content: center;
+            margin-top: var(--space-16);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--color-text);
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 3px;
+            border-radius: 2px;
+        }
+
+        .chart-tooltip {
+            position: absolute;
+            background-color: var(--color-surface);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-base);
+            padding: var(--space-8) var(--space-12);
+            font-size: 12px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .chart-tooltip.show {
+            opacity: 1;
+        }
+
+        .history-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: var(--space-12);
+            border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-date {
+            font-size: 14px;
+            color: var(--color-text);
+            font-weight: 600;
+        }
+
+        .history-zones {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: var(--space-24);
+            color: var(--color-text-secondary);
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background-color: var(--color-primary);
+            color: var(--color-btn-primary-text);
+            padding: var(--space-16) var(--space-20);
+            border-radius: var(--radius-base);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        @media (max-width: 768px) {
+            .zone-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reading-inputs {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .chart-bars {
+                height: 300px;
+            }
+            
+            .chart {
+                height: 350px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚾ Baseball Field Moisture Tracker</h1>
+        <p class="subtitle">Track moisture readings across 6 field zones with 6 subzones each</p>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Moisture Readings</h2>
+            </div>
+
+            <div class="zone-grid" id="zoneGrid"></div>
+
+            <div class="button-group">
+                <button class="button button-secondary" onclick="clearForm()">Clear All</button>
+                <button class="button button-secondary" onclick="exportData()">Export CSV</button>
+                <button class="button button-secondary" onclick="document.getElementById('importFile').click()">Import Data</button>
+                <button class="button button-primary" onclick="submitReadings()">Submit Readings</button>
+            </div>
+            <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
+        </div>
+
+        <div class="chart-container">
+            <h2 class="chart-title">Moisture Trends Over Time</h2>
+            <div class="chart">
+                <div class="chart-canvas" id="chartCanvas">
+                    <svg class="chart-svg" id="chartSvg"></svg>
+                    <div class="chart-tooltip" id="chartTooltip"></div>
+                </div>
+                <div class="chart-legend" id="chartLegend"></div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">Reading History</h2>
+            </div>
+            <div class="history-list" id="historyList">
+                <div class="empty-state">No readings recorded yet. Submit your first reading above!</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const zones = [
+            'Left Field',
+            'Center Field',
+            'Right Field',
+            '1st Base Line',
+            '3rd Base Line',
+            'Infield'
+        ];
+
+        let readingsHistory = [];
+
+        function initializeZoneGrid() {
+            const grid = document.getElementById('zoneGrid');
+            grid.innerHTML = '';
+
+            zones.forEach((zone, zoneIndex) => {
+                const card = document.createElement('div');
+                card.className = 'zone-card';
+
+                const zoneName = document.createElement('div');
+                zoneName.className = 'zone-name';
+                zoneName.textContent = zone;
+                card.appendChild(zoneName);
+
+                const readingInputs = document.createElement('div');
+                readingInputs.className = 'reading-inputs';
+
+                for (let i = 1; i <= 6; i++) {
+                    const inputWrapper = document.createElement('div');
+                    inputWrapper.className = 'reading-input';
+
+                    const label = document.createElement('label');
+                    label.textContent = `Zone ${i}`;
+                    inputWrapper.appendChild(label);
+
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = '0.1';
+                    input.min = '0';
+                    input.placeholder = '0.0';
+                    input.id = `zone-${zoneIndex}-reading-${i}`;
+                    input.addEventListener('input', () => updateZoneAverage(zoneIndex));
+                    inputWrapper.appendChild(input);
+
+                    readingInputs.appendChild(inputWrapper);
+                }
+
+                card.appendChild(readingInputs);
+
+                const averageDiv = document.createElement('div');
+                averageDiv.className = 'zone-average';
+                averageDiv.innerHTML = `
+                    <div class="zone-average-label">Zone Average</div>
+                    <div class="zone-average-value" id="avg-${zoneIndex}">--</div>
+                `;
+                card.appendChild(averageDiv);
+
+                grid.appendChild(card);
+            });
+        }
+
+        function updateZoneAverage(zoneIndex) {
+            const readings = [];
+            for (let i = 1; i <= 6; i++) {
+                const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
+                const value = parseFloat(input.value);
+                if (!isNaN(value) && value > 0) {
+                    readings.push(value);
+                }
+            }
+
+            const avgElement = document.getElementById(`avg-${zoneIndex}`);
+            if (readings.length > 0) {
+                const average = readings.reduce((sum, val) => sum + val, 0) / readings.length;
+                avgElement.textContent = average.toFixed(1);
+            } else {
+                avgElement.textContent = '--';
+            }
+        }
+
+        function submitReadings() {
+            const timestamp = new Date();
+            const reading = {
+                date: timestamp.toLocaleString(),
+                zones: []
+            };
+
+            let hasData = false;
+
+            zones.forEach((zone, zoneIndex) => {
+                const readings = [];
+                for (let i = 1; i <= 6; i++) {
+                    const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
+                    const value = parseFloat(input.value);
+                    if (!isNaN(value) && value > 0) {
+                        readings.push(value);
+                        hasData = true;
+                    }
+                }
+
+                if (readings.length > 0) {
+                    const average = readings.reduce((sum, val) => sum + val, 0) / readings.length;
+                    reading.zones.push({
+                        name: zone,
+                        average: average,
+                        readings: readings
+                    });
+                }
+            });
+
+            if (!hasData) {
+                showToast('Please enter at least one reading before submitting.');
+                return;
+            }
+
+            readingsHistory.unshift(reading);
+            updateChart();
+            updateHistory();
+            showToast('Readings submitted successfully!');
+        }
+
+        function clearForm() {
+            zones.forEach((zone, zoneIndex) => {
+                for (let i = 1; i <= 6; i++) {
+                    const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
+                    input.value = '';
+                }
+                updateZoneAverage(zoneIndex);
+            });
+            showToast('Form cleared.');
+        }
+
+        const zoneColors = [
+            '#2D74A6',  // Left Field - blue
+            '#E68A3C',  // Center Field - orange
+            '#4CAF50',  // Right Field - green
+            '#9C27B0',  // 1st Base Line - purple
+            '#F44336',  // 3rd Base Line - red
+            '#00BCD4'   // Infield - cyan
+        ];
+
+        function updateChart() {
+            const chartSvg = document.getElementById('chartSvg');
+            const chartLegend = document.getElementById('chartLegend');
+            
+            if (readingsHistory.length === 0) {
+                chartSvg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="var(--color-text-secondary)" font-size="14">No data to display</text>';
+                chartLegend.innerHTML = '';
+                return;
+            }
+
+            // Prepare data structure - reverse history for chronological order
+            const chronologicalHistory = [...readingsHistory].reverse();
+            const zoneData = {};
+            
+            zones.forEach(zone => {
+                zoneData[zone] = [];
+            });
+
+            chronologicalHistory.forEach((reading, index) => {
+                reading.zones.forEach(zone => {
+                    zoneData[zone.name].push({
+                        index: index,
+                        value: zone.average,
+                        date: reading.date
+                    });
+                });
+            });
+
+            // Chart dimensions
+            const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+            const svgWidth = chartSvg.clientWidth || 800;
+            const svgHeight = chartSvg.clientHeight || 350;
+            const chartWidth = svgWidth - padding.left - padding.right;
+            const chartHeight = svgHeight - padding.top - padding.bottom;
+
+            // Find min/max values
+            let allValues = [];
+            Object.values(zoneData).forEach(data => {
+                allValues = allValues.concat(data.map(d => d.value));
+            });
+            const minValue = Math.min(...allValues);
+            const maxValue = Math.max(...allValues);
+            const valueRange = maxValue - minValue || 1;
+
+            // Clear SVG
+            chartSvg.innerHTML = '';
+
+            // Create grid lines
+            const numGridLines = 5;
+            for (let i = 0; i <= numGridLines; i++) {
+                const y = padding.top + (chartHeight / numGridLines) * i;
+                const value = maxValue - (valueRange / numGridLines) * i;
+                
+                // Grid line
+                const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+                line.setAttribute('x1', padding.left);
+                line.setAttribute('y1', y);
+                line.setAttribute('x2', svgWidth - padding.right);
+                line.setAttribute('y2', y);
+                line.setAttribute('stroke', 'var(--color-border)');
+                line.setAttribute('stroke-width', '1');
+                line.setAttribute('opacity', '0.3');
+                chartSvg.appendChild(line);
+
+                // Y-axis label
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', padding.left - 10);
+                text.setAttribute('y', y + 4);
+                text.setAttribute('text-anchor', 'end');
+                text.setAttribute('fill', 'var(--color-text-secondary)');
+                text.setAttribute('font-size', '11');
+                text.textContent = value.toFixed(1);
+                chartSvg.appendChild(text);
+            }
+
+            // X-axis labels
+            chronologicalHistory.forEach((reading, index) => {
+                const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * index;
+                const shortDate = new Date(reading.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                
+                const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+                text.setAttribute('x', x);
+                text.setAttribute('y', svgHeight - padding.bottom + 20);
+                text.setAttribute('text-anchor', 'middle');
+                text.setAttribute('fill', 'var(--color-text-secondary)');
+                text.setAttribute('font-size', '11');
+                text.textContent = shortDate;
+                chartSvg.appendChild(text);
+            });
+
+            // Draw lines for each zone
+            Object.keys(zoneData).forEach((zoneName, zoneIndex) => {
+                const data = zoneData[zoneName];
+                if (data.length === 0) return;
+
+                const color = zoneColors[zoneIndex % zoneColors.length];
+
+                // Create path
+                let pathD = '';
+                data.forEach((point, i) => {
+                    const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
+                    const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
+                    
+                    if (i === 0) {
+                        pathD += `M ${x} ${y}`;
+                    } else {
+                        pathD += ` L ${x} ${y}`;
+                    }
+                });
+
+                const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                path.setAttribute('d', pathD);
+                path.setAttribute('class', 'chart-line');
+                path.setAttribute('stroke', color);
+                chartSvg.appendChild(path);
+
+                // Add points
+                data.forEach(point => {
+                    const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
+                    const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
+
+                    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                    circle.setAttribute('cx', x);
+                    circle.setAttribute('cy', y);
+                    circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', color);
+                    circle.setAttribute('class', 'chart-point');
+                    circle.style.cursor = 'pointer';
+                    
+                    // Tooltip
+                    circle.addEventListener('mouseenter', (e) => {
+                        const tooltip = document.getElementById('chartTooltip');
+                        tooltip.innerHTML = `<strong>${zoneName}</strong><br>${point.date}<br>Value: ${point.value.toFixed(1)}`;
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY - 40}px`;
+                        tooltip.classList.add('show');
+                    });
+                    
+                    circle.addEventListener('mouseleave', () => {
+                        const tooltip = document.getElementById('chartTooltip');
+                        tooltip.classList.remove('show');
+                    });
+
+                    chartSvg.appendChild(circle);
+                });
+            });
+
+            // Update legend
+            chartLegend.innerHTML = '';
+            zones.forEach((zone, index) => {
+                const item = document.createElement('div');
+                item.className = 'legend-item';
+
+                const colorBox = document.createElement('div');
+                colorBox.className = 'legend-color';
+                colorBox.style.backgroundColor = zoneColors[index % zoneColors.length];
+
+                const label = document.createElement('span');
+                label.textContent = zone;
+
+                item.appendChild(colorBox);
+                item.appendChild(label);
+                chartLegend.appendChild(item);
+            });
+        }
+
+        function updateHistory() {
+            const historyList = document.getElementById('historyList');
+            
+            if (readingsHistory.length === 0) {
+                historyList.innerHTML = '<div class="empty-state">No readings recorded yet. Submit your first reading above!</div>';
+                return;
+            }
+
+            historyList.innerHTML = '';
+
+            readingsHistory.forEach(reading => {
+                const item = document.createElement('div');
+                item.className = 'history-item';
+
+                const leftDiv = document.createElement('div');
+                const dateDiv = document.createElement('div');
+                dateDiv.className = 'history-date';
+                dateDiv.textContent = reading.date;
+                leftDiv.appendChild(dateDiv);
+
+                const zonesDiv = document.createElement('div');
+                zonesDiv.className = 'history-zones';
+                zonesDiv.textContent = reading.zones.map(z => `${z.name}: ${z.average.toFixed(1)}`).join(' | ');
+                leftDiv.appendChild(zonesDiv);
+
+                item.appendChild(leftDiv);
+                historyList.appendChild(item);
+            });
+        }
+
+        function exportData() {
+            if (readingsHistory.length === 0) {
+                showToast('No data to export. Submit some readings first!');
+                return;
+            }
+
+            try {
+                // Create CSV header
+                let csv = 'Date,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
+                
+                // Add data rows
+                readingsHistory.forEach(reading => {
+                    const row = ['"' + reading.date + '"'];
+                    
+                    // Add zone averages in order
+                    zones.forEach(zoneName => {
+                        const zone = reading.zones.find(z => z.name === zoneName);
+                        row.push(zone ? zone.average.toFixed(1) : '');
+                    });
+                    
+                    csv += row.join(',') + '\n';
+                });
+
+                // Create blob with BOM for better Excel compatibility
+                const BOM = '\uFEFF';
+                const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+                
+                // Create download link with macOS compatibility
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                const fileName = `baseball-field-moisture-${new Date().toISOString().split('T')[0]}.csv`;
+                
+                // Set attributes
+                link.href = url;
+                link.download = fileName;
+                
+                // Force download by adding to body, clicking, and removing
+                document.body.appendChild(link);
+                
+                // Use setTimeout to ensure link is in DOM before clicking
+                setTimeout(() => {
+                    link.click();
+                    
+                    // Cleanup after a delay to ensure download starts
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
+                }, 10);
+                
+                showToast(`Exporting ${readingsHistory.length} reading(s)...`);
+            } catch (error) {
+                console.error('Export error:', error);
+                showToast('Error exporting data. Please try right-clicking the Export button and select "Save Link As..."');
+            }
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    // Try parsing as JSON first
+                    const importedData = JSON.parse(e.target.result);
+                    
+                    if (!Array.isArray(importedData)) {
+                        showToast('Invalid file format. Please upload a valid export file.');
+                        return;
+                    }
+
+                    readingsHistory = importedData;
+                    updateChart();
+                    updateHistory();
+                    showToast(`Successfully imported ${importedData.length} reading(s)!`);
+                } catch (error) {
+                    // If JSON parsing fails, try CSV
+                    try {
+                        const csvData = e.target.result;
+                        const lines = csvData.split('\n').filter(line => line.trim());
+                        
+                        if (lines.length < 2) {
+                            showToast('CSV file appears to be empty.');
+                            return;
+                        }
+                        
+                        // Skip header row
+                        const dataLines = lines.slice(1);
+                        const importedReadings = [];
+                        
+                        dataLines.forEach(line => {
+                            const values = line.split(',');
+                            if (values.length < 7) return;
+                            
+                            const reading = {
+                                date: values[0],
+                                zones: []
+                            };
+                            
+                            zones.forEach((zoneName, index) => {
+                                const value = parseFloat(values[index + 1]);
+                                if (!isNaN(value)) {
+                                    reading.zones.push({
+                                        name: zoneName,
+                                        average: value,
+                                        readings: [value]
+                                    });
+                                }
+                            });
+                            
+                            if (reading.zones.length > 0) {
+                                importedReadings.push(reading);
+                            }
+                        });
+                        
+                        if (importedReadings.length === 0) {
+                            showToast('No valid data found in CSV file.');
+                            return;
+                        }
+                        
+                        readingsHistory = importedReadings;
+                        updateChart();
+                        updateHistory();
+                        showToast(`Successfully imported ${importedReadings.length} reading(s) from CSV!`);
+                    } catch (csvError) {
+                        showToast('Error reading file. Please ensure it\'s a valid CSV or JSON file.');
+                    }
+                }
+            };
+            reader.readAsText(file);
+            
+            // Reset file input
+            event.target.value = '';
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        initializeZoneGrid();
+    </script>
+</body>
+</html>
+
