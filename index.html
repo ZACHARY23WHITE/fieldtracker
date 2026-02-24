@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -496,6 +497,79 @@
             font-size: 13px;
         }
 
+        /* Date range filter */
+        .date-filter {
+            background: var(--color-surface);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+            padding: var(--space-16) var(--space-20);
+            margin-top: var(--space-24);
+            margin-bottom: 4px;
+        }
+        .date-filter h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: var(--space-12);
+            color: var(--color-text);
+        }
+        .date-filter-row {
+            display: flex;
+            align-items: flex-end;
+            gap: var(--space-12);
+            flex-wrap: wrap;
+        }
+        .date-filter-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .date-filter-field label {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--color-text-secondary);
+        }
+        .date-filter-field input[type="date"] {
+            padding: 8px 12px;
+            border: 1px solid var(--color-border);
+            border-radius: 6px;
+            background: var(--color-background);
+            color: var(--color-text);
+            font-size: 14px;
+            font-family: var(--font-family-base);
+        }
+        .date-filter-field input[type="date"]:focus {
+            outline: 2px solid var(--color-primary);
+            border-color: var(--color-primary);
+        }
+        .filter-btn {
+            padding: 8px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .filter-btn-primary {
+            background: var(--color-primary);
+            color: var(--color-btn-primary-text);
+        }
+        .filter-btn-primary:hover {
+            background: var(--color-primary-hover);
+        }
+        .filter-btn-secondary {
+            background: var(--color-secondary);
+            color: var(--color-text);
+        }
+        .filter-btn-secondary:hover {
+            background: var(--color-secondary-hover);
+        }
+        .filter-info {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: var(--space-8);
+        }
+
 
 
         .empty-state {
@@ -558,11 +632,35 @@
 
             <div class="button-group">
                 <button class="button button-secondary" onclick="clearForm()">Clear All</button>
+                <button class="button button-secondary" onclick="saveDraft()" title="Save current entries and finish later">&#128190; Save Draft</button>
                 <button class="button button-secondary" onclick="exportData()">Export CSV</button>
                 <button class="button button-secondary" onclick="document.getElementById('importFile').click()">Import Data</button>
                 <button class="button button-primary" onclick="submitReadings()">Submit Readings</button>
             </div>
+            <div id="draftNotice" style="display:none; margin-top:var(--space-12); padding:var(--space-12); background:rgba(230,138,60,0.12); border:1px solid rgba(230,138,60,0.3); border-radius:var(--radius-base); font-size:13px; color:var(--color-text);">
+                &#128221; <strong>You have a saved draft.</strong>
+                <button onclick="loadDraft()" style="margin-left:8px; padding:4px 12px; border:none; border-radius:4px; background:var(--color-primary); color:var(--color-btn-primary-text); font-size:12px; font-weight:600; cursor:pointer;">Resume Draft</button>
+                <button onclick="discardDraft()" style="margin-left:4px; padding:4px 12px; border:1px solid var(--color-border); border-radius:4px; background:var(--color-secondary); color:var(--color-text); font-size:12px; font-weight:600; cursor:pointer;">Discard</button>
+            </div>
             <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
+        </div>
+
+        <!-- Date Range Filter -->
+        <div class="date-filter">
+            <h3>&#128197; Report Date Range</h3>
+            <div class="date-filter-row">
+                <div class="date-filter-field">
+                    <label for="filterStart">Start Date</label>
+                    <input type="date" id="filterStart">
+                </div>
+                <div class="date-filter-field">
+                    <label for="filterEnd">End Date</label>
+                    <input type="date" id="filterEnd">
+                </div>
+                <button class="filter-btn filter-btn-primary" onclick="applyDateFilter()">Apply Filter</button>
+                <button class="filter-btn filter-btn-secondary" onclick="resetDateFilter()">Reset (Last 7 Days)</button>
+            </div>
+            <div class="filter-info" id="filterInfo">Showing last 7 days</div>
         </div>
 
         <!-- TDR Report -->
@@ -637,6 +735,10 @@
             getFirestore,
             collection,
             addDoc,
+            doc,
+            getDoc,
+            setDoc,
+            deleteDoc,
             query,
             orderBy,
             onSnapshot,
@@ -672,6 +774,7 @@
         const readingTypes = ['tdr', 'shear'];
         let readingsHistory = [];
         let activeChartType = 'tdr';
+        let savedDraft = null;
 
         // ---------- Zone grid with TDR & Shear subsections ----------
         function initializeZoneGrid() {
@@ -1241,15 +1344,103 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
+        // ---------- Draft Save / Load (Firestore) ----------
+        const DRAFT_DOC_ID = 'current_draft';
+
+        async function saveDraft() {
+            const enteredBy = document.getElementById('enteredBy').value.trim();
+            const draftData = { enteredBy: enteredBy, zones: {}, savedAt: Timestamp.now() };
+
+            zones.forEach((zone, zoneIndex) => {
+                draftData.zones[zoneIndex] = {};
+                readingTypes.forEach(type => {
+                    draftData.zones[zoneIndex][type] = {};
+                    for (let i = 1; i <= 6; i++) {
+                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
+                        draftData.zones[zoneIndex][type][i] = input.value;
+                    }
+                });
+            });
+
+            try {
+                await setDoc(doc(db, 'drafts', DRAFT_DOC_ID), draftData);
+                showDraftNotice(true);
+                showToast('Draft saved to Firebase! You can close and come back later.');
+            } catch (error) {
+                console.error('Error saving draft:', error);
+                showToast('Error saving draft — check console.');
+            }
+        }
+
+        async function loadDraft() {
+            try {
+                const snap = await getDoc(doc(db, 'drafts', DRAFT_DOC_ID));
+                if (!snap.exists()) {
+                    showToast('No draft found.');
+                    return;
+                }
+                const draftData = snap.data();
+                document.getElementById('enteredBy').value = draftData.enteredBy || '';
+
+                zones.forEach((zone, zoneIndex) => {
+                    readingTypes.forEach(type => {
+                        for (let i = 1; i <= 6; i++) {
+                            const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
+                            const val = draftData.zones?.[zoneIndex]?.[type]?.[i] || '';
+                            input.value = val;
+                        }
+                        updateZoneAverage(zoneIndex, type);
+                    });
+                });
+
+                showToast('Draft restored! Continue where you left off.');
+            } catch (error) {
+                console.error('Error loading draft:', error);
+                showToast('Error loading draft.');
+            }
+        }
+
+        async function discardDraft() {
+            try {
+                await deleteDoc(doc(db, 'drafts', DRAFT_DOC_ID));
+                showDraftNotice(false);
+                showToast('Draft discarded.');
+            } catch (error) {
+                console.error('Error discarding draft:', error);
+                showToast('Error discarding draft.');
+            }
+        }
+
+        function showDraftNotice(show) {
+            document.getElementById('draftNotice').style.display = show ? 'block' : 'none';
+        }
+
+        async function checkForExistingDraft() {
+            try {
+                const snap = await getDoc(doc(db, 'drafts', DRAFT_DOC_ID));
+                if (snap.exists()) {
+                    showDraftNotice(true);
+                }
+            } catch (e) {
+                console.error('Error checking draft:', e);
+            }
+        }
+
         // ---------- Boot ----------
         initializeZoneGrid();
         listenForReadings();
+        checkForExistingDraft();
 
         window.submitReadings = submitReadings;
         window.clearForm = clearForm;
         window.exportData = exportData;
         window.importData = importData;
         window.switchChart = switchChart;
+        window.applyDateFilter = applyDateFilter;
+        window.resetDateFilter = resetDateFilter;
+        window.saveDraft = saveDraft;
+        window.loadDraft = loadDraft;
+        window.discardDraft = discardDraft;
     </script>
 </body>
 </html>
