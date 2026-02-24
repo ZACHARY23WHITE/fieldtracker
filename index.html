@@ -418,6 +418,7 @@
                         <tr>
                             <th style="text-align:left;">Date</th>
                             <th style="text-align:left;">By</th>
+                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof</th>
                             <th>Left Field</th><th>Center Field</th><th>Right Field</th>
                             <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
                         </tr>
@@ -440,6 +441,7 @@
                         <tr>
                             <th style="text-align:left;">Date</th>
                             <th style="text-align:left;">By</th>
+                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof</th>
                             <th>Left Field</th><th>Center Field</th><th>Right Field</th>
                             <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
                         </tr>
@@ -791,6 +793,10 @@
                         id: docSnap.id,
                         date: data.date || data.timestamp?.toDate().toLocaleString() || 'Unknown',
                         enteredBy: data.enteredBy || null,
+                        tempHigh: data.tempHigh ?? null,
+                        tempLow: data.tempLow ?? null,
+                        weatherCondition: data.weatherCondition || null,
+                        roofClosed: !!data.roofClosed,
                         zones: data.zones || []
                     });
                 });
@@ -865,10 +871,17 @@
             let hasTdr = false, hasShear = false;
 
             filtered.forEach(reading => {
+                const weatherCells = '<td>' + escapeHTML(reading.tempHigh != null ? String(reading.tempHigh) : '\u2014') + '</td>'
+                    + '<td>' + escapeHTML(reading.tempLow != null ? String(reading.tempLow) : '\u2014') + '</td>'
+                    + '<td>' + escapeHTML(reading.weatherCondition || '\u2014') + '</td>'
+                    + '<td>' + (reading.roofClosed ? 'Yes' : 'No') + '</td>';
+
                 let tdrRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
                 tdrRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '\u2014') + '</td>';
+                tdrRow += weatherCells;
                 let shearRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
                 shearRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '\u2014') + '</td>';
+                shearRow += weatherCells;
 
                 let rowHasTdr = false, rowHasShear = false;
 
