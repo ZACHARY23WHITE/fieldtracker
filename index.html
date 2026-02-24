@@ -341,9 +341,32 @@
                 <h2 class="section-title">Moisture Readings</h2>
             </div>
 
-            <div class="entered-by-wrapper">
-                <label for="enteredBy">Entered by</label>
-                <input type="text" id="enteredBy" placeholder="First name">
+            <div style="display:flex; gap:16px; flex-wrap:wrap; align-items:flex-end; margin-bottom:var(--space-16);">
+                <div class="entered-by-wrapper" style="margin-bottom:0;">
+                    <label for="enteredBy">Entered by</label>
+                    <input type="text" id="enteredBy" placeholder="First name">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:4px; min-width:130px;">
+                    <label for="tempHigh" style="font-size:13px; color:var(--color-text-secondary); font-weight:500;">Temp High (&deg;F)</label>
+                    <input type="number" id="tempHigh" placeholder="75" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" style="padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-background); color:var(--color-text); font-size:14px; width:100%;">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:4px; min-width:130px;">
+                    <label for="tempLow" style="font-size:13px; color:var(--color-text-secondary); font-weight:500;">Temp Low (&deg;F)</label>
+                    <input type="number" id="tempLow" placeholder="55" inputmode="decimal" pattern="[0-9]*\.?[0-9]*" style="padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-background); color:var(--color-text); font-size:14px; width:100%;">
+                </div>
+                <div style="display:flex; flex-direction:column; gap:4px; min-width:140px;">
+                    <label for="weatherCondition" style="font-size:13px; color:var(--color-text-secondary); font-weight:500;">Weather Condition</label>
+                    <select id="weatherCondition" style="padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-background); color:var(--color-text); font-size:14px; width:100%;">
+                        <option value="">Select...</option>
+                        <option value="sunny">Sunny</option>
+                        <option value="cloudy">Cloudy</option>
+                        <option value="rainy">Rainy</option>
+                    </select>
+                </div>
+                <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--color-text-secondary); cursor:pointer; padding-bottom:4px;">
+                    <input type="checkbox" id="roofClosed" style="width:16px; height:16px; accent-color:var(--color-primary); cursor:pointer;">
+                    Roof closed?
+                </label>
             </div>
 
             <div class="zone-grid" id="zoneGrid"></div>
@@ -573,11 +596,21 @@
         // ================================================================
         async function submitReadings() {
             const enteredBy = document.getElementById('enteredBy').value.trim();
+            const tempHighVal = document.getElementById('tempHigh').value.trim();
+            const tempLowVal = document.getElementById('tempLow').value.trim();
+            const weatherCondition = document.getElementById('weatherCondition').value || null;
+            const roofClosed = document.getElementById('roofClosed').checked;
+            const tempHigh = tempHighVal === '' ? null : parseFloat(tempHighVal);
+            const tempLow = tempLowVal === '' ? null : parseFloat(tempLowVal);
 
             const reading = {
                 timestamp: Timestamp.now(),
                 date: new Date().toLocaleString(),
                 enteredBy: enteredBy || null,
+                tempHigh: isNaN(tempHigh) ? null : tempHigh,
+                tempLow: isNaN(tempLow) ? null : tempLow,
+                weatherCondition: weatherCondition,
+                roofClosed: roofClosed,
                 zones: []
             };
 
@@ -628,7 +661,15 @@
         // ================================================================
         async function saveDraft() {
             const enteredBy = document.getElementById('enteredBy').value.trim();
-            const draftData = { enteredBy: enteredBy, savedAt: Timestamp.now(), zones: {} };
+            const draftData = {
+                enteredBy: enteredBy,
+                tempHigh: document.getElementById('tempHigh').value.trim(),
+                tempLow: document.getElementById('tempLow').value.trim(),
+                weatherCondition: document.getElementById('weatherCondition').value,
+                roofClosed: document.getElementById('roofClosed').checked,
+                savedAt: Timestamp.now(),
+                zones: {}
+            };
 
             zones.forEach((zone, zoneIndex) => {
                 draftData.zones[String(zoneIndex)] = {};
@@ -662,6 +703,10 @@
                 }
                 const d = snap.data();
                 document.getElementById('enteredBy').value = d.enteredBy || '';
+                document.getElementById('tempHigh').value = d.tempHigh || '';
+                document.getElementById('tempLow').value = d.tempLow || '';
+                document.getElementById('weatherCondition').value = d.weatherCondition || '';
+                document.getElementById('roofClosed').checked = !!d.roofClosed;
 
                 zones.forEach((zone, zoneIndex) => {
                     readingTypes.forEach(type => {
@@ -725,6 +770,10 @@
                 });
             });
             document.getElementById('enteredBy').value = '';
+            document.getElementById('tempHigh').value = '';
+            document.getElementById('tempLow').value = '';
+            document.getElementById('weatherCondition').value = '';
+            document.getElementById('roofClosed').checked = false;
             if (notify !== false) showToast('Form cleared.');
         }
 
