@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -41,16 +42,6 @@
             --space-24: 24px;
             --radius-base: 8px;
             --radius-lg: 12px;
-
-            /* TDR & Shear colors */
-            --tdr-bg: rgba(33, 128, 80, 0.10);
-            --tdr-accent: #1a7a42;
-            --tdr-text: #15603a;
-            --tdr-border: rgba(33, 128, 80, 0.25);
-            --shear-bg: rgba(180, 50, 50, 0.08);
-            --shear-accent: #a83232;
-            --shear-text: #8b2020;
-            --shear-border: rgba(180, 50, 50, 0.25);
         }
 
         @media (prefers-color-scheme: dark) {
@@ -68,15 +59,6 @@
                 --color-btn-primary-text: var(--color-slate-900);
                 --color-secondary: rgba(var(--color-gray-400-rgb), 0.15);
                 --color-secondary-hover: rgba(var(--color-gray-400-rgb), 0.25);
-
-                --tdr-bg: rgba(50, 184, 120, 0.12);
-                --tdr-accent: #4ade80;
-                --tdr-text: #6ee7a0;
-                --tdr-border: rgba(50, 184, 120, 0.3);
-                --shear-bg: rgba(255, 84, 89, 0.12);
-                --shear-accent: #ff5459;
-                --shear-text: #ff7a7e;
-                --shear-border: rgba(255, 84, 89, 0.3);
             }
         }
 
@@ -162,7 +144,7 @@
 
         .zone-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: var(--space-16);
             margin-bottom: var(--space-20);
         }
@@ -179,49 +161,13 @@
             margin-bottom: var(--space-12);
             color: var(--color-text);
             font-size: 16px;
-            text-align: center;
-            padding-bottom: var(--space-8);
-            border-bottom: 1px solid var(--color-border);
-        }
-
-        /* Reading type subsection (TDR / Shear) */
-        .reading-type-section {
-            border-radius: var(--radius-base);
-            padding: var(--space-12);
-            margin-top: var(--space-12);
-            border: 1px solid transparent;
-        }
-        .reading-type-section.tdr {
-            background: var(--tdr-bg);
-            border-color: var(--tdr-border);
-        }
-        .reading-type-section.shear {
-            background: var(--shear-bg);
-            border-color: var(--shear-border);
-        }
-
-        .reading-type-label {
-            font-size: 13px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: var(--space-8);
-            padding: 3px 10px;
-            border-radius: 6px;
-            display: block;
-            letter-spacing: 0.04em;
-        }
-        .reading-type-label.tdr {
-            color: var(--tdr-text);
-        }
-        .reading-type-label.shear {
-            color: var(--shear-text);
         }
 
         .reading-inputs {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: var(--space-8);
-            margin-bottom: var(--space-8);
+            margin-bottom: var(--space-12);
         }
 
         .reading-input {
@@ -252,31 +198,25 @@
         }
 
         .zone-average {
-            padding: var(--space-8) var(--space-12);
+            padding: var(--space-12);
+            background-color: var(--color-secondary);
             border-radius: var(--radius-base);
             text-align: center;
-        }
-        .zone-average.tdr {
-            background-color: var(--tdr-bg);
-        }
-        .zone-average.shear {
-            background-color: var(--shear-bg);
+            font-weight: 600;
+            color: var(--color-text);
         }
 
         .zone-average-label {
-            font-size: 11px;
+            font-size: 12px;
+            color: var(--color-text-secondary);
             font-weight: 500;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
-        .zone-average-label.tdr { color: var(--tdr-text); }
-        .zone-average-label.shear { color: var(--shear-text); }
 
         .zone-average-value {
-            font-size: 22px;
-            font-weight: 700;
+            font-size: 24px;
+            color: var(--color-primary);
         }
-        .zone-average-value.tdr { color: var(--tdr-accent); }
-        .zone-average-value.shear { color: var(--shear-accent); }
 
         .button {
             padding: 12px 24px;
@@ -314,10 +254,8 @@
             display: flex;
             gap: var(--space-12);
             justify-content: flex-end;
-            flex-wrap: wrap;
         }
 
-        /* ---- Chart ---- */
         .chart-container {
             margin-top: var(--space-24);
             padding: var(--space-20);
@@ -331,28 +269,6 @@
             font-weight: 600;
             margin-bottom: var(--space-16);
             color: var(--color-text);
-        }
-
-        .chart-tab-bar {
-            display: flex;
-            gap: var(--space-8);
-            margin-bottom: var(--space-16);
-        }
-        .chart-tab {
-            padding: 6px 16px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid var(--color-border);
-            background: var(--color-background);
-            color: var(--color-text-secondary);
-            transition: all 0.15s;
-        }
-        .chart-tab.active {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            border-color: var(--color-primary);
         }
 
         .chart {
@@ -433,70 +349,6 @@
             opacity: 1;
         }
 
-        /* ---- Report tables ---- */
-        .report-section {
-            margin-top: var(--space-24);
-            background-color: var(--color-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border);
-            overflow: hidden;
-        }
-        .report-header {
-            padding: var(--space-12) var(--space-16);
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .report-header.tdr {
-            background: var(--tdr-bg);
-            color: var(--tdr-text);
-            border-bottom: 1px solid var(--tdr-border);
-        }
-        .report-header.shear {
-            background: var(--shear-bg);
-            color: var(--shear-text);
-            border-bottom: 1px solid var(--shear-border);
-        }
-        .report-body {
-            overflow-x: auto;
-        }
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .report-table th, .report-table td {
-            padding: 8px 12px;
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
-        }
-        .report-table th {
-            background: var(--color-secondary);
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .report-table td:first-child {
-            text-align: left;
-            font-weight: 500;
-        }
-        .report-table tbody tr:hover {
-            background: var(--color-secondary);
-        }
-        .report-table .avg-cell.tdr { color: var(--tdr-accent); font-weight: 700; }
-        .report-table .avg-cell.shear { color: var(--shear-accent); font-weight: 700; }
-        .report-empty {
-            padding: var(--space-24);
-            text-align: center;
-            color: var(--color-text-secondary);
-            font-size: 13px;
-        }
-
-        /* ---- History ---- */
         .history-list {
             max-height: 300px;
             overflow-y: auto;
@@ -505,6 +357,9 @@
         .history-item {
             padding: var(--space-12);
             border-bottom: 1px solid var(--color-border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
         .history-item:last-child {
@@ -521,22 +376,6 @@
             font-size: 12px;
             color: var(--color-text-secondary);
             margin-top: 4px;
-        }
-        .history-type-label {
-            display: inline-block;
-            font-size: 10px;
-            font-weight: 700;
-            padding: 1px 6px;
-            border-radius: 4px;
-            margin-right: 4px;
-        }
-        .history-type-label.tdr {
-            background: var(--tdr-bg);
-            color: var(--tdr-text);
-        }
-        .history-type-label.shear {
-            background: var(--shear-bg);
-            color: var(--shear-text);
         }
 
         .empty-state {
@@ -558,7 +397,6 @@
             transform: translateY(20px);
             transition: all 0.3s;
             pointer-events: none;
-            z-index: 100;
         }
 
         .toast.show {
@@ -571,9 +409,15 @@
             .zone-grid {
                 grid-template-columns: 1fr;
             }
+
             .reading-inputs {
                 grid-template-columns: repeat(2, 1fr);
             }
+
+            .chart-bars {
+                height: 300px;
+            }
+
             .chart {
                 height: 350px;
             }
@@ -582,8 +426,8 @@
 </head>
 <body>
     <div class="container">
-        <h1>&#9918; Baseball Field Moisture Tracker</h1>
-        <p class="subtitle">Track TDR and Shear readings across 6 field zones with 6 subzones each</p>
+        <h1>⚾ Baseball Field Moisture Tracker</h1>
+        <p class="subtitle">Track moisture readings across 6 field zones with 6 subzones each</p>
 
         <div class="section">
             <div class="section-header">
@@ -606,57 +450,8 @@
             <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
         </div>
 
-        <!-- TDR Report -->
-        <div class="report-section" id="tdrReportSection">
-            <div class="report-header tdr">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
-                TDR Report
-            </div>
-            <div class="report-body">
-                <div class="report-empty" id="tdrEmpty">No TDR readings submitted yet.</div>
-                <table class="report-table" id="tdrReportTable" style="display:none;">
-                    <thead>
-                        <tr>
-                            <th style="text-align:left;">Date</th>
-                            <th style="text-align:left;">By</th>
-                            <th>Left Field</th><th>Center Field</th><th>Right Field</th>
-                            <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tdrReportBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Shear Report -->
-        <div class="report-section" id="shearReportSection">
-            <div class="report-header shear">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-                Shear Report
-            </div>
-            <div class="report-body">
-                <div class="report-empty" id="shearEmpty">No Shear readings submitted yet.</div>
-                <table class="report-table" id="shearReportTable" style="display:none;">
-                    <thead>
-                        <tr>
-                            <th style="text-align:left;">Date</th>
-                            <th style="text-align:left;">By</th>
-                            <th>Left Field</th><th>Center Field</th><th>Right Field</th>
-                            <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
-                        </tr>
-                    </thead>
-                    <tbody id="shearReportBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <!-- Charts -->
         <div class="chart-container">
-            <h2 class="chart-title">Trends Over Time</h2>
-            <div class="chart-tab-bar">
-                <button class="chart-tab active" data-chart-type="tdr" onclick="switchChart('tdr')">TDR</button>
-                <button class="chart-tab" data-chart-type="shear" onclick="switchChart('shear')">Shear</button>
-            </div>
+            <h2 class="chart-title">Moisture Trends Over Time</h2>
             <div class="chart">
                 <div class="chart-canvas" id="chartCanvas">
                     <svg class="chart-svg" id="chartSvg"></svg>
@@ -680,6 +475,7 @@
 
     <!-- ===================== FIREBASE SDK (CDN) ===================== -->
     <script type="module">
+        // --- Firebase imports from CDN (no npm needed) ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import {
             getFirestore,
@@ -691,6 +487,7 @@
             Timestamp
         } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+        // --- Your Firebase config ---
         const firebaseConfig = {
             apiKey: "AIzaSyBFmnx84dDnmUn205rBWJvKA5Y9_dPZyNM",
             authDomain: "groundscrew-17d39.firebaseapp.com",
@@ -701,6 +498,7 @@
             measurementId: "G-XB95M4KK65"
         };
 
+        // --- Initialize Firebase & Firestore ---
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
 
@@ -717,11 +515,9 @@
             'Infield'
         ];
 
-        const readingTypes = ['tdr', 'shear'];
         let readingsHistory = [];
-        let activeChartType = 'tdr';
 
-        // ---------- Zone grid with TDR & Shear subsections ----------
+        // ---------- Zone grid ----------
         function initializeZoneGrid() {
             const grid = document.getElementById('zoneGrid');
             grid.innerHTML = '';
@@ -735,65 +531,54 @@
                 zoneName.textContent = zone;
                 card.appendChild(zoneName);
 
-                readingTypes.forEach(type => {
-                    const typeSection = document.createElement('div');
-                    typeSection.className = 'reading-type-section ' + type;
+                const readingInputs = document.createElement('div');
+                readingInputs.className = 'reading-inputs';
 
-                    const typeLabel = document.createElement('div');
-                    typeLabel.className = 'reading-type-label ' + type;
-                    typeLabel.textContent = type.toUpperCase();
-                    typeSection.appendChild(typeLabel);
+                for (let i = 1; i <= 6; i++) {
+                    const inputWrapper = document.createElement('div');
+                    inputWrapper.className = 'reading-input';
 
-                    const readingInputs = document.createElement('div');
-                    readingInputs.className = 'reading-inputs';
+                    const label = document.createElement('label');
+                    label.textContent = `Zone ${i}`;
+                    inputWrapper.appendChild(label);
 
-                    for (let i = 1; i <= 6; i++) {
-                        const inputWrapper = document.createElement('div');
-                        inputWrapper.className = 'reading-input';
+                    const input = document.createElement('input');
+                    input.type = 'number';
+                    input.step = '0.1';
+                    input.min = '0';
+                    input.placeholder = '0.0';
+                    input.id = `zone-${zoneIndex}-reading-${i}`;
+                    input.addEventListener('input', () => updateZoneAverage(zoneIndex));
+                    inputWrapper.appendChild(input);
 
-                        const label = document.createElement('label');
-                        label.textContent = 'Zone ' + i;
-                        inputWrapper.appendChild(label);
+                    readingInputs.appendChild(inputWrapper);
+                }
 
-                        const input = document.createElement('input');
-                        input.type = 'number';
-                        input.step = '0.1';
-                        input.min = '0';
-                        input.placeholder = '0.0';
-                        input.id = 'zone-' + zoneIndex + '-' + type + '-reading-' + i;
-                        input.addEventListener('input', () => updateZoneAverage(zoneIndex, type));
-                        inputWrapper.appendChild(input);
+                card.appendChild(readingInputs);
 
-                        readingInputs.appendChild(inputWrapper);
-                    }
-
-                    typeSection.appendChild(readingInputs);
-
-                    const averageDiv = document.createElement('div');
-                    averageDiv.className = 'zone-average ' + type;
-                    averageDiv.innerHTML =
-                        '<div class="zone-average-label ' + type + '">' + type.toUpperCase() + ' Average</div>' +
-                        '<div class="zone-average-value ' + type + '" id="avg-' + zoneIndex + '-' + type + '">--</div>';
-                    typeSection.appendChild(averageDiv);
-
-                    card.appendChild(typeSection);
-                });
+                const averageDiv = document.createElement('div');
+                averageDiv.className = 'zone-average';
+                averageDiv.innerHTML = `
+                    <div class="zone-average-label">Zone Average</div>
+                    <div class="zone-average-value" id="avg-${zoneIndex}">--</div>
+                `;
+                card.appendChild(averageDiv);
 
                 grid.appendChild(card);
             });
         }
 
-        function updateZoneAverage(zoneIndex, type) {
+        function updateZoneAverage(zoneIndex) {
             const readings = [];
             for (let i = 1; i <= 6; i++) {
-                const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
+                const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
                 const value = parseFloat(input.value);
                 if (!isNaN(value) && value > 0) {
                     readings.push(value);
                 }
             }
 
-            const avgElement = document.getElementById('avg-' + zoneIndex + '-' + type);
+            const avgElement = document.getElementById(`avg-${zoneIndex}`);
             if (readings.length > 0) {
                 const average = readings.reduce((sum, val) => sum + val, 0) / readings.length;
                 avgElement.textContent = average.toFixed(1);
@@ -802,7 +587,7 @@
             }
         }
 
-        // ---------- Submit → save TDR & Shear to Firestore ----------
+        // ---------- Submit → save to Firestore ----------
         async function submitReadings() {
             const enteredByInput = document.getElementById('enteredBy');
             const enteredBy = enteredByInput ? enteredByInput.value.trim() : '';
@@ -817,29 +602,24 @@
             let hasData = false;
 
             zones.forEach((zone, zoneIndex) => {
-                const zoneEntry = {
-                    name: zone,
-                    tdr: { readings: [], average: null },
-                    shear: { readings: [], average: null }
-                };
-
-                readingTypes.forEach(type => {
-                    const vals = [];
-                    for (let i = 1; i <= 6; i++) {
-                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                        const value = parseFloat(input.value);
-                        if (!isNaN(value) && value > 0) {
-                            vals.push(value);
-                            hasData = true;
-                        }
+                const readings = [];
+                for (let i = 1; i <= 6; i++) {
+                    const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
+                    const value = parseFloat(input.value);
+                    if (!isNaN(value) && value > 0) {
+                        readings.push(value);
+                        hasData = true;
                     }
-                    zoneEntry[type].readings = vals;
-                    if (vals.length > 0) {
-                        zoneEntry[type].average = vals.reduce((s, v) => s + v, 0) / vals.length;
-                    }
-                });
+                }
 
-                reading.zones.push(zoneEntry);
+                if (readings.length > 0) {
+                    const average = readings.reduce((sum, val) => sum + val, 0) / readings.length;
+                    reading.zones.push({
+                        name: zone,
+                        average: average,
+                        readings: readings
+                    });
+                }
             });
 
             if (!hasData) {
@@ -847,17 +627,17 @@
                 return;
             }
 
+            // Save to Firestore
             try {
                 await addDoc(collection(db, "moistureReadings"), reading);
                 showToast('Readings saved to Firebase!');
-                clearForm();
             } catch (error) {
                 console.error("Error saving to Firebase:", error);
                 showToast('Error saving — check console for details.');
             }
         }
 
-        // ---------- Real-time listener ----------
+        // ---------- Real-time listener — keeps chart & history in sync ----------
         function listenForReadings() {
             const q = query(
                 collection(db, "moistureReadings"),
@@ -876,10 +656,10 @@
                     });
                 });
 
+                // Reverse so newest is first (for history display)
                 readingsHistory.reverse();
                 updateChart();
                 updateHistory();
-                updateReportTables();
             }, (error) => {
                 console.error("Firestore listener error:", error);
                 showToast('Error loading data from Firebase.');
@@ -889,82 +669,17 @@
         // ---------- Clear form ----------
         function clearForm() {
             zones.forEach((zone, zoneIndex) => {
-                readingTypes.forEach(type => {
-                    for (let i = 1; i <= 6; i++) {
-                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                        input.value = '';
-                    }
-                    updateZoneAverage(zoneIndex, type);
-                });
+                for (let i = 1; i <= 6; i++) {
+                    const input = document.getElementById(`zone-${zoneIndex}-reading-${i}`);
+                    input.value = '';
+                }
+                updateZoneAverage(zoneIndex);
             });
             document.getElementById('enteredBy').value = '';
             showToast('Form cleared.');
         }
 
-        // ---------- Report Tables ----------
-        function updateReportTables() {
-            const tdrBody = document.getElementById('tdrReportBody');
-            const shearBody = document.getElementById('shearReportBody');
-            tdrBody.innerHTML = '';
-            shearBody.innerHTML = '';
-
-            let hasTdr = false;
-            let hasShear = false;
-
-            // Show newest first
-            readingsHistory.forEach(reading => {
-                let tdrRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
-                tdrRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '—') + '</td>';
-                let shearRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
-                shearRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '—') + '</td>';
-
-                let rowHasTdr = false;
-                let rowHasShear = false;
-
-                zones.forEach(zoneName => {
-                    const zoneData = reading.zones.find(z => z.name === zoneName);
-
-                    // TDR cell
-                    if (zoneData && zoneData.tdr && zoneData.tdr.average != null) {
-                        tdrRow += '<td class="avg-cell tdr">' + zoneData.tdr.average.toFixed(1) + '</td>';
-                        rowHasTdr = true;
-                    } else if (zoneData && typeof zoneData.average === 'number') {
-                        // Backward compat: old records without tdr/shear split
-                        tdrRow += '<td>' + zoneData.average.toFixed(1) + '</td>';
-                        rowHasTdr = true;
-                    } else {
-                        tdrRow += '<td>—</td>';
-                    }
-
-                    // Shear cell
-                    if (zoneData && zoneData.shear && zoneData.shear.average != null) {
-                        shearRow += '<td class="avg-cell shear">' + zoneData.shear.average.toFixed(1) + '</td>';
-                        rowHasShear = true;
-                    } else {
-                        shearRow += '<td>—</td>';
-                    }
-                });
-
-                tdrRow += '</tr>';
-                shearRow += '</tr>';
-
-                if (rowHasTdr) { tdrBody.innerHTML += tdrRow; hasTdr = true; }
-                if (rowHasShear) { shearBody.innerHTML += shearRow; hasShear = true; }
-            });
-
-            document.getElementById('tdrEmpty').style.display = hasTdr ? 'none' : 'block';
-            document.getElementById('tdrReportTable').style.display = hasTdr ? 'table' : 'none';
-            document.getElementById('shearEmpty').style.display = hasShear ? 'none' : 'block';
-            document.getElementById('shearReportTable').style.display = hasShear ? 'table' : 'none';
-        }
-
-        function escapeHTML(str) {
-            const d = document.createElement('div');
-            d.textContent = str;
-            return d.innerHTML;
-        }
-
-        // ---------- Chart (TDR / Shear tabs) ----------
+        // ---------- Chart ----------
         const zoneColors = [
             '#2D74A6',
             '#E68A3C',
@@ -973,14 +688,6 @@
             '#F44336',
             '#00BCD4'
         ];
-
-        function switchChart(type) {
-            activeChartType = type;
-            document.querySelectorAll('.chart-tab').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.chartType === type);
-            });
-            updateChart();
-        }
 
         function updateChart() {
             const chartSvg = document.getElementById('chartSvg');
@@ -994,23 +701,18 @@
 
             const chronologicalHistory = [...readingsHistory].reverse();
             const zoneData = {};
-            zones.forEach(zone => { zoneData[zone] = []; });
+
+            zones.forEach(zone => {
+                zoneData[zone] = [];
+            });
 
             chronologicalHistory.forEach((reading, index) => {
                 reading.zones.forEach(zone => {
-                    let avg = null;
-                    if (zone[activeChartType] && zone[activeChartType].average != null) {
-                        avg = zone[activeChartType].average;
-                    } else if (activeChartType === 'tdr' && typeof zone.average === 'number') {
-                        avg = zone.average; // backward compat
-                    }
-                    if (avg !== null) {
-                        zoneData[zone.name].push({
-                            index: index,
-                            value: avg,
-                            date: reading.date
-                        });
-                    }
+                    zoneData[zone.name].push({
+                        index: index,
+                        value: zone.average,
+                        date: reading.date
+                    });
                 });
             });
 
@@ -1024,13 +726,6 @@
             Object.values(zoneData).forEach(data => {
                 allValues = allValues.concat(data.map(d => d.value));
             });
-
-            if (allValues.length === 0) {
-                chartSvg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="var(--color-text-secondary)" font-size="14">No ' + activeChartType.toUpperCase() + ' data to display</text>';
-                chartLegend.innerHTML = '';
-                return;
-            }
-
             const minValue = Math.min(...allValues);
             const maxValue = Math.max(...allValues);
             const valueRange = maxValue - minValue || 1;
@@ -1088,9 +783,9 @@
                     const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
 
                     if (i === 0) {
-                        pathD += 'M ' + x + ' ' + y;
+                        pathD += `M ${x} ${y}`;
                     } else {
-                        pathD += ' L ' + x + ' ' + y;
+                        pathD += ` L ${x} ${y}`;
                     }
                 });
 
@@ -1114,14 +809,15 @@
 
                     circle.addEventListener('mouseenter', (e) => {
                         const tooltip = document.getElementById('chartTooltip');
-                        tooltip.innerHTML = '<strong>' + zoneName + ' (' + activeChartType.toUpperCase() + ')</strong><br>' + point.date + '<br>Value: ' + point.value.toFixed(1);
-                        tooltip.style.left = (e.pageX + 10) + 'px';
-                        tooltip.style.top = (e.pageY - 40) + 'px';
+                        tooltip.innerHTML = `<strong>${zoneName}</strong><br>${point.date}<br>Value: ${point.value.toFixed(1)}`;
+                        tooltip.style.left = `${e.pageX + 10}px`;
+                        tooltip.style.top = `${e.pageY - 40}px`;
                         tooltip.classList.add('show');
                     });
 
                     circle.addEventListener('mouseleave', () => {
-                        document.getElementById('chartTooltip').classList.remove('show');
+                        const tooltip = document.getElementById('chartTooltip');
+                        tooltip.classList.remove('show');
                     });
 
                     chartSvg.appendChild(circle);
@@ -1161,41 +857,18 @@
                 const item = document.createElement('div');
                 item.className = 'history-item';
 
+                const leftDiv = document.createElement('div');
                 const dateDiv = document.createElement('div');
                 dateDiv.className = 'history-date';
-                dateDiv.textContent = reading.date + (reading.enteredBy ? ' \u2022 ' + reading.enteredBy : '');
-                item.appendChild(dateDiv);
+                dateDiv.textContent = reading.date + (reading.enteredBy ? ` \u2022 ${reading.enteredBy}` : '');
+                leftDiv.appendChild(dateDiv);
 
-                // TDR line
-                const tdrZones = document.createElement('div');
-                tdrZones.className = 'history-zones';
-                let tdrParts = [];
-                reading.zones.forEach(z => {
-                    if (z.tdr && z.tdr.average != null) {
-                        tdrParts.push(z.name + ': ' + z.tdr.average.toFixed(1));
-                    } else if (typeof z.average === 'number') {
-                        tdrParts.push(z.name + ': ' + z.average.toFixed(1));
-                    }
-                });
-                if (tdrParts.length > 0) {
-                    tdrZones.innerHTML = '<span class="history-type-label tdr">TDR</span>' + tdrParts.join(' | ');
-                    item.appendChild(tdrZones);
-                }
+                const zonesDiv = document.createElement('div');
+                zonesDiv.className = 'history-zones';
+                zonesDiv.textContent = reading.zones.map(z => `${z.name}: ${z.average.toFixed(1)}`).join(' | ');
+                leftDiv.appendChild(zonesDiv);
 
-                // Shear line
-                const shearZones = document.createElement('div');
-                shearZones.className = 'history-zones';
-                let shearParts = [];
-                reading.zones.forEach(z => {
-                    if (z.shear && z.shear.average != null) {
-                        shearParts.push(z.name + ': ' + z.shear.average.toFixed(1));
-                    }
-                });
-                if (shearParts.length > 0) {
-                    shearZones.innerHTML = '<span class="history-type-label shear">SHEAR</span>' + shearParts.join(' | ');
-                    item.appendChild(shearZones);
-                }
-
+                item.appendChild(leftDiv);
                 historyList.appendChild(item);
             });
         }
@@ -1208,49 +881,40 @@
             }
 
             try {
-                // Header row: Type column added
-                let csv = 'Date,Entered By,Type,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
+                let csv = 'Date,Entered By,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
 
                 readingsHistory.forEach(reading => {
-                    // TDR row
-                    const tdrRow = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"', 'TDR'];
-                    zones.forEach(zoneName => {
-                        const zone = reading.zones.find(z => z.name === zoneName);
-                        if (zone && zone.tdr && zone.tdr.average != null) {
-                            tdrRow.push(zone.tdr.average.toFixed(1));
-                        } else if (zone && typeof zone.average === 'number') {
-                            tdrRow.push(zone.average.toFixed(1));
-                        } else {
-                            tdrRow.push('');
-                        }
-                    });
-                    csv += tdrRow.join(',') + '\n';
+                    const row = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"'];
 
-                    // Shear row
-                    const shearRow = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"', 'Shear'];
                     zones.forEach(zoneName => {
                         const zone = reading.zones.find(z => z.name === zoneName);
-                        if (zone && zone.shear && zone.shear.average != null) {
-                            shearRow.push(zone.shear.average.toFixed(1));
-                        } else {
-                            shearRow.push('');
-                        }
+                        row.push(zone ? zone.average.toFixed(1) : '');
                     });
-                    csv += shearRow.join(',') + '\n';
+
+                    csv += row.join(',') + '\n';
                 });
 
                 const BOM = '\uFEFF';
                 const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
+                const fileName = `baseball-field-moisture-${new Date().toISOString().split('T')[0]}.csv`;
+
                 link.href = url;
-                link.download = 'baseball-field-readings-' + new Date().toISOString().split('T')[0] + '.csv';
+                link.download = fileName;
+
                 document.body.appendChild(link);
+
                 setTimeout(() => {
                     link.click();
-                    setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 100);
+                    setTimeout(() => {
+                        document.body.removeChild(link);
+                        URL.revokeObjectURL(url);
+                    }, 100);
                 }, 10);
-                showToast('Exporting ' + readingsHistory.length + ' reading(s)...');
+
+                showToast(`Exporting ${readingsHistory.length} reading(s)...`);
             } catch (error) {
                 console.error('Export error:', error);
                 showToast('Error exporting data. Please try again.');
@@ -1266,11 +930,13 @@
             reader.onload = async function(e) {
                 try {
                     const importedData = JSON.parse(e.target.result);
+
                     if (!Array.isArray(importedData)) {
                         showToast('Invalid file format.');
                         return;
                     }
 
+                    // Save each imported reading to Firestore
                     let count = 0;
                     for (const reading of importedData) {
                         await addDoc(collection(db, "moistureReadings"), {
@@ -1281,34 +947,34 @@
                         });
                         count++;
                     }
-                    showToast('Imported ' + count + ' reading(s) to Firebase!');
+
+                    showToast(`Imported ${count} reading(s) to Firebase!`);
                 } catch (error) {
                     try {
                         const csvData = e.target.result;
                         const lines = csvData.split('\n').filter(line => line.trim());
+
                         if (lines.length < 2) {
                             showToast('CSV file appears to be empty.');
                             return;
                         }
+
                         const dataLines = lines.slice(1);
                         let count = 0;
 
                         for (const line of dataLines) {
                             const values = line.split(',');
-                            if (values.length < 9) continue;
+                            if (values.length < 8) continue;
 
                             const zonesArr = [];
-                            const type = (values[2] || '').trim().toLowerCase();
                             zones.forEach((zoneName, index) => {
-                                const value = parseFloat(values[index + 3]);
+                                const value = parseFloat(values[index + 2]);
                                 if (!isNaN(value)) {
-                                    const entry = { name: zoneName, tdr: { readings: [], average: null }, shear: { readings: [], average: null } };
-                                    if (type === 'shear') {
-                                        entry.shear = { readings: [value], average: value };
-                                    } else {
-                                        entry.tdr = { readings: [value], average: value };
-                                    }
-                                    zonesArr.push(entry);
+                                    zonesArr.push({
+                                        name: zoneName,
+                                        average: value,
+                                        readings: [value]
+                                    });
                                 }
                             });
 
@@ -1322,7 +988,8 @@
                                 count++;
                             }
                         }
-                        showToast('Imported ' + count + ' reading(s) from CSV to Firebase!');
+
+                        showToast(`Imported ${count} reading(s) from CSV to Firebase!`);
                     } catch (csvError) {
                         showToast('Error reading file.');
                     }
@@ -1337,18 +1004,21 @@
             const toast = document.getElementById('toast');
             toast.textContent = message;
             toast.classList.add('show');
-            setTimeout(() => { toast.classList.remove('show'); }, 3000);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
         }
 
         // ---------- Boot ----------
         initializeZoneGrid();
-        listenForReadings();
+        listenForReadings();   // Start real-time sync from Firestore
 
+        // Expose functions to onclick handlers (module scope doesn't auto-expose)
         window.submitReadings = submitReadings;
         window.clearForm = clearForm;
         window.exportData = exportData;
         window.importData = importData;
-        window.switchChart = switchChart;
     </script>
 </body>
 </html>
