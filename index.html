@@ -712,6 +712,8 @@
                         input.step = '0.1';
                         input.min = '0';
                         input.placeholder = '0.0';
+                        input.inputMode = 'decimal';
+                        input.pattern = '[0-9]*\.?[0-9]*';
                         input.id = 'zone-' + zoneIndex + '-' + type + '-reading-' + i;
                         input.addEventListener('input', () => updateZoneAverage(zoneIndex, type));
                         inputWrapper.appendChild(input);
