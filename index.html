@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,7 +42,6 @@
             --radius-base: 8px;
             --radius-lg: 12px;
 
-            /* TDR & Shear colors */
             --tdr-bg: rgba(33, 128, 80, 0.10);
             --tdr-accent: #1a7a42;
             --tdr-text: #15603a;
@@ -81,11 +79,7 @@
             }
         }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         body {
             font-family: var(--font-family-base);
@@ -95,16 +89,9 @@
             padding: var(--space-20);
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
 
-        h1 {
-            font-size: 28px;
-            margin-bottom: var(--space-8);
-            color: var(--color-text);
-        }
+        h1 { font-size: 28px; margin-bottom: var(--space-8); color: var(--color-text); }
 
         .subtitle {
             color: var(--color-text-secondary);
@@ -127,39 +114,19 @@
             margin-bottom: var(--space-16);
         }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: var(--color-text);
-        }
+        .section-title { font-size: 18px; font-weight: 600; color: var(--color-text); }
 
-        .entered-by-wrapper {
-            max-width: 240px;
-            margin-bottom: var(--space-16);
-        }
-
+        .entered-by-wrapper { max-width: 240px; margin-bottom: var(--space-16); }
         .entered-by-wrapper label {
-            font-size: 13px;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-            display: block;
-            margin-bottom: 4px;
+            font-size: 13px; color: var(--color-text-secondary);
+            font-weight: 500; display: block; margin-bottom: 4px;
         }
-
         .entered-by-wrapper input {
-            width: 100%;
-            padding: 8px 12px;
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
-            background-color: var(--color-background);
-            color: var(--color-text);
-            font-size: 14px;
+            width: 100%; padding: 8px 12px;
+            border: 1px solid var(--color-border); border-radius: 6px;
+            background-color: var(--color-background); color: var(--color-text); font-size: 14px;
         }
-
-        .entered-by-wrapper input:focus {
-            outline: 2px solid var(--color-primary);
-            border-color: var(--color-primary);
-        }
+        .entered-by-wrapper input:focus { outline: 2px solid var(--color-primary); border-color: var(--color-primary); }
 
         .zone-grid {
             display: grid;
@@ -176,440 +143,191 @@
         }
 
         .zone-name {
-            font-weight: 600;
-            margin-bottom: var(--space-12);
-            color: var(--color-text);
-            font-size: 16px;
-            text-align: center;
-            padding-bottom: var(--space-8);
-            border-bottom: 1px solid var(--color-border);
+            font-weight: 600; margin-bottom: var(--space-12);
+            color: var(--color-text); font-size: 16px; text-align: center;
+            padding-bottom: var(--space-8); border-bottom: 1px solid var(--color-border);
         }
 
-        /* Reading type subsection (TDR / Shear) */
         .reading-type-section {
-            border-radius: var(--radius-base);
-            padding: var(--space-12);
-            margin-top: var(--space-12);
-            border: 1px solid transparent;
+            border-radius: var(--radius-base); padding: var(--space-12);
+            margin-top: var(--space-12); border: 1px solid transparent;
         }
-        .reading-type-section.tdr {
-            background: var(--tdr-bg);
-            border-color: var(--tdr-border);
-        }
-        .reading-type-section.shear {
-            background: var(--shear-bg);
-            border-color: var(--shear-border);
-        }
+        .reading-type-section.tdr { background: var(--tdr-bg); border-color: var(--tdr-border); }
+        .reading-type-section.shear { background: var(--shear-bg); border-color: var(--shear-border); }
 
         .reading-type-label {
-            font-size: 13px;
-            font-weight: 700;
-            text-align: center;
-            margin-bottom: var(--space-8);
-            padding: 3px 10px;
-            border-radius: 6px;
-            display: block;
-            letter-spacing: 0.04em;
+            font-size: 13px; font-weight: 700; text-align: center;
+            margin-bottom: var(--space-8); padding: 3px 10px;
+            border-radius: 6px; display: block; letter-spacing: 0.04em;
         }
-        .reading-type-label.tdr {
-            color: var(--tdr-text);
-        }
-        .reading-type-label.shear {
-            color: var(--shear-text);
-        }
+        .reading-type-label.tdr { color: var(--tdr-text); }
+        .reading-type-label.shear { color: var(--shear-text); }
 
         .reading-inputs {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: var(--space-8);
-            margin-bottom: var(--space-8);
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-8); margin-bottom: var(--space-8);
         }
 
-        .reading-input {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .reading-input label {
-            font-size: 11px;
-            color: var(--color-text-secondary);
-            font-weight: 500;
-        }
-
+        .reading-input { display: flex; flex-direction: column; gap: 4px; }
+        .reading-input label { font-size: 11px; color: var(--color-text-secondary); font-weight: 500; }
         .reading-input input {
-            width: 100%;
-            padding: 6px 8px;
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
-            background-color: var(--color-surface);
-            color: var(--color-text);
-            font-size: 14px;
+            width: 100%; padding: 6px 8px;
+            border: 1px solid var(--color-border); border-radius: 6px;
+            background-color: var(--color-surface); color: var(--color-text); font-size: 14px;
         }
-
-        .reading-input input:focus {
-            outline: 2px solid var(--color-primary);
-            border-color: var(--color-primary);
-        }
+        .reading-input input:focus { outline: 2px solid var(--color-primary); border-color: var(--color-primary); }
 
         .zone-average {
             padding: var(--space-8) var(--space-12);
-            border-radius: var(--radius-base);
-            text-align: center;
+            border-radius: var(--radius-base); text-align: center;
         }
-        .zone-average.tdr {
-            background-color: var(--tdr-bg);
-        }
-        .zone-average.shear {
-            background-color: var(--shear-bg);
-        }
+        .zone-average.tdr { background-color: var(--tdr-bg); }
+        .zone-average.shear { background-color: var(--shear-bg); }
 
-        .zone-average-label {
-            font-size: 11px;
-            font-weight: 500;
-            margin-bottom: 2px;
-        }
+        .zone-average-label { font-size: 11px; font-weight: 500; margin-bottom: 2px; }
         .zone-average-label.tdr { color: var(--tdr-text); }
         .zone-average-label.shear { color: var(--shear-text); }
 
-        .zone-average-value {
-            font-size: 22px;
-            font-weight: 700;
-        }
+        .zone-average-value { font-size: 22px; font-weight: 700; }
         .zone-average-value.tdr { color: var(--tdr-accent); }
         .zone-average-value.shear { color: var(--shear-accent); }
 
         .button {
-            padding: 12px 24px;
-            border: none;
-            border-radius: var(--radius-base);
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
+            padding: 12px 24px; border: none; border-radius: var(--radius-base);
+            font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s;
         }
+        .button-primary { background-color: var(--color-primary); color: var(--color-btn-primary-text); }
+        .button-primary:hover { background-color: var(--color-primary-hover); }
+        .button-primary:active { background-color: var(--color-primary-active); }
+        .button-secondary { background-color: var(--color-secondary); color: var(--color-text); }
+        .button-secondary:hover { background-color: var(--color-secondary-hover); }
 
-        .button-primary {
-            background-color: var(--color-primary);
-            color: var(--color-btn-primary-text);
+        .button-group { display: flex; gap: var(--space-12); justify-content: flex-end; flex-wrap: wrap; }
+
+        .draft-notice {
+            display: none; margin-top: var(--space-12); padding: var(--space-12);
+            background: rgba(230,138,60,0.12); border: 1px solid rgba(230,138,60,0.3);
+            border-radius: var(--radius-base); font-size: 13px; color: var(--color-text);
+            align-items: center; gap: 8px; flex-wrap: wrap;
         }
-
-        .button-primary:hover {
-            background-color: var(--color-primary-hover);
+        .draft-notice.show { display: flex; }
+        .draft-notice-btn {
+            padding: 4px 12px; border-radius: 4px; font-size: 12px;
+            font-weight: 600; cursor: pointer; border: none;
         }
-
-        .button-primary:active {
-            background-color: var(--color-primary-active);
+        .draft-notice-btn.resume {
+            background: var(--color-primary); color: var(--color-btn-primary-text);
         }
-
-        .button-secondary {
-            background-color: var(--color-secondary);
-            color: var(--color-text);
-        }
-
-        .button-secondary:hover {
-            background-color: var(--color-secondary-hover);
-        }
-
-        .button-group {
-            display: flex;
-            gap: var(--space-12);
-            justify-content: flex-end;
-            flex-wrap: wrap;
-        }
-
-        /* ---- Chart ---- */
-        .chart-container {
-            margin-top: var(--space-24);
-            padding: var(--space-20);
-            background-color: var(--color-surface);
-            border-radius: var(--radius-lg);
+        .draft-notice-btn.discard {
+            background: var(--color-secondary); color: var(--color-text);
             border: 1px solid var(--color-border);
-        }
-
-        .chart-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: var(--space-16);
-            color: var(--color-text);
-        }
-
-        .chart-tab-bar {
-            display: flex;
-            gap: var(--space-8);
-            margin-bottom: var(--space-16);
-        }
-        .chart-tab {
-            padding: 6px 16px;
-            border-radius: 6px;
-            font-size: 13px;
-            font-weight: 600;
-            cursor: pointer;
-            border: 1px solid var(--color-border);
-            background: var(--color-background);
-            color: var(--color-text-secondary);
-            transition: all 0.15s;
-        }
-        .chart-tab.active {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            border-color: var(--color-primary);
-        }
-
-        .chart {
-            width: 100%;
-            height: 400px;
-            position: relative;
-        }
-
-        .chart-canvas {
-            width: 100%;
-            height: 350px;
-            position: relative;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-base);
-            background-color: var(--color-background);
-        }
-
-        .chart-svg {
-            width: 100%;
-            height: 100%;
-        }
-
-        .chart-line {
-            fill: none;
-            stroke-width: 2.5;
-            transition: stroke-width 0.2s;
-        }
-
-        .chart-line:hover {
-            stroke-width: 3.5;
-        }
-
-        .chart-point {
-            transition: r 0.2s;
-        }
-
-        .chart-point:hover {
-            r: 6;
-        }
-
-        .chart-legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: var(--space-12);
-            justify-content: center;
-            margin-top: var(--space-16);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 12px;
-            color: var(--color-text);
-        }
-
-        .legend-color {
-            width: 20px;
-            height: 3px;
-            border-radius: 2px;
-        }
-
-        .chart-tooltip {
-            position: absolute;
-            background-color: var(--color-surface);
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-base);
-            padding: var(--space-8) var(--space-12);
-            font-size: 12px;
-            pointer-events: none;
-            opacity: 0;
-            transition: opacity 0.2s;
-            z-index: 10;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-        }
-
-        .chart-tooltip.show {
-            opacity: 1;
-        }
-
-        /* ---- Report tables ---- */
-        .report-section {
-            margin-top: var(--space-24);
-            background-color: var(--color-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border);
-            overflow: hidden;
-        }
-        .report-header {
-            padding: var(--space-12) var(--space-16);
-            font-size: 16px;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .report-header.tdr {
-            background: var(--tdr-bg);
-            color: var(--tdr-text);
-            border-bottom: 1px solid var(--tdr-border);
-        }
-        .report-header.shear {
-            background: var(--shear-bg);
-            color: var(--shear-text);
-            border-bottom: 1px solid var(--shear-border);
-        }
-        .report-body {
-            overflow-x: auto;
-        }
-        .report-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
-        .report-table th, .report-table td {
-            padding: 8px 12px;
-            text-align: center;
-            border-bottom: 1px solid var(--color-border);
-        }
-        .report-table th {
-            background: var(--color-secondary);
-            color: var(--color-text-secondary);
-            font-weight: 600;
-            font-size: 11px;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
-        .report-table td:first-child {
-            text-align: left;
-            font-weight: 500;
-        }
-        .report-table tbody tr:hover {
-            background: var(--color-secondary);
-        }
-        .report-table .avg-cell.tdr { color: var(--tdr-accent); font-weight: 700; }
-        .report-table .avg-cell.shear { color: var(--shear-accent); font-weight: 700; }
-        .report-empty {
-            padding: var(--space-24);
-            text-align: center;
-            color: var(--color-text-secondary);
-            font-size: 13px;
         }
 
         /* Date range filter */
         .date-filter {
-            background: var(--color-surface);
-            border-radius: var(--radius-lg);
-            border: 1px solid var(--color-border);
-            padding: var(--space-16) var(--space-20);
-            margin-top: var(--space-24);
-            margin-bottom: 4px;
+            background: var(--color-surface); border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border); padding: var(--space-16) var(--space-20);
+            margin-top: var(--space-24); margin-bottom: 4px;
         }
-        .date-filter h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: var(--space-12);
-            color: var(--color-text);
-        }
-        .date-filter-row {
-            display: flex;
-            align-items: flex-end;
-            gap: var(--space-12);
-            flex-wrap: wrap;
-        }
-        .date-filter-field {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .date-filter-field label {
-            font-size: 12px;
-            font-weight: 500;
-            color: var(--color-text-secondary);
-        }
+        .date-filter h3 { font-size: 16px; font-weight: 600; margin-bottom: var(--space-12); color: var(--color-text); }
+        .date-filter-row { display: flex; align-items: flex-end; gap: var(--space-12); flex-wrap: wrap; }
+        .date-filter-field { display: flex; flex-direction: column; gap: 4px; }
+        .date-filter-field label { font-size: 12px; font-weight: 500; color: var(--color-text-secondary); }
         .date-filter-field input[type="date"] {
-            padding: 8px 12px;
-            border: 1px solid var(--color-border);
-            border-radius: 6px;
-            background: var(--color-background);
-            color: var(--color-text);
-            font-size: 14px;
-            font-family: var(--font-family-base);
+            padding: 8px 12px; border: 1px solid var(--color-border); border-radius: 6px;
+            background: var(--color-background); color: var(--color-text);
+            font-size: 14px; font-family: var(--font-family-base);
         }
-        .date-filter-field input[type="date"]:focus {
-            outline: 2px solid var(--color-primary);
-            border-color: var(--color-primary);
-        }
+        .date-filter-field input[type="date"]:focus { outline: 2px solid var(--color-primary); border-color: var(--color-primary); }
         .filter-btn {
-            padding: 8px 20px;
-            border: none;
-            border-radius: 6px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.15s;
+            padding: 8px 20px; border: none; border-radius: 6px;
+            font-size: 14px; font-weight: 600; cursor: pointer; transition: all 0.15s;
         }
-        .filter-btn-primary {
-            background: var(--color-primary);
-            color: var(--color-btn-primary-text);
-        }
-        .filter-btn-primary:hover {
-            background: var(--color-primary-hover);
-        }
-        .filter-btn-secondary {
-            background: var(--color-secondary);
-            color: var(--color-text);
-        }
-        .filter-btn-secondary:hover {
-            background: var(--color-secondary-hover);
-        }
-        .filter-info {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-top: var(--space-8);
-        }
+        .filter-btn-primary { background: var(--color-primary); color: var(--color-btn-primary-text); }
+        .filter-btn-primary:hover { background: var(--color-primary-hover); }
+        .filter-btn-secondary { background: var(--color-secondary); color: var(--color-text); }
+        .filter-btn-secondary:hover { background: var(--color-secondary-hover); }
+        .filter-info { font-size: 12px; color: var(--color-text-secondary); margin-top: var(--space-8); }
 
-
-
-        .empty-state {
-            text-align: center;
-            padding: var(--space-24);
-            color: var(--color-text-secondary);
+        /* Report tables */
+        .report-section {
+            margin-top: var(--space-24); background-color: var(--color-surface);
+            border-radius: var(--radius-lg); border: 1px solid var(--color-border); overflow: hidden;
         }
+        .report-header {
+            padding: var(--space-12) var(--space-16); font-size: 16px; font-weight: 600;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .report-header.tdr { background: var(--tdr-bg); color: var(--tdr-text); border-bottom: 1px solid var(--tdr-border); }
+        .report-header.shear { background: var(--shear-bg); color: var(--shear-text); border-bottom: 1px solid var(--shear-border); }
+        .report-body { overflow-x: auto; }
+        .report-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+        .report-table th, .report-table td {
+            padding: 8px 12px; text-align: center; border-bottom: 1px solid var(--color-border);
+        }
+        .report-table th {
+            background: var(--color-secondary); color: var(--color-text-secondary);
+            font-weight: 600; font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+        }
+        .report-table td:first-child { text-align: left; font-weight: 500; }
+        .report-table tbody tr:hover { background: var(--color-secondary); }
+        .report-table .avg-cell.tdr { color: var(--tdr-accent); font-weight: 700; }
+        .report-table .avg-cell.shear { color: var(--shear-accent); font-weight: 700; }
+        .report-empty { padding: var(--space-24); text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+
+        /* Chart */
+        .chart-container {
+            margin-top: var(--space-24); padding: var(--space-20);
+            background-color: var(--color-surface); border-radius: var(--radius-lg);
+            border: 1px solid var(--color-border);
+        }
+        .chart-title { font-size: 18px; font-weight: 600; margin-bottom: var(--space-16); color: var(--color-text); }
+        .chart-tab-bar { display: flex; gap: var(--space-8); margin-bottom: var(--space-16); }
+        .chart-tab {
+            padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 600;
+            cursor: pointer; border: 1px solid var(--color-border);
+            background: var(--color-background); color: var(--color-text-secondary); transition: all 0.15s;
+        }
+        .chart-tab.active { background: var(--color-primary); color: var(--color-btn-primary-text); border-color: var(--color-primary); }
+        .chart { width: 100%; height: 400px; position: relative; }
+        .chart-canvas {
+            width: 100%; height: 350px; position: relative;
+            border: 1px solid var(--color-border); border-radius: var(--radius-base);
+            background-color: var(--color-background);
+        }
+        .chart-svg { width: 100%; height: 100%; }
+        .chart-line { fill: none; stroke-width: 2.5; transition: stroke-width 0.2s; }
+        .chart-line:hover { stroke-width: 3.5; }
+        .chart-point { transition: r 0.2s; }
+        .chart-point:hover { r: 6; }
+        .chart-legend { display: flex; flex-wrap: wrap; gap: var(--space-12); justify-content: center; margin-top: var(--space-16); }
+        .legend-item { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text); }
+        .legend-color { width: 20px; height: 3px; border-radius: 2px; }
+        .chart-tooltip {
+            position: absolute; background-color: var(--color-surface);
+            border: 1px solid var(--color-border); border-radius: var(--radius-base);
+            padding: var(--space-8) var(--space-12); font-size: 12px;
+            pointer-events: none; opacity: 0; transition: opacity 0.2s; z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+        .chart-tooltip.show { opacity: 1; }
+
+        .empty-state { text-align: center; padding: var(--space-24); color: var(--color-text-secondary); }
 
         .toast {
-            position: fixed;
-            bottom: 24px;
-            right: 24px;
-            background-color: var(--color-primary);
-            color: var(--color-btn-primary-text);
-            padding: var(--space-16) var(--space-20);
-            border-radius: var(--radius-base);
+            position: fixed; bottom: 24px; right: 24px;
+            background-color: var(--color-primary); color: var(--color-btn-primary-text);
+            padding: var(--space-16) var(--space-20); border-radius: var(--radius-base);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            opacity: 0;
-            transform: translateY(20px);
-            transition: all 0.3s;
-            pointer-events: none;
-            z-index: 100;
+            opacity: 0; transform: translateY(20px); transition: all 0.3s;
+            pointer-events: none; z-index: 100;
         }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: auto;
-        }
+        .toast.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
 
         @media (max-width: 768px) {
-            .zone-grid {
-                grid-template-columns: 1fr;
-            }
-            .reading-inputs {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .chart {
-                height: 350px;
-            }
+            .zone-grid { grid-template-columns: 1fr; }
+            .reading-inputs { grid-template-columns: repeat(2, 1fr); }
+            .chart { height: 350px; }
         }
     </style>
 </head>
@@ -631,18 +349,19 @@
             <div class="zone-grid" id="zoneGrid"></div>
 
             <div class="button-group">
-                <button class="button button-secondary" onclick="clearForm()">Clear All</button>
-                <button class="button button-secondary" onclick="saveDraft()" title="Save current entries and finish later">&#128190; Save Draft</button>
-                <button class="button button-secondary" onclick="exportData()">Export CSV</button>
-                <button class="button button-secondary" onclick="document.getElementById('importFile').click()">Import Data</button>
-                <button class="button button-primary" onclick="submitReadings()">Submit Readings</button>
+                <button class="button button-secondary" id="clearBtn">Clear All</button>
+                <button class="button button-secondary" id="saveDraftBtn">&#128190; Save Draft</button>
+                <button class="button button-secondary" id="exportBtn">Export CSV</button>
+                <button class="button button-secondary" id="importBtn">Import Data</button>
+                <button class="button button-primary" id="submitBtn">Submit Readings</button>
             </div>
-            <div id="draftNotice" style="display:none; margin-top:var(--space-12); padding:var(--space-12); background:rgba(230,138,60,0.12); border:1px solid rgba(230,138,60,0.3); border-radius:var(--radius-base); font-size:13px; color:var(--color-text);">
+            <input type="file" id="importFile" accept=".json,.csv" style="display: none;">
+
+            <div class="draft-notice" id="draftNotice">
                 &#128221; <strong>You have a saved draft.</strong>
-                <button onclick="loadDraft()" style="margin-left:8px; padding:4px 12px; border:none; border-radius:4px; background:var(--color-primary); color:var(--color-btn-primary-text); font-size:12px; font-weight:600; cursor:pointer;">Resume Draft</button>
-                <button onclick="discardDraft()" style="margin-left:4px; padding:4px 12px; border:1px solid var(--color-border); border-radius:4px; background:var(--color-secondary); color:var(--color-text); font-size:12px; font-weight:600; cursor:pointer;">Discard</button>
+                <button class="draft-notice-btn resume" id="loadDraftBtn">Resume Draft</button>
+                <button class="draft-notice-btn discard" id="discardDraftBtn">Discard</button>
             </div>
-            <input type="file" id="importFile" accept=".json,.csv" style="display: none;" onchange="importData(event)">
         </div>
 
         <!-- Date Range Filter -->
@@ -657,14 +376,14 @@
                     <label for="filterEnd">End Date</label>
                     <input type="date" id="filterEnd">
                 </div>
-                <button class="filter-btn filter-btn-primary" onclick="applyDateFilter()">Apply Filter</button>
-                <button class="filter-btn filter-btn-secondary" onclick="resetDateFilter()">Reset (Last 7 Days)</button>
+                <button class="filter-btn filter-btn-primary" id="applyFilterBtn">Apply Filter</button>
+                <button class="filter-btn filter-btn-secondary" id="resetFilterBtn">Reset (Last 7 Days)</button>
             </div>
             <div class="filter-info" id="filterInfo">Showing last 7 days</div>
         </div>
 
         <!-- TDR Report -->
-        <div class="report-section" id="tdrReportSection">
+        <div class="report-section">
             <div class="report-header tdr">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg>
                 TDR Report
@@ -686,7 +405,7 @@
         </div>
 
         <!-- Shear Report -->
-        <div class="report-section" id="shearReportSection">
+        <div class="report-section">
             <div class="report-header shear">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
                 Shear Report
@@ -711,8 +430,8 @@
         <div class="chart-container">
             <h2 class="chart-title">Trends Over Time</h2>
             <div class="chart-tab-bar">
-                <button class="chart-tab active" data-chart-type="tdr" onclick="switchChart('tdr')">TDR</button>
-                <button class="chart-tab" data-chart-type="shear" onclick="switchChart('shear')">Shear</button>
+                <button class="chart-tab active" data-chart-type="tdr" id="chartTabTdr">TDR</button>
+                <button class="chart-tab" data-chart-type="shear" id="chartTabShear">Shear</button>
             </div>
             <div class="chart">
                 <div class="chart-canvas" id="chartCanvas">
@@ -722,14 +441,12 @@
                 <div class="chart-legend" id="chartLegend"></div>
             </div>
         </div>
-
-
     </div>
 
     <div class="toast" id="toast"></div>
 
-    <!-- ===================== FIREBASE SDK (CDN) ===================== -->
     <script type="module">
+        // --- Firebase imports ---
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
         import {
             getFirestore,
@@ -745,6 +462,7 @@
             Timestamp
         } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-firestore.js";
 
+        // --- Firebase config ---
         const firebaseConfig = {
             apiKey: "AIzaSyBFmnx84dDnmUn205rBWJvKA5Y9_dPZyNM",
             authDomain: "groundscrew-17d39.firebaseapp.com",
@@ -759,24 +477,22 @@
         const db = getFirestore(app);
 
         // ================================================================
-        //  APP CODE
+        //  CONFIG
         // ================================================================
-
         const zones = [
-            'Left Field',
-            'Center Field',
-            'Right Field',
-            '1st Base Line',
-            '3rd Base Line',
-            'Infield'
+            'Left Field', 'Center Field', 'Right Field',
+            '1st Base Line', '3rd Base Line', 'Infield'
         ];
-
         const readingTypes = ['tdr', 'shear'];
         let readingsHistory = [];
         let activeChartType = 'tdr';
-        let savedDraft = null;
+        let customFilterStart = null;
+        let customFilterEnd = null;
+        const DRAFT_DOC_ID = 'current_draft';
 
-        // ---------- Zone grid with TDR & Shear subsections ----------
+        // ================================================================
+        //  ZONE GRID
+        // ================================================================
         function initializeZoneGrid() {
             const grid = document.getElementById('zoneGrid');
             grid.innerHTML = '';
@@ -816,7 +532,7 @@
                         input.min = '0';
                         input.placeholder = '0.0';
                         input.inputMode = 'decimal';
-                        input.pattern = '[0-9]*\.?[0-9]*';
+                        input.pattern = '[0-9]*\\.?[0-9]*';
                         input.id = 'zone-' + zoneIndex + '-' + type + '-reading-' + i;
                         input.addEventListener('input', () => updateZoneAverage(zoneIndex, type));
                         inputWrapper.appendChild(input);
@@ -843,26 +559,20 @@
         function updateZoneAverage(zoneIndex, type) {
             const readings = [];
             for (let i = 1; i <= 6; i++) {
-                const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                const value = parseFloat(input.value);
-                if (!isNaN(value) && value > 0) {
-                    readings.push(value);
-                }
+                const val = parseFloat(document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i).value);
+                if (!isNaN(val) && val > 0) readings.push(val);
             }
-
-            const avgElement = document.getElementById('avg-' + zoneIndex + '-' + type);
-            if (readings.length > 0) {
-                const average = readings.reduce((sum, val) => sum + val, 0) / readings.length;
-                avgElement.textContent = average.toFixed(1);
-            } else {
-                avgElement.textContent = '--';
-            }
+            const avgEl = document.getElementById('avg-' + zoneIndex + '-' + type);
+            avgEl.textContent = readings.length > 0
+                ? (readings.reduce((s, v) => s + v, 0) / readings.length).toFixed(1)
+                : '--';
         }
 
-        // ---------- Submit → save TDR & Shear to Firestore ----------
+        // ================================================================
+        //  SUBMIT
+        // ================================================================
         async function submitReadings() {
-            const enteredByInput = document.getElementById('enteredBy');
-            const enteredBy = enteredByInput ? enteredByInput.value.trim() : '';
+            const enteredBy = document.getElementById('enteredBy').value.trim();
 
             const reading = {
                 timestamp: Timestamp.now(),
@@ -883,12 +593,8 @@
                 readingTypes.forEach(type => {
                     const vals = [];
                     for (let i = 1; i <= 6; i++) {
-                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                        const value = parseFloat(input.value);
-                        if (!isNaN(value) && value > 0) {
-                            vals.push(value);
-                            hasData = true;
-                        }
+                        const val = parseFloat(document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i).value);
+                        if (!isNaN(val) && val > 0) { vals.push(val); hasData = true; }
                     }
                     zoneEntry[type].readings = vals;
                     if (vals.length > 0) {
@@ -907,32 +613,138 @@
             try {
                 await addDoc(collection(db, "moistureReadings"), reading);
                 showToast('Readings saved to Firebase!');
-                clearForm();
+                clearForm(false);
+                // Also discard draft if one exists
+                try { await deleteDoc(doc(db, 'drafts', DRAFT_DOC_ID)); } catch (e) { /* ignore */ }
+                showDraftNotice(false);
             } catch (error) {
                 console.error("Error saving to Firebase:", error);
                 showToast('Error saving — check console for details.');
             }
         }
 
-        // ---------- Real-time listener ----------
+        // ================================================================
+        //  DRAFT — SAVE / LOAD / DISCARD (Firestore)
+        // ================================================================
+        async function saveDraft() {
+            const enteredBy = document.getElementById('enteredBy').value.trim();
+            const draftData = { enteredBy: enteredBy, savedAt: Timestamp.now(), zones: {} };
+
+            zones.forEach((zone, zoneIndex) => {
+                draftData.zones[String(zoneIndex)] = {};
+                readingTypes.forEach(type => {
+                    draftData.zones[String(zoneIndex)][type] = {};
+                    for (let i = 1; i <= 6; i++) {
+                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
+                        draftData.zones[String(zoneIndex)][type][String(i)] = input.value || '';
+                    }
+                });
+            });
+
+            try {
+                const draftRef = doc(db, 'drafts', DRAFT_DOC_ID);
+                await setDoc(draftRef, draftData);
+                showDraftNotice(true);
+                showToast('Draft saved to Firebase! You can close and come back later.');
+            } catch (error) {
+                console.error('Error saving draft:', error);
+                showToast('Error saving draft — check console.');
+            }
+        }
+
+        async function loadDraft() {
+            try {
+                const draftRef = doc(db, 'drafts', DRAFT_DOC_ID);
+                const snap = await getDoc(draftRef);
+                if (!snap.exists()) {
+                    showToast('No draft found.');
+                    return;
+                }
+                const d = snap.data();
+                document.getElementById('enteredBy').value = d.enteredBy || '';
+
+                zones.forEach((zone, zoneIndex) => {
+                    readingTypes.forEach(type => {
+                        for (let i = 1; i <= 6; i++) {
+                            const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
+                            const val = d.zones?.[String(zoneIndex)]?.[type]?.[String(i)] || '';
+                            input.value = val;
+                        }
+                        updateZoneAverage(zoneIndex, type);
+                    });
+                });
+
+                showToast('Draft restored! Continue where you left off.');
+            } catch (error) {
+                console.error('Error loading draft:', error);
+                showToast('Error loading draft — check console.');
+            }
+        }
+
+        async function discardDraft() {
+            try {
+                const draftRef = doc(db, 'drafts', DRAFT_DOC_ID);
+                await deleteDoc(draftRef);
+                showDraftNotice(false);
+                showToast('Draft discarded.');
+            } catch (error) {
+                console.error('Error discarding draft:', error);
+                showToast('Error discarding draft — check console.');
+            }
+        }
+
+        function showDraftNotice(show) {
+            const el = document.getElementById('draftNotice');
+            if (show) { el.classList.add('show'); } else { el.classList.remove('show'); }
+        }
+
+        async function checkForExistingDraft() {
+            try {
+                const draftRef = doc(db, 'drafts', DRAFT_DOC_ID);
+                const snap = await getDoc(draftRef);
+                if (snap.exists()) {
+                    const d = snap.data();
+                    // Only show notice if it has real zone data (not just the placeholder)
+                    if (d.zones) { showDraftNotice(true); }
+                }
+            } catch (e) {
+                console.error('Error checking for draft:', e);
+            }
+        }
+
+        // ================================================================
+        //  CLEAR FORM
+        // ================================================================
+        function clearForm(notify) {
+            zones.forEach((zone, zoneIndex) => {
+                readingTypes.forEach(type => {
+                    for (let i = 1; i <= 6; i++) {
+                        document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i).value = '';
+                    }
+                    updateZoneAverage(zoneIndex, type);
+                });
+            });
+            document.getElementById('enteredBy').value = '';
+            if (notify !== false) showToast('Form cleared.');
+        }
+
+        // ================================================================
+        //  REAL-TIME LISTENER
+        // ================================================================
         function listenForReadings() {
-            const q = query(
-                collection(db, "moistureReadings"),
-                orderBy("timestamp", "asc")
-            );
+            const q = query(collection(db, "moistureReadings"), orderBy("timestamp", "asc"));
 
             onSnapshot(q, (snapshot) => {
                 readingsHistory = [];
-                snapshot.forEach((doc) => {
-                    const data = doc.data();
+                snapshot.forEach((docSnap) => {
+                    const data = docSnap.data();
                     readingsHistory.push({
-                        id: doc.id,
+                        id: docSnap.id,
                         date: data.date || data.timestamp?.toDate().toLocaleString() || 'Unknown',
                         enteredBy: data.enteredBy || null,
                         zones: data.zones || []
                     });
                 });
-
                 readingsHistory.reverse();
                 updateChart();
                 updateReportTables();
@@ -942,62 +754,93 @@
             });
         }
 
-        // ---------- Clear form ----------
-        function clearForm() {
-            zones.forEach((zone, zoneIndex) => {
-                readingTypes.forEach(type => {
-                    for (let i = 1; i <= 6; i++) {
-                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                        input.value = '';
-                    }
-                    updateZoneAverage(zoneIndex, type);
-                });
-            });
-            document.getElementById('enteredBy').value = '';
-            showToast('Form cleared.');
+        // ================================================================
+        //  REPORT TABLES (with date filtering)
+        // ================================================================
+        function parseReadingDate(dateStr) {
+            const d = new Date(dateStr);
+            return isNaN(d.getTime()) ? null : d;
         }
 
-        // ---------- Report Tables ----------
+        function getFilteredReadings() {
+            const now = new Date();
+            let startDate, endDate;
+            if (customFilterStart && customFilterEnd) {
+                startDate = new Date(customFilterStart + 'T00:00:00');
+                endDate = new Date(customFilterEnd + 'T23:59:59');
+            } else {
+                endDate = now;
+                startDate = new Date(now);
+                startDate.setDate(startDate.getDate() - 7);
+                startDate.setHours(0, 0, 0, 0);
+            }
+            return readingsHistory.filter(r => {
+                const d = parseReadingDate(r.date);
+                return d && d >= startDate && d <= endDate;
+            });
+        }
+
+        function applyDateFilter() {
+            const s = document.getElementById('filterStart').value;
+            const e = document.getElementById('filterEnd').value;
+            if (!s || !e) { showToast('Please select both a start and end date.'); return; }
+            if (s > e) { showToast('Start date must be before end date.'); return; }
+            customFilterStart = s;
+            customFilterEnd = e;
+            document.getElementById('filterInfo').textContent = 'Showing ' + s + ' to ' + e;
+            updateReportTables();
+        }
+
+        function resetDateFilter() {
+            customFilterStart = null;
+            customFilterEnd = null;
+            document.getElementById('filterStart').value = '';
+            document.getElementById('filterEnd').value = '';
+            document.getElementById('filterInfo').textContent = 'Showing last 7 days';
+            updateReportTables();
+        }
+
+        function escapeHTML(str) {
+            const d = document.createElement('div');
+            d.textContent = str;
+            return d.innerHTML;
+        }
+
         function updateReportTables() {
             const tdrBody = document.getElementById('tdrReportBody');
             const shearBody = document.getElementById('shearReportBody');
             tdrBody.innerHTML = '';
             shearBody.innerHTML = '';
 
-            let hasTdr = false;
-            let hasShear = false;
+            const filtered = getFilteredReadings();
+            let hasTdr = false, hasShear = false;
 
-            // Show newest first
-            readingsHistory.forEach(reading => {
+            filtered.forEach(reading => {
                 let tdrRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
-                tdrRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '—') + '</td>';
+                tdrRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '\u2014') + '</td>';
                 let shearRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
-                shearRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '—') + '</td>';
+                shearRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '\u2014') + '</td>';
 
-                let rowHasTdr = false;
-                let rowHasShear = false;
+                let rowHasTdr = false, rowHasShear = false;
 
                 zones.forEach(zoneName => {
-                    const zoneData = reading.zones.find(z => z.name === zoneName);
+                    const zd = reading.zones.find(z => z.name === zoneName);
 
-                    // TDR cell
-                    if (zoneData && zoneData.tdr && zoneData.tdr.average != null) {
-                        tdrRow += '<td class="avg-cell tdr">' + zoneData.tdr.average.toFixed(1) + '</td>';
+                    if (zd && zd.tdr && zd.tdr.average != null) {
+                        tdrRow += '<td class="avg-cell tdr">' + zd.tdr.average.toFixed(1) + '</td>';
                         rowHasTdr = true;
-                    } else if (zoneData && typeof zoneData.average === 'number') {
-                        // Backward compat: old records without tdr/shear split
-                        tdrRow += '<td>' + zoneData.average.toFixed(1) + '</td>';
+                    } else if (zd && typeof zd.average === 'number') {
+                        tdrRow += '<td>' + zd.average.toFixed(1) + '</td>';
                         rowHasTdr = true;
                     } else {
-                        tdrRow += '<td>—</td>';
+                        tdrRow += '<td>\u2014</td>';
                     }
 
-                    // Shear cell
-                    if (zoneData && zoneData.shear && zoneData.shear.average != null) {
-                        shearRow += '<td class="avg-cell shear">' + zoneData.shear.average.toFixed(1) + '</td>';
+                    if (zd && zd.shear && zd.shear.average != null) {
+                        shearRow += '<td class="avg-cell shear">' + zd.shear.average.toFixed(1) + '</td>';
                         rowHasShear = true;
                     } else {
-                        shearRow += '<td>—</td>';
+                        shearRow += '<td>\u2014</td>';
                     }
                 });
 
@@ -1014,21 +857,10 @@
             document.getElementById('shearReportTable').style.display = hasShear ? 'table' : 'none';
         }
 
-        function escapeHTML(str) {
-            const d = document.createElement('div');
-            d.textContent = str;
-            return d.innerHTML;
-        }
-
-        // ---------- Chart (TDR / Shear tabs) ----------
-        const zoneColors = [
-            '#2D74A6',
-            '#E68A3C',
-            '#4CAF50',
-            '#9C27B0',
-            '#F44336',
-            '#00BCD4'
-        ];
+        // ================================================================
+        //  CHART
+        // ================================================================
+        const zoneColors = ['#2D74A6', '#E68A3C', '#4CAF50', '#9C27B0', '#F44336', '#00BCD4'];
 
         function switchChart(type) {
             activeChartType = type;
@@ -1048,38 +880,26 @@
                 return;
             }
 
-            const chronologicalHistory = [...readingsHistory].reverse();
+            const chronological = [...readingsHistory].reverse();
             const zoneData = {};
-            zones.forEach(zone => { zoneData[zone] = []; });
+            zones.forEach(z => { zoneData[z] = []; });
 
-            chronologicalHistory.forEach((reading, index) => {
+            chronological.forEach((reading, index) => {
                 reading.zones.forEach(zone => {
                     let avg = null;
                     if (zone[activeChartType] && zone[activeChartType].average != null) {
                         avg = zone[activeChartType].average;
                     } else if (activeChartType === 'tdr' && typeof zone.average === 'number') {
-                        avg = zone.average; // backward compat
+                        avg = zone.average;
                     }
                     if (avg !== null) {
-                        zoneData[zone.name].push({
-                            index: index,
-                            value: avg,
-                            date: reading.date
-                        });
+                        zoneData[zone.name].push({ index, value: avg, date: reading.date });
                     }
                 });
             });
 
-            const padding = { top: 20, right: 20, bottom: 40, left: 50 };
-            const svgWidth = chartSvg.clientWidth || 800;
-            const svgHeight = chartSvg.clientHeight || 350;
-            const chartWidth = svgWidth - padding.left - padding.right;
-            const chartHeight = svgHeight - padding.top - padding.bottom;
-
             let allValues = [];
-            Object.values(zoneData).forEach(data => {
-                allValues = allValues.concat(data.map(d => d.value));
-            });
+            Object.values(zoneData).forEach(data => { allValues = allValues.concat(data.map(d => d.value)); });
 
             if (allValues.length === 0) {
                 chartSvg.innerHTML = '<text x="50%" y="50%" text-anchor="middle" fill="var(--color-text-secondary)" font-size="14">No ' + activeChartType.toUpperCase() + ' data to display</text>';
@@ -1087,256 +907,178 @@
                 return;
             }
 
-            const minValue = Math.min(...allValues);
-            const maxValue = Math.max(...allValues);
-            const valueRange = maxValue - minValue || 1;
+            const padding = { top: 20, right: 20, bottom: 40, left: 50 };
+            const svgW = chartSvg.clientWidth || 800;
+            const svgH = chartSvg.clientHeight || 350;
+            const cW = svgW - padding.left - padding.right;
+            const cH = svgH - padding.top - padding.bottom;
+            const minV = Math.min(...allValues);
+            const maxV = Math.max(...allValues);
+            const range = maxV - minV || 1;
 
             chartSvg.innerHTML = '';
 
-            const numGridLines = 5;
-            for (let i = 0; i <= numGridLines; i++) {
-                const y = padding.top + (chartHeight / numGridLines) * i;
-                const value = maxValue - (valueRange / numGridLines) * i;
-
+            for (let i = 0; i <= 5; i++) {
+                const y = padding.top + (cH / 5) * i;
+                const val = maxV - (range / 5) * i;
                 const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-                line.setAttribute('x1', padding.left);
-                line.setAttribute('y1', y);
-                line.setAttribute('x2', svgWidth - padding.right);
-                line.setAttribute('y2', y);
-                line.setAttribute('stroke', 'var(--color-border)');
-                line.setAttribute('stroke-width', '1');
-                line.setAttribute('opacity', '0.3');
+                line.setAttribute('x1', padding.left); line.setAttribute('y1', y);
+                line.setAttribute('x2', svgW - padding.right); line.setAttribute('y2', y);
+                line.setAttribute('stroke', 'var(--color-border)'); line.setAttribute('stroke-width', '1'); line.setAttribute('opacity', '0.3');
                 chartSvg.appendChild(line);
-
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', padding.left - 10);
-                text.setAttribute('y', y + 4);
-                text.setAttribute('text-anchor', 'end');
-                text.setAttribute('fill', 'var(--color-text-secondary)');
-                text.setAttribute('font-size', '11');
-                text.textContent = value.toFixed(1);
+                text.setAttribute('x', padding.left - 10); text.setAttribute('y', y + 4);
+                text.setAttribute('text-anchor', 'end'); text.setAttribute('fill', 'var(--color-text-secondary)'); text.setAttribute('font-size', '11');
+                text.textContent = val.toFixed(1);
                 chartSvg.appendChild(text);
             }
 
-            chronologicalHistory.forEach((reading, index) => {
-                const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * index;
+            chronological.forEach((reading, index) => {
+                const x = padding.left + (cW / (chronological.length - 1 || 1)) * index;
                 const shortDate = new Date(reading.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-
                 const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
-                text.setAttribute('x', x);
-                text.setAttribute('y', svgHeight - padding.bottom + 20);
-                text.setAttribute('text-anchor', 'middle');
-                text.setAttribute('fill', 'var(--color-text-secondary)');
-                text.setAttribute('font-size', '11');
+                text.setAttribute('x', x); text.setAttribute('y', svgH - padding.bottom + 20);
+                text.setAttribute('text-anchor', 'middle'); text.setAttribute('fill', 'var(--color-text-secondary)'); text.setAttribute('font-size', '11');
                 text.textContent = shortDate;
                 chartSvg.appendChild(text);
             });
 
-            Object.keys(zoneData).forEach((zoneName, zoneIndex) => {
+            Object.keys(zoneData).forEach((zoneName, zi) => {
                 const data = zoneData[zoneName];
-                if (data.length === 0) return;
-
-                const color = zoneColors[zoneIndex % zoneColors.length];
-
+                if (!data.length) return;
+                const color = zoneColors[zi % zoneColors.length];
                 let pathD = '';
-                data.forEach((point, i) => {
-                    const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
-                    const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
-
-                    if (i === 0) {
-                        pathD += 'M ' + x + ' ' + y;
-                    } else {
-                        pathD += ' L ' + x + ' ' + y;
-                    }
+                data.forEach((pt, i) => {
+                    const x = padding.left + (cW / (chronological.length - 1 || 1)) * pt.index;
+                    const y = padding.top + cH - ((pt.value - minV) / range) * cH;
+                    pathD += (i === 0 ? 'M ' : ' L ') + x + ' ' + y;
                 });
-
                 const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                path.setAttribute('d', pathD);
-                path.setAttribute('class', 'chart-line');
-                path.setAttribute('stroke', color);
+                path.setAttribute('d', pathD); path.setAttribute('class', 'chart-line'); path.setAttribute('stroke', color);
                 chartSvg.appendChild(path);
 
-                data.forEach(point => {
-                    const x = padding.left + (chartWidth / (chronologicalHistory.length - 1 || 1)) * point.index;
-                    const y = padding.top + chartHeight - ((point.value - minValue) / valueRange) * chartHeight;
-
+                data.forEach(pt => {
+                    const x = padding.left + (cW / (chronological.length - 1 || 1)) * pt.index;
+                    const y = padding.top + cH - ((pt.value - minV) / range) * cH;
                     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                    circle.setAttribute('cx', x);
-                    circle.setAttribute('cy', y);
-                    circle.setAttribute('r', '4');
-                    circle.setAttribute('fill', color);
-                    circle.setAttribute('class', 'chart-point');
-                    circle.style.cursor = 'pointer';
-
+                    circle.setAttribute('cx', x); circle.setAttribute('cy', y); circle.setAttribute('r', '4');
+                    circle.setAttribute('fill', color); circle.setAttribute('class', 'chart-point'); circle.style.cursor = 'pointer';
                     circle.addEventListener('mouseenter', (e) => {
-                        const tooltip = document.getElementById('chartTooltip');
-                        tooltip.innerHTML = '<strong>' + zoneName + ' (' + activeChartType.toUpperCase() + ')</strong><br>' + point.date + '<br>Value: ' + point.value.toFixed(1);
-                        tooltip.style.left = (e.pageX + 10) + 'px';
-                        tooltip.style.top = (e.pageY - 40) + 'px';
-                        tooltip.classList.add('show');
+                        const tip = document.getElementById('chartTooltip');
+                        tip.innerHTML = '<strong>' + zoneName + ' (' + activeChartType.toUpperCase() + ')</strong><br>' + pt.date + '<br>Value: ' + pt.value.toFixed(1);
+                        tip.style.left = (e.pageX + 10) + 'px'; tip.style.top = (e.pageY - 40) + 'px';
+                        tip.classList.add('show');
                     });
-
-                    circle.addEventListener('mouseleave', () => {
-                        document.getElementById('chartTooltip').classList.remove('show');
-                    });
-
+                    circle.addEventListener('mouseleave', () => { document.getElementById('chartTooltip').classList.remove('show'); });
                     chartSvg.appendChild(circle);
                 });
             });
 
             chartLegend.innerHTML = '';
-            zones.forEach((zone, index) => {
-                const item = document.createElement('div');
-                item.className = 'legend-item';
-
-                const colorBox = document.createElement('div');
-                colorBox.className = 'legend-color';
-                colorBox.style.backgroundColor = zoneColors[index % zoneColors.length];
-
-                const label = document.createElement('span');
-                label.textContent = zone;
-
-                item.appendChild(colorBox);
-                item.appendChild(label);
-                chartLegend.appendChild(item);
+            zones.forEach((zone, i) => {
+                const item = document.createElement('div'); item.className = 'legend-item';
+                const cb = document.createElement('div'); cb.className = 'legend-color'; cb.style.backgroundColor = zoneColors[i % zoneColors.length];
+                const lbl = document.createElement('span'); lbl.textContent = zone;
+                item.appendChild(cb); item.appendChild(lbl); chartLegend.appendChild(item);
             });
         }
 
-
-
-        // ---------- Export CSV ----------
+        // ================================================================
+        //  EXPORT CSV
+        // ================================================================
         function exportData() {
-            if (readingsHistory.length === 0) {
-                showToast('No data to export. Submit some readings first!');
-                return;
-            }
-
+            if (readingsHistory.length === 0) { showToast('No data to export.'); return; }
             try {
-                // Header row: Type column added
                 let csv = 'Date,Entered By,Type,Left Field,Center Field,Right Field,1st Base Line,3rd Base Line,Infield\n';
-
                 readingsHistory.forEach(reading => {
+                    const base = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"'];
                     // TDR row
-                    const tdrRow = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"', 'TDR'];
-                    zones.forEach(zoneName => {
-                        const zone = reading.zones.find(z => z.name === zoneName);
-                        if (zone && zone.tdr && zone.tdr.average != null) {
-                            tdrRow.push(zone.tdr.average.toFixed(1));
-                        } else if (zone && typeof zone.average === 'number') {
-                            tdrRow.push(zone.average.toFixed(1));
-                        } else {
-                            tdrRow.push('');
-                        }
+                    const tdrRow = [...base, 'TDR'];
+                    zones.forEach(zn => {
+                        const z = reading.zones.find(zz => zz.name === zn);
+                        if (z && z.tdr && z.tdr.average != null) tdrRow.push(z.tdr.average.toFixed(1));
+                        else if (z && typeof z.average === 'number') tdrRow.push(z.average.toFixed(1));
+                        else tdrRow.push('');
                     });
                     csv += tdrRow.join(',') + '\n';
-
                     // Shear row
-                    const shearRow = ['"' + reading.date + '"', '"' + (reading.enteredBy || '') + '"', 'Shear'];
-                    zones.forEach(zoneName => {
-                        const zone = reading.zones.find(z => z.name === zoneName);
-                        if (zone && zone.shear && zone.shear.average != null) {
-                            shearRow.push(zone.shear.average.toFixed(1));
-                        } else {
-                            shearRow.push('');
-                        }
+                    const shearRow = [...base, 'Shear'];
+                    zones.forEach(zn => {
+                        const z = reading.zones.find(zz => zz.name === zn);
+                        if (z && z.shear && z.shear.average != null) shearRow.push(z.shear.average.toFixed(1));
+                        else shearRow.push('');
                     });
                     csv += shearRow.join(',') + '\n';
                 });
-
-                const BOM = '\uFEFF';
-                const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8;' });
+                const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
                 const url = URL.createObjectURL(blob);
                 const link = document.createElement('a');
                 link.href = url;
                 link.download = 'baseball-field-readings-' + new Date().toISOString().split('T')[0] + '.csv';
                 document.body.appendChild(link);
-                setTimeout(() => {
-                    link.click();
-                    setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 100);
-                }, 10);
+                setTimeout(() => { link.click(); setTimeout(() => { document.body.removeChild(link); URL.revokeObjectURL(url); }, 100); }, 10);
                 showToast('Exporting ' + readingsHistory.length + ' reading(s)...');
-            } catch (error) {
-                console.error('Export error:', error);
-                showToast('Error exporting data. Please try again.');
-            }
+            } catch (error) { console.error('Export error:', error); showToast('Error exporting.'); }
         }
 
-        // ---------- Import ----------
+        // ================================================================
+        //  IMPORT
+        // ================================================================
         function importData(event) {
             const file = event.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = async function(e) {
                 try {
-                    const importedData = JSON.parse(e.target.result);
-                    if (!Array.isArray(importedData)) {
-                        showToast('Invalid file format.');
-                        return;
-                    }
-
+                    const imported = JSON.parse(e.target.result);
+                    if (!Array.isArray(imported)) { showToast('Invalid file format.'); return; }
                     let count = 0;
-                    for (const reading of importedData) {
+                    for (const r of imported) {
                         await addDoc(collection(db, "moistureReadings"), {
-                            timestamp: Timestamp.now(),
-                            date: reading.date || new Date().toLocaleString(),
-                            enteredBy: reading.enteredBy || null,
-                            zones: reading.zones || []
+                            timestamp: Timestamp.now(), date: r.date || new Date().toLocaleString(),
+                            enteredBy: r.enteredBy || null, zones: r.zones || []
                         });
                         count++;
                     }
-                    showToast('Imported ' + count + ' reading(s) to Firebase!');
-                } catch (error) {
+                    showToast('Imported ' + count + ' reading(s)!');
+                } catch (err) {
                     try {
-                        const csvData = e.target.result;
-                        const lines = csvData.split('\n').filter(line => line.trim());
-                        if (lines.length < 2) {
-                            showToast('CSV file appears to be empty.');
-                            return;
-                        }
-                        const dataLines = lines.slice(1);
+                        const lines = e.target.result.split('\n').filter(l => l.trim());
+                        if (lines.length < 2) { showToast('CSV file appears empty.'); return; }
                         let count = 0;
-
-                        for (const line of dataLines) {
-                            const values = line.split(',');
-                            if (values.length < 9) continue;
-
+                        for (const line of lines.slice(1)) {
+                            const vals = line.split(',');
+                            if (vals.length < 9) continue;
+                            const type = (vals[2] || '').trim().toLowerCase();
                             const zonesArr = [];
-                            const type = (values[2] || '').trim().toLowerCase();
-                            zones.forEach((zoneName, index) => {
-                                const value = parseFloat(values[index + 3]);
-                                if (!isNaN(value)) {
-                                    const entry = { name: zoneName, tdr: { readings: [], average: null }, shear: { readings: [], average: null } };
-                                    if (type === 'shear') {
-                                        entry.shear = { readings: [value], average: value };
-                                    } else {
-                                        entry.tdr = { readings: [value], average: value };
-                                    }
+                            zones.forEach((zn, idx) => {
+                                const v = parseFloat(vals[idx + 3]);
+                                if (!isNaN(v)) {
+                                    const entry = { name: zn, tdr: { readings: [], average: null }, shear: { readings: [], average: null } };
+                                    if (type === 'shear') entry.shear = { readings: [v], average: v };
+                                    else entry.tdr = { readings: [v], average: v };
                                     zonesArr.push(entry);
                                 }
                             });
-
                             if (zonesArr.length > 0) {
                                 await addDoc(collection(db, "moistureReadings"), {
-                                    timestamp: Timestamp.now(),
-                                    date: values[0].replace(/"/g, ''),
-                                    enteredBy: values[1].replace(/"/g, '') || null,
-                                    zones: zonesArr
+                                    timestamp: Timestamp.now(), date: vals[0].replace(/"/g, ''),
+                                    enteredBy: vals[1].replace(/"/g, '') || null, zones: zonesArr
                                 });
                                 count++;
                             }
                         }
-                        showToast('Imported ' + count + ' reading(s) from CSV to Firebase!');
-                    } catch (csvError) {
-                        showToast('Error reading file.');
-                    }
+                        showToast('Imported ' + count + ' reading(s) from CSV!');
+                    } catch (csvErr) { showToast('Error reading file.'); }
                 }
             };
             reader.readAsText(file);
             event.target.value = '';
         }
 
-        // ---------- Toast ----------
+        // ================================================================
+        //  TOAST
+        // ================================================================
         function showToast(message) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -1344,103 +1086,36 @@
             setTimeout(() => { toast.classList.remove('show'); }, 3000);
         }
 
-        // ---------- Draft Save / Load (Firestore) ----------
-        const DRAFT_DOC_ID = 'current_draft';
+        // ================================================================
+        //  WIRE UP BUTTONS (addEventListener — works with module scope)
+        // ================================================================
+        document.getElementById('clearBtn').addEventListener('click', () => clearForm());
+        document.getElementById('submitBtn').addEventListener('click', () => {
+            submitReadings().catch(err => { console.error(err); showToast('Error submitting.'); });
+        });
+        document.getElementById('saveDraftBtn').addEventListener('click', () => {
+            saveDraft().catch(err => { console.error(err); showToast('Error saving draft.'); });
+        });
+        document.getElementById('loadDraftBtn').addEventListener('click', () => {
+            loadDraft().catch(err => { console.error(err); showToast('Error loading draft.'); });
+        });
+        document.getElementById('discardDraftBtn').addEventListener('click', () => {
+            discardDraft().catch(err => { console.error(err); showToast('Error discarding draft.'); });
+        });
+        document.getElementById('exportBtn').addEventListener('click', () => exportData());
+        document.getElementById('importBtn').addEventListener('click', () => document.getElementById('importFile').click());
+        document.getElementById('importFile').addEventListener('change', (e) => importData(e));
+        document.getElementById('applyFilterBtn').addEventListener('click', () => applyDateFilter());
+        document.getElementById('resetFilterBtn').addEventListener('click', () => resetDateFilter());
+        document.getElementById('chartTabTdr').addEventListener('click', () => switchChart('tdr'));
+        document.getElementById('chartTabShear').addEventListener('click', () => switchChart('shear'));
 
-        async function saveDraft() {
-            const enteredBy = document.getElementById('enteredBy').value.trim();
-            const draftData = { enteredBy: enteredBy, zones: {}, savedAt: Timestamp.now() };
-
-            zones.forEach((zone, zoneIndex) => {
-                draftData.zones[zoneIndex] = {};
-                readingTypes.forEach(type => {
-                    draftData.zones[zoneIndex][type] = {};
-                    for (let i = 1; i <= 6; i++) {
-                        const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                        draftData.zones[zoneIndex][type][i] = input.value;
-                    }
-                });
-            });
-
-            try {
-                await setDoc(doc(db, 'drafts', DRAFT_DOC_ID), draftData);
-                showDraftNotice(true);
-                showToast('Draft saved to Firebase! You can close and come back later.');
-            } catch (error) {
-                console.error('Error saving draft:', error);
-                showToast('Error saving draft — check console.');
-            }
-        }
-
-        async function loadDraft() {
-            try {
-                const snap = await getDoc(doc(db, 'drafts', DRAFT_DOC_ID));
-                if (!snap.exists()) {
-                    showToast('No draft found.');
-                    return;
-                }
-                const draftData = snap.data();
-                document.getElementById('enteredBy').value = draftData.enteredBy || '';
-
-                zones.forEach((zone, zoneIndex) => {
-                    readingTypes.forEach(type => {
-                        for (let i = 1; i <= 6; i++) {
-                            const input = document.getElementById('zone-' + zoneIndex + '-' + type + '-reading-' + i);
-                            const val = draftData.zones?.[zoneIndex]?.[type]?.[i] || '';
-                            input.value = val;
-                        }
-                        updateZoneAverage(zoneIndex, type);
-                    });
-                });
-
-                showToast('Draft restored! Continue where you left off.');
-            } catch (error) {
-                console.error('Error loading draft:', error);
-                showToast('Error loading draft.');
-            }
-        }
-
-        async function discardDraft() {
-            try {
-                await deleteDoc(doc(db, 'drafts', DRAFT_DOC_ID));
-                showDraftNotice(false);
-                showToast('Draft discarded.');
-            } catch (error) {
-                console.error('Error discarding draft:', error);
-                showToast('Error discarding draft.');
-            }
-        }
-
-        function showDraftNotice(show) {
-            document.getElementById('draftNotice').style.display = show ? 'block' : 'none';
-        }
-
-        async function checkForExistingDraft() {
-            try {
-                const snap = await getDoc(doc(db, 'drafts', DRAFT_DOC_ID));
-                if (snap.exists()) {
-                    showDraftNotice(true);
-                }
-            } catch (e) {
-                console.error('Error checking draft:', e);
-            }
-        }
-
-        // ---------- Boot ----------
+        // ================================================================
+        //  BOOT
+        // ================================================================
         initializeZoneGrid();
         listenForReadings();
         checkForExistingDraft();
-
-        window.submitReadings = submitReadings;
-        window.clearForm = clearForm;
-        window.exportData = exportData;
-        window.importData = importData;
-        window.switchChart = switchChart;
-        window.applyDateFilter = applyDateFilter;
-        window.resetDateFilter = resetDateFilter;
-        window.saveDraft = saveDraft;
-        window.loadDraft = loadDraft;
-        window.discardDraft = discardDraft;
     </script>
 </body>
 </html>
