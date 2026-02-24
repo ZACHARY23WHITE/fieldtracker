@@ -363,10 +363,14 @@
                         <option value="rainy">Rainy</option>
                     </select>
                 </div>
-                <label style="display:flex; align-items:center; gap:6px; font-size:13px; color:var(--color-text-secondary); cursor:pointer; padding-bottom:4px;">
-                    <input type="checkbox" id="roofClosed" style="width:16px; height:16px; accent-color:var(--color-primary); cursor:pointer;">
-                    Roof closed?
-                </label>
+                <div style="display:flex; flex-direction:column; gap:4px; min-width:130px;">
+                    <label for="roofStatus" style="font-size:13px; color:var(--color-text-secondary); font-weight:500;">Roof Status</label>
+                    <select id="roofStatus" style="padding:8px 12px; border:1px solid var(--color-border); border-radius:6px; background:var(--color-background); color:var(--color-text); font-size:14px; width:100%;">
+                        <option value="">Select...</option>
+                        <option value="Open">Open</option>
+                        <option value="Closed">Closed</option>
+                    </select>
+                </div>
             </div>
 
             <div class="zone-grid" id="zoneGrid"></div>
@@ -418,7 +422,7 @@
                         <tr>
                             <th style="text-align:left;">Date</th>
                             <th style="text-align:left;">By</th>
-                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof Closed?</th>
+                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof Status</th>
                             <th>Left Field</th><th>Center Field</th><th>Right Field</th>
                             <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
                         </tr>
@@ -441,7 +445,7 @@
                         <tr>
                             <th style="text-align:left;">Date</th>
                             <th style="text-align:left;">By</th>
-                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof Closed?</th>
+                            <th>High &deg;F</th><th>Low &deg;F</th><th>Weather</th><th>Roof Status</th>
                             <th>Left Field</th><th>Center Field</th><th>Right Field</th>
                             <th>1st Base Line</th><th>3rd Base Line</th><th>Infield</th>
                         </tr>
@@ -601,7 +605,7 @@
             const tempHighVal = document.getElementById('tempHigh').value.trim();
             const tempLowVal = document.getElementById('tempLow').value.trim();
             const weatherCondition = document.getElementById('weatherCondition').value || null;
-            const roofClosed = document.getElementById('roofClosed').checked;
+            const roofStatus = document.getElementById('roofStatus').value || null;
             const tempHigh = tempHighVal === '' ? null : parseFloat(tempHighVal);
             const tempLow = tempLowVal === '' ? null : parseFloat(tempLowVal);
 
@@ -612,7 +616,7 @@
                 tempHigh: isNaN(tempHigh) ? null : tempHigh,
                 tempLow: isNaN(tempLow) ? null : tempLow,
                 weatherCondition: weatherCondition,
-                roofClosed: roofClosed,
+                roofStatus: roofStatus,
                 zones: []
             };
 
@@ -668,7 +672,7 @@
                 tempHigh: document.getElementById('tempHigh').value.trim(),
                 tempLow: document.getElementById('tempLow').value.trim(),
                 weatherCondition: document.getElementById('weatherCondition').value,
-                roofClosed: document.getElementById('roofClosed').checked,
+                roofStatus: document.getElementById('roofStatus').value,
                 savedAt: Timestamp.now(),
                 zones: {}
             };
@@ -708,7 +712,7 @@
                 document.getElementById('tempHigh').value = d.tempHigh || '';
                 document.getElementById('tempLow').value = d.tempLow || '';
                 document.getElementById('weatherCondition').value = d.weatherCondition || '';
-                document.getElementById('roofClosed').checked = !!d.roofClosed;
+                document.getElementById('roofStatus').value = d.roofStatus || '';
 
                 zones.forEach((zone, zoneIndex) => {
                     readingTypes.forEach(type => {
@@ -775,7 +779,7 @@
             document.getElementById('tempHigh').value = '';
             document.getElementById('tempLow').value = '';
             document.getElementById('weatherCondition').value = '';
-            document.getElementById('roofClosed').checked = false;
+            document.getElementById('roofStatus').value = '';
             if (notify !== false) showToast('Form cleared.');
         }
 
@@ -796,7 +800,7 @@
                         tempHigh: data.tempHigh ?? null,
                         tempLow: data.tempLow ?? null,
                         weatherCondition: data.weatherCondition || null,
-                        roofClosed: !!data.roofClosed,
+                        roofStatus: data.roofStatus || null,
                         zones: data.zones || []
                     });
                 });
@@ -874,7 +878,7 @@
                 const weatherCells = '<td>' + escapeHTML(reading.tempHigh != null ? String(reading.tempHigh) : '\u2014') + '</td>'
                     + '<td>' + escapeHTML(reading.tempLow != null ? String(reading.tempLow) : '\u2014') + '</td>'
                     + '<td>' + escapeHTML(reading.weatherCondition || '\u2014') + '</td>'
-                    + '<td>' + (reading.roofClosed ? 'Yes' : 'No') + '</td>';
+                    + '<td>' + escapeHTML(reading.roofStatus || '\u2014') + '</td>';
 
                 let tdrRow = '<tr><td style="text-align:left;">' + escapeHTML(reading.date) + '</td>';
                 tdrRow += '<td style="text-align:left;">' + escapeHTML(reading.enteredBy || '\u2014') + '</td>';
