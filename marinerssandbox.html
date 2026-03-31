@@ -91,55 +91,81 @@
     .draft-bar.show{display:flex;}
     .toast{position:fixed;right:20px;bottom:20px;background:var(--text);color:var(--bg);padding:12px 16px;border-radius:10px;opacity:0;transform:translateY(12px);transition:.2s;pointer-events:none;z-index:40;}
     .toast.show{opacity:1;transform:translateY(0);}
-    .dark-toggle{background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:8px 12px;cursor:pointer;color:var(--text);font-size:13px;}
     @media(max-width:768px){.reading-inputs{grid-template-columns:repeat(2,1fr);}.container{padding:12px;}.chart-box{height:300px;}}
   </style>
 </head>
 <body>
 <div class="container">
   <div class="header-row">
-    <div>
-      <h1>⚾ Field Moisture Tracker</h1>
-    </div>
+    <div><h1>⚾ Field Moisture Tracker</h1></div>
     <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <button class="button secondary" id="exportBtn">Export CSV</button>
       <button class="button secondary" id="importBtn">Import</button>
       <input type="file" id="importFile" accept=".json,.csv" style="display:none"/>
     </div>
   </div>
-  <p class="subtitle">Track TDR, Shear and Clegg readings across 6 field zones with 6 subzones each.</p>
+  <p class="subtitle">Track TDR, Shear and Clegg readings independently across 6 field zones.</p>
 
   <div class="top-tabs">
-    <button class="top-tab active" data-top-tab="main">TDR / Shear</button>
+    <button class="top-tab active" data-top-tab="tdr">TDR</button>
+    <button class="top-tab" data-top-tab="shear">Shear</button>
     <button class="top-tab" data-top-tab="clegg">Clegg</button>
   </div>
 
-  <!-- ─── TDR / SHEAR TAB ─── -->
-  <div class="tab-panel active" id="panel-main">
+  <!-- ─── TDR TAB ─── -->
+  <div class="tab-panel active" id="panel-tdr">
     <div class="section">
-      <div id="mainDraftBar" class="draft-bar">
-        📝 <strong>You have a saved draft.</strong>
-        <button class="button primary" style="padding:5px 12px;font-size:12px;" id="loadDraftBtn">Resume Draft</button>
-        <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="discardDraftBtn">Discard</button>
+      <div id="tdrDraftBar" class="draft-bar">📝 <strong>You have a saved TDR draft.</strong>
+        <button class="button primary" style="padding:5px 12px;font-size:12px;" id="tdrLoadDraftBtn">Resume</button>
+        <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="tdrDiscardDraftBtn">Discard</button>
       </div>
       <div class="toolbar" style="margin-bottom:14px;">
-        <div class="field"><label for="readingDate">Reading date</label><input type="date" id="readingDate"/></div>
-        <div class="field grow"><label>Entry status</label><div class="pill" id="editModeLabel">Creating new reading</div></div>
+        <div class="field"><label for="tdrReadingDate">Reading date</label><input type="date" id="tdrReadingDate"/></div>
+        <div class="field grow"><label>Status</label><div class="pill" id="tdrStatusLabel">New TDR entry</div></div>
       </div>
       <div class="meta-grid" style="margin-bottom:14px;">
-        <div class="field"><label for="enteredBy">Entered by</label><input type="text" id="enteredBy" placeholder="First name"/></div>
-        <div class="field"><label for="tempHigh">Temp High °F</label><input type="number" id="tempHigh" step="0.1"/></div>
-        <div class="field"><label for="tempLow">Temp Low °F</label><input type="number" id="tempLow" step="0.1"/></div>
-        <div class="field"><label for="weatherCondition">Weather</label><select id="weatherCondition"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
-        <div class="field"><label for="roofStatus">Roof Status</label><select id="roofStatus"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
+        <div class="field"><label for="tdrEnteredBy">Entered by</label><input type="text" id="tdrEnteredBy" placeholder="First name"/></div>
+        <div class="field"><label for="tdrTempHigh">Temp High °F</label><input type="number" id="tdrTempHigh" step="0.1"/></div>
+        <div class="field"><label for="tdrTempLow">Temp Low °F</label><input type="number" id="tdrTempLow" step="0.1"/></div>
+        <div class="field"><label for="tdrWeather">Weather</label><select id="tdrWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
+        <div class="field"><label for="tdrRoof">Roof Status</label><select id="tdrRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
       </div>
-      <div id="zoneGrid" class="zone-grid"></div>
-      <div style="margin-top:14px;"><div class="field"><label for="notes">Notes (255 characters max)</label><textarea id="notes" maxlength="255" placeholder="Example: Behind the plate was 30"></textarea><div class="char-count"><span id="notesCount">0</span>/255</div></div></div>
+      <div id="tdrZoneGrid" class="zone-grid"></div>
+      <div style="margin-top:14px;"><div class="field"><label for="tdrNotes">Notes (255 max)</label><textarea id="tdrNotes" maxlength="255"></textarea><div class="char-count"><span id="tdrNotesCount">0</span>/255</div></div></div>
       <div class="button-row" style="margin-top:16px;">
-        <button class="button secondary" id="clearBtn">Clear Form</button>
-        <button class="button secondary" id="saveDraftBtn">Save Draft</button>
-        <button class="button secondary" id="cancelEditBtn" style="display:none;">Cancel Edit</button>
-        <button class="button primary" id="submitBtn">Save Reading</button>
+        <button class="button secondary" id="tdrClearBtn">Clear</button>
+        <button class="button secondary" id="tdrSaveDraftBtn">Save Draft</button>
+        <button class="button secondary" id="tdrCancelEditBtn" style="display:none;">Cancel Edit</button>
+        <button class="button primary" id="tdrSubmitBtn">Save TDR Reading</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ─── SHEAR TAB ─── -->
+  <div class="tab-panel" id="panel-shear">
+    <div class="section">
+      <div id="shearDraftBar" class="draft-bar">📝 <strong>You have a saved Shear draft.</strong>
+        <button class="button primary" style="padding:5px 12px;font-size:12px;" id="shearLoadDraftBtn">Resume</button>
+        <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="shearDiscardDraftBtn">Discard</button>
+      </div>
+      <div class="toolbar" style="margin-bottom:14px;">
+        <div class="field"><label for="shearReadingDate">Reading date</label><input type="date" id="shearReadingDate"/></div>
+        <div class="field grow"><label>Status</label><div class="pill" id="shearStatusLabel">New Shear entry</div></div>
+      </div>
+      <div class="meta-grid" style="margin-bottom:14px;">
+        <div class="field"><label for="shearEnteredBy">Entered by</label><input type="text" id="shearEnteredBy" placeholder="First name"/></div>
+        <div class="field"><label for="shearTempHigh">Temp High °F</label><input type="number" id="shearTempHigh" step="0.1"/></div>
+        <div class="field"><label for="shearTempLow">Temp Low °F</label><input type="number" id="shearTempLow" step="0.1"/></div>
+        <div class="field"><label for="shearWeather">Weather</label><select id="shearWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
+        <div class="field"><label for="shearRoof">Roof Status</label><select id="shearRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
+      </div>
+      <div id="shearZoneGrid" class="zone-grid"></div>
+      <div style="margin-top:14px;"><div class="field"><label for="shearNotes">Notes (255 max)</label><textarea id="shearNotes" maxlength="255"></textarea><div class="char-count"><span id="shearNotesCount">0</span>/255</div></div></div>
+      <div class="button-row" style="margin-top:16px;">
+        <button class="button secondary" id="shearClearBtn">Clear</button>
+        <button class="button secondary" id="shearSaveDraftBtn">Save Draft</button>
+        <button class="button secondary" id="shearCancelEditBtn" style="display:none;">Cancel Edit</button>
+        <button class="button primary" id="shearSubmitBtn">Save Shear Reading</button>
       </div>
     </div>
   </div>
@@ -147,28 +173,27 @@
   <!-- ─── CLEGG TAB ─── -->
   <div class="tab-panel" id="panel-clegg">
     <div class="section">
-      <div id="cleggDraftBar" class="draft-bar">
-        📝 <strong>You have a saved Clegg draft.</strong>
-        <button class="button primary" style="padding:5px 12px;font-size:12px;" id="cleggLoadDraftBtn">Resume Draft</button>
+      <div id="cleggDraftBar" class="draft-bar">📝 <strong>You have a saved Clegg draft.</strong>
+        <button class="button primary" style="padding:5px 12px;font-size:12px;" id="cleggLoadDraftBtn">Resume</button>
         <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="cleggDiscardDraftBtn">Discard</button>
       </div>
       <div class="toolbar" style="margin-bottom:14px;">
         <div class="field"><label for="cleggReadingDate">Reading date</label><input type="date" id="cleggReadingDate"/></div>
-        <div class="field grow"><label>Clegg status</label><div class="pill" id="cleggStatusLabel">New Clegg entry</div></div>
+        <div class="field grow"><label>Status</label><div class="pill" id="cleggStatusLabel">New Clegg entry</div></div>
       </div>
       <div class="meta-grid" style="margin-bottom:14px;">
         <div class="field"><label for="cleggEnteredBy">Entered by</label><input type="text" id="cleggEnteredBy" placeholder="First name"/></div>
         <div class="field"><label for="cleggTempHigh">Temp High °F</label><input type="number" id="cleggTempHigh" step="0.1"/></div>
         <div class="field"><label for="cleggTempLow">Temp Low °F</label><input type="number" id="cleggTempLow" step="0.1"/></div>
-        <div class="field"><label for="cleggWeatherCondition">Weather</label><select id="cleggWeatherCondition"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
-        <div class="field"><label for="cleggRoofStatus">Roof Status</label><select id="cleggRoofStatus"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
+        <div class="field"><label for="cleggWeather">Weather</label><select id="cleggWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
+        <div class="field"><label for="cleggRoof">Roof Status</label><select id="cleggRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
       </div>
       <div id="cleggZoneGrid" class="zone-grid"></div>
-      <div style="margin-top:14px;"><div class="field"><label for="cleggNotes">Notes (255 characters max)</label><textarea id="cleggNotes" maxlength="255" placeholder="Example: Behind the plate was 30"></textarea><div class="char-count"><span id="cleggNotesCount">0</span>/255</div></div></div>
+      <div style="margin-top:14px;"><div class="field"><label for="cleggNotes">Notes (255 max)</label><textarea id="cleggNotes" maxlength="255"></textarea><div class="char-count"><span id="cleggNotesCount">0</span>/255</div></div></div>
       <div class="button-row" style="margin-top:16px;">
-        <button class="button secondary" id="cleggClearBtn">Clear Clegg Form</button>
-        <button class="button secondary" id="saveCleggDraftBtn">Save Draft</button>
-        <button class="button secondary" id="cancelCleggEditBtn" style="display:none;">Cancel Edit</button>
+        <button class="button secondary" id="cleggClearBtn">Clear</button>
+        <button class="button secondary" id="cleggSaveDraftBtn">Save Draft</button>
+        <button class="button secondary" id="cleggCancelEditBtn" style="display:none;">Cancel Edit</button>
         <button class="button primary" id="cleggSubmitBtn">Save Clegg Reading</button>
       </div>
     </div>
@@ -177,7 +202,7 @@
   <!-- ─── REPORTS ─── -->
   <div class="section">
     <div class="history-toolbar" style="justify-content:space-between;margin-bottom:12px;">
-      <div><h2 style="margin:0 0 4px;">Reports</h2><div class="muted" id="reportInfo">Showing last 7 readings</div></div>
+      <div><h2 style="margin:0 0 4px;">Reports</h2><div class="muted" id="reportInfo">Showing last 7 readings per type</div></div>
       <div class="filter-row">
         <div class="field"><label for="filterStart">Start date</label><input type="date" id="filterStart"/></div>
         <div class="field"><label for="filterEnd">End date</label><input type="date" id="filterEnd"/></div>
@@ -216,11 +241,10 @@
       <div><h3 id="detailTitle" style="margin:0 0 4px;">Reading Details</h3><div class="muted" id="detailMeta"></div></div>
       <button class="button secondary" id="closeDetailBtn">Close</button>
     </div>
-    <div id="detailNotes" style="margin-bottom:12px;"></div>
     <div class="detail-grid" id="detailGrid"></div>
+    <div id="detailNotes" style="margin-top:12px;"></div>
   </div>
 </div>
-
 <div class="toast" id="toast"></div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
@@ -233,267 +257,205 @@ const app = initializeApp(FB);
 const db  = getFirestore(app);
 
 const ZONES = ['Left Field','Center Field','Right Field','1st Base Line','Infield','3rd Base Line'];
-const MAIN_TYPES  = ['tdr','shear'];
-const CLEGG_TYPES = ['clegg'];
-const ALL_TYPES   = ['tdr','shear','clegg'];
-const ZONE_COLORS = { 'Left Field':'#2D74A6','Center Field':'#E68A3C','Right Field':'#4CAF50','1st Base Line':'#9C27B0','Infield':'#00BCD4','3rd Base Line':'#F44336' };
-const DRAFT_ID_MAIN  = 'draft-main';
-const DRAFT_ID_CLEGG = 'draft-clegg';
+const ZONE_COLORS = {'Left Field':'#2D74A6','Center Field':'#E68A3C','Right Field':'#4CAF50','1st Base Line':'#9C27B0','Infield':'#00BCD4','3rd Base Line':'#F44336'};
+const ENTRY_TYPES = ['tdr','shear','clegg'];
 
 let allReadings = [];
-let chartType   = 'tdr';
+let chartType = 'tdr';
 let selectedZones = new Set(ZONES);
-let activeEditId   = null;
-let activeCleggEditId = null;
 let chart;
+const editIds = { tdr:null, shear:null, clegg:null };
 
 // ── helpers ──────────────────────────────────────────────────────────────────
 function $(id){ return document.getElementById(id); }
 function toast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2800); }
 function today(){ const d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
-function fmtDate(v){ if(!v)return'Unknown'; const[y,m,d]=v.split('-').map(Number); return new Date(y,m-1,d,12).toLocaleDateString(); }
+function fmtDate(v){ if(!v) return 'Unknown'; const[y,m,d]=v.split('-').map(Number); return new Date(y,m-1,d,12).toLocaleDateString(); }
 function esc(s){ const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
-function blankZone(name){ return { name, tdr:{readings:[],average:null}, shear:{readings:[],average:null}, clegg:{readings:[],average:null} }; }
-function normalizeZones(stored=[]){ return ZONES.map(n=>stored.find(z=>z.name===n)||blankZone(n)); }
+function blankZone(name){ return {name,tdr:{readings:[],average:null},shear:{readings:[],average:null},clegg:{readings:[],average:null}}; }
+function normalizeZones(stored=[]){ return ZONES.map(n=>stored.find(z=>z&&z.name===n)||blankZone(n)); }
 
-// ── zone grid builder ─────────────────────────────────────────────────────────
-function buildGrid(gridEl, types, prefix){
-  gridEl.innerHTML='';
-  ZONES.forEach((zone,zi)=>{
-    const card=document.createElement('div'); card.className='zone-card';
-    card.innerHTML=`<div class="zone-name">${zone}</div>`;
-    types.forEach(type=>{
-      const sec=document.createElement('div'); sec.className=`reading-type-section ${type}`;
-      sec.innerHTML=`<div class="reading-type-label ${type}">${type.toUpperCase()}</div>`;
-      const grid=document.createElement('div'); grid.className='reading-inputs';
-      for(let i=1;i<=6;i++){
-        const w=document.createElement('div'); w.className='reading-input';
-        w.innerHTML=`<label for="${prefix}-${zi}-${type}-${i}">Zone ${i}</label><input type="number" step="0.1" min="0" id="${prefix}-${zi}-${type}-${i}"/>`;
-        w.querySelector('input').addEventListener('input',()=>recalcAvg(zi,type,prefix));
-        grid.appendChild(w);
-      }
-      sec.appendChild(grid);
-      const avg=document.createElement('div'); avg.className='avg-box';
-      avg.innerHTML=`<small>${type.toUpperCase()} Average</small><span id="avg-${prefix}-${zi}-${type}">—</span>`;
-      sec.appendChild(avg); card.appendChild(sec);
-    });
-    gridEl.appendChild(card);
-  });
-}
+// ── legacy-safe zone average ──────────────────────────────────────────────────
+const legacyOrder = ['Left Field','Center Field','Right Field','1st Base Line','3rd Base Line','Infield'];
+const currentIndexMap = {'Left Field':0,'Center Field':1,'Right Field':2,'1st Base Line':3,'Infield':4,'3rd Base Line':5};
 
-function recalcAvg(zi,type,prefix){
-  const vals=[]; for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${type}-${i}`); const n=parseFloat(el?el.value:''); if(!isNaN(n)) vals.push(n); }
-  const el=$(`avg-${prefix}-${zi}-${type}`); if(el) el.textContent=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';
-}
-
-function readGrid(types, prefix){
-  return ZONES.map((zone,zi)=>{
-    const entry=blankZone(zone);
-    types.forEach(type=>{
-      const vals=[]; for(let i=1;i<=6;i++){ const n=parseFloat($(`${prefix}-${zi}-${type}-${i}`)?.value||''); if(!isNaN(n)) vals.push(n); }
-      entry[type]={ readings:vals, average:vals.length?Number((vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)):null };
-    });
-    return entry;
-  });
-}
-
-function fillGrid(types, prefix, storedZones){
-  const norm=normalizeZones(storedZones);
-  norm.forEach((zone,zi)=>{
-    types.forEach(type=>{
-      for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${type}-${i}`); if(el) el.value=zone[type]?.readings?.[i-1]??''; }
-      recalcAvg(zi,type,prefix);
-    });
-  });
-}
-
-function clearGrid(types, prefix){
-  ZONES.forEach((_,zi)=>{ types.forEach(type=>{ for(let i=1;i<=6;i++){const el=$(`${prefix}-${zi}-${type}-${i}`);if(el)el.value='';} recalcAvg(zi,type,prefix); }); });
-}
-
-// ── form helpers ──────────────────────────────────────────────────────────────
-// getMeta removed - using getMainMeta/getCleggMeta directly
-
-// simplified direct reads
-function getMainMeta(){ const th=parseFloat($('tempHigh').value); const tl=parseFloat($('tempLow').value); return { enteredBy:$('enteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$('weatherCondition').value||null, roof:$('roofStatus').value||null, notes:$('notes').value.trim()||null, date:$('readingDate').value||today() }; }
-function getCleggMeta(){ const th=parseFloat($('cleggTempHigh').value); const tl=parseFloat($('cleggTempLow').value); return { enteredBy:$('cleggEnteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$('cleggWeatherCondition').value||null, roof:$('cleggRoofStatus').value||null, notes:$('cleggNotes').value.trim()||null, date:$('cleggReadingDate').value||today() }; }
-
-function setMainMeta(m){
-  $('enteredBy').value=m.enteredBy||''; $('tempHigh').value=m.tempHigh??''; $('tempLow').value=m.tempLow??'';
-  $('weatherCondition').value=m.weather||''; $('roofStatus').value=m.roof||'';
-  $('notes').value=m.notes||''; $('readingDate').value=m.date||today(); updateCharCount('notesCount','notes');
-}
-function setCleggMeta(m){
-  $('cleggEnteredBy').value=m.enteredBy||''; $('cleggTempHigh').value=m.tempHigh??''; $('cleggTempLow').value=m.tempLow??'';
-  $('cleggWeatherCondition').value=m.weather||''; $('cleggRoofStatus').value=m.roof||'';
-  $('cleggNotes').value=m.notes||''; $('cleggReadingDate').value=m.date||today(); updateCharCount('cleggNotesCount','cleggNotes');
-}
-
-function updateCharCount(countId, textareaId){ const el=$(textareaId); const c=$(countId); if(el&&c) c.textContent=el.value.length; }
-function clearMainForm(resetDate=false){ clearGrid(MAIN_TYPES,'mz'); setMainMeta({date:resetDate?today():$('readingDate').value}); }
-function clearCleggForm(resetDate=false){ clearGrid(CLEGG_TYPES,'cz'); setCleggMeta({date:resetDate?today():$('cleggReadingDate').value}); }
-function resetMainEditMode(){ activeEditId=null; $('submitBtn').textContent='Save Reading'; $('cancelEditBtn').style.display='none'; $('editModeLabel').textContent='Creating new reading'; clearMainForm(true); }
-function resetCleggEditMode(){ activeCleggEditId=null; $('cleggSubmitBtn').textContent='Save Clegg Reading'; $('cancelCleggEditBtn').style.display='none'; $('cleggStatusLabel').textContent='New Clegg entry'; clearCleggForm(true); }
-
-// ── firebase save ─────────────────────────────────────────────────────────────
-function buildPayload(meta, zonesPayload, entryType){
-  return { readingDate:meta.date, date:fmtDate(meta.date), timestamp:Timestamp.fromDate(new Date(`${meta.date}T12:00:00`)), enteredBy:meta.enteredBy, tempHigh:isNaN(meta.tempHigh)?null:meta.tempHigh, tempLow:isNaN(meta.tempLow)?null:meta.tempLow, weatherCondition:meta.weather, roofStatus:meta.roof, notes:meta.notes, zones:zonesPayload, entryType, zoneOrderVersion:2, updatedAt:Timestamp.now() };
-}
-
-async function submitMain(){
-  const meta=getMainMeta(); const zones=readGrid(MAIN_TYPES,'mz');
-  const hasData=zones.some(z=>MAIN_TYPES.some(t=>z[t].readings.length));
-  if(!hasData) return toast('Please enter at least one reading.');
-  const p=buildPayload(meta,zones,'main');
-  try{
-    if(activeEditId){ await updateDoc(doc(db,'moistureReadings',activeEditId),p); toast('Reading updated.'); resetMainEditMode(); }
-    else{ p.createdAt=Timestamp.now(); await addDoc(collection(db,'moistureReadings'),p); toast('Reading saved.'); clearMainForm(false); }
-  }catch(e){ console.error(e); toast('Save failed.'); }
-}
-
-async function submitClegg(){
-  const meta=getCleggMeta(); const zones=readGrid(CLEGG_TYPES,'cz');
-  const hasData=zones.some(z=>z.clegg.readings.length);
-  if(!hasData) return toast('Please enter at least one Clegg reading.');
-  const p=buildPayload(meta,zones,'clegg');
-  try{
-    if(activeCleggEditId){ await updateDoc(doc(db,'moistureReadings',activeCleggEditId),p); toast('Clegg reading updated.'); resetCleggEditMode(); }
-    else{ p.createdAt=Timestamp.now(); await addDoc(collection(db,'moistureReadings'),p); toast('Clegg reading saved.'); clearCleggForm(false); }
-  }catch(e){ console.error(e); toast('Clegg save failed.'); }
-}
-
-// ── drafts ────────────────────────────────────────────────────────────────────
-async function saveDraftMain(){
-  const meta=getMainMeta(); const zones=readGrid(MAIN_TYPES,'mz');
-  const d={ meta, zoneData:{}, savedAt:Timestamp.now() };
-  ZONES.forEach((_,zi)=>{ d.zoneData[zi]={}; MAIN_TYPES.forEach(type=>{ d.zoneData[zi][type]={}; for(let i=1;i<=6;i++) d.zoneData[zi][type][i]=$(`mz-${zi}-${type}-${i}`)?.value||''; }); });
-  try{ await setDoc(doc(db,'drafts',DRAFT_ID_MAIN),d); toast('Draft saved!'); showDraftBar('mainDraftBar',true); }catch(e){ toast('Draft save failed.'); }
-}
-async function loadDraftMain(){
-  try{
-    const snap=await getDoc(doc(db,'drafts',DRAFT_ID_MAIN)); if(!snap.exists()) return toast('No draft found.');
-    const d=snap.data(); setMainMeta(d.meta||{});
-    if(d.zoneData){ ZONES.forEach((_,zi)=>{ MAIN_TYPES.forEach(type=>{ for(let i=1;i<=6;i++){const el=$(`mz-${zi}-${type}-${i}`);if(el)el.value=d.zoneData[zi]?.[type]?.[i]||'';} recalcAvg(zi,type,'mz'); }); }); }
-    toast('Draft loaded!');
-  }catch(e){ toast('Draft load failed.'); }
-}
-async function discardDraftMain(){ try{ await deleteDoc(doc(db,'drafts',DRAFT_ID_MAIN)); showDraftBar('mainDraftBar',false); toast('Draft discarded.'); }catch(e){ toast('Discard failed.'); } }
-
-async function saveDraftClegg(){
-  const meta=getCleggMeta();
-  const d={ meta, zoneData:{}, savedAt:Timestamp.now() };
-  ZONES.forEach((_,zi)=>{ d.zoneData[zi]={}; CLEGG_TYPES.forEach(type=>{ d.zoneData[zi][type]={}; for(let i=1;i<=6;i++) d.zoneData[zi][type][i]=$(`cz-${zi}-${type}-${i}`)?.value||''; }); });
-  try{ await setDoc(doc(db,'drafts',DRAFT_ID_CLEGG),d); toast('Clegg draft saved!'); showDraftBar('cleggDraftBar',true); }catch(e){ toast('Clegg draft save failed.'); }
-}
-async function loadDraftClegg(){
-  try{
-    const snap=await getDoc(doc(db,'drafts',DRAFT_ID_CLEGG)); if(!snap.exists()) return toast('No Clegg draft found.');
-    const d=snap.data(); setCleggMeta(d.meta||{});
-    if(d.zoneData){ ZONES.forEach((_,zi)=>{ CLEGG_TYPES.forEach(type=>{ for(let i=1;i<=6;i++){const el=$(`cz-${zi}-${type}-${i}`);if(el)el.value=d.zoneData[zi]?.[type]?.[i]||'';} recalcAvg(zi,type,'cz'); }); }); }
-    toast('Clegg draft loaded!');
-  }catch(e){ toast('Clegg draft load failed.'); }
-}
-async function discardDraftClegg(){ try{ await deleteDoc(doc(db,'drafts',DRAFT_ID_CLEGG)); showDraftBar('cleggDraftBar',false); toast('Clegg draft discarded.'); }catch(e){ toast('Discard failed.'); } }
-
-async function checkDrafts(){
-  try{ const s=await getDoc(doc(db,'drafts',DRAFT_ID_MAIN)); showDraftBar('mainDraftBar',s.exists()); }catch(e){}
-  try{ const s=await getDoc(doc(db,'drafts',DRAFT_ID_CLEGG)); showDraftBar('cleggDraftBar',s.exists()); }catch(e){}
-}
-function showDraftBar(id,show){ const el=$(id); if(el) el.classList.toggle('show',show); }
-
-// ── edit mode ─────────────────────────────────────────────────────────────────
-function editReading(id){
-  const r=allReadings.find(x=>x.id===id); if(!r) return;
-  if((r.entryType||'main')==='clegg'){
-    activeCleggEditId=id; $('cleggSubmitBtn').textContent='Update Reading'; $('cancelCleggEditBtn').style.display='inline-flex'; $('cleggStatusLabel').textContent=`Editing ${r.date}`;
-    $('cleggReadingDate').value=r.readingDate||today(); setCleggMeta({ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
-    fillGrid(CLEGG_TYPES,'cz',r.zones||[]);
-    activateTab('clegg'); window.scrollTo({top:0,behavior:'smooth'});
-  } else {
-    activeEditId=id; $('submitBtn').textContent='Update Reading'; $('cancelEditBtn').style.display='inline-flex'; $('editModeLabel').textContent=`Editing ${r.date}`;
-    $('readingDate').value=r.readingDate||today(); setMainMeta({ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
-    fillGrid(MAIN_TYPES,'mz',r.zones||[]);
-    activateTab('main'); window.scrollTo({top:0,behavior:'smooth'});
-  }
-}
-
-async function deleteReading(id){ if(!confirm('Delete this reading? Cannot be undone.')) return; try{ await deleteDoc(doc(db,'moistureReadings',id)); if(activeEditId===id) resetMainEditMode(); if(activeCleggEditId===id) resetCleggEditMode(); toast('Deleted.'); }catch(e){ toast('Delete failed.'); } }
-
-// ── reporting ─────────────────────────────────────────────────────────────────
-function getVisible(entryType){
-  const s=$('filterStart').value, e=$('filterEnd').value;
-  let src=allReadings.filter(r=>(r.entryType||'main')===entryType);
-  if(s&&e){ const st=new Date(`${s}T00:00:00`),en=new Date(`${e}T23:59:59`); return src.filter(r=>{ const d=new Date(`${r.readingDate||today()}T12:00:00`); return d>=st&&d<=en; }); }
-  return src.slice(0,7);
-}
-
-function zoneAvg(reading,zoneName,type){
+function zoneAvg(reading, zoneName, type){
   const zones = Array.isArray(reading.zones) ? reading.zones : [];
-
-  // Legacy zone order from original app (before Infield/3rd Base swap)
-  const legacyOrder = ['Left Field','Center Field','Right Field','1st Base Line','3rd Base Line','Infield'];
-  // Current index map (after swap)
-  const currentIndexMap = {'Left Field':0,'Center Field':1,'Right Field':2,'1st Base Line':3,'Infield':4,'3rd Base Line':5};
-
-  // 1. Try name match first (works for all newer records)
-  let z = zones.find(x => x && x.name === zoneName);
-
-  // 2. Fallback: match by legacy index order (for older records without names or using old order)
-  if (!z) {
-    const legacyIndex = legacyOrder.indexOf(zoneName);
-    if (legacyIndex !== -1 && zones[legacyIndex]) z = zones[legacyIndex];
-  }
-
-  // 3. Fallback: match by current index map
-  if (!z && currentIndexMap[zoneName] != null && zones[currentIndexMap[zoneName]]) {
-    z = zones[currentIndexMap[zoneName]];
-  }
-
-  if (!z) return null;
-
+  let z = zones.find(x=>x && x.name===zoneName);
+  if(!z){ const li=legacyOrder.indexOf(zoneName); if(li!==-1 && zones[li]) z=zones[li]; }
+  if(!z && currentIndexMap[zoneName]!=null && zones[currentIndexMap[zoneName]]) z=zones[currentIndexMap[zoneName]];
+  if(!z) return null;
   if(type==='tdr'){
     if(z?.tdr?.average!=null) return z.tdr.average;
     if(typeof z?.average==='number') return z.average;
-    if(Array.isArray(z?.tdr?.readings) && z.tdr.readings.length) return Number((z.tdr.readings.reduce((a,b)=>a+b,0)/z.tdr.readings.length).toFixed(1));
-    if(Array.isArray(z?.readings) && z.readings.length) return Number((z.readings.reduce((a,b)=>a+b,0)/z.readings.length).toFixed(1));
+    if(Array.isArray(z?.tdr?.readings)&&z.tdr.readings.length) return Number((z.tdr.readings.reduce((a,b)=>a+b,0)/z.tdr.readings.length).toFixed(1));
+    if(Array.isArray(z?.readings)&&z.readings.length) return Number((z.readings.reduce((a,b)=>a+b,0)/z.readings.length).toFixed(1));
     return null;
   }
   if(type==='shear'){
     if(z?.shear?.average!=null) return z.shear.average;
-    if(Array.isArray(z?.shear?.readings) && z.shear.readings.length) return Number((z.shear.readings.reduce((a,b)=>a+b,0)/z.shear.readings.length).toFixed(1));
+    if(Array.isArray(z?.shear?.readings)&&z.shear.readings.length) return Number((z.shear.readings.reduce((a,b)=>a+b,0)/z.shear.readings.length).toFixed(1));
     return null;
   }
   if(type==='clegg'){
     if(z?.clegg?.average!=null) return z.clegg.average;
-    if(Array.isArray(z?.clegg?.readings) && z.clegg.readings.length) return Number((z.clegg.readings.reduce((a,b)=>a+b,0)/z.clegg.readings.length).toFixed(1));
+    if(Array.isArray(z?.clegg?.readings)&&z.clegg.readings.length) return Number((z.clegg.readings.reduce((a,b)=>a+b,0)/z.clegg.readings.length).toFixed(1));
     return null;
   }
   return null;
 }
 
+// ── grid builder ──────────────────────────────────────────────────────────────
+function buildGrid(gridEl, type, prefix){
+  gridEl.innerHTML='';
+  ZONES.forEach((zone,zi)=>{
+    const card=document.createElement('div'); card.className='zone-card';
+    card.innerHTML=`<div class="zone-name">${zone}</div>`;
+    const sec=document.createElement('div'); sec.className=`reading-type-section ${type}`;
+    sec.innerHTML=`<div class="reading-type-label ${type}">${type.toUpperCase()}</div>`;
+    const grid=document.createElement('div'); grid.className='reading-inputs';
+    for(let i=1;i<=6;i++){
+      const w=document.createElement('div'); w.className='reading-input';
+      w.innerHTML=`<label for="${prefix}-${zi}-${i}">Zone ${i}</label><input type="number" step="0.1" min="0" id="${prefix}-${zi}-${i}"/>`;
+      w.querySelector('input').addEventListener('input',()=>recalcAvg(zi,type,prefix));
+      grid.appendChild(w);
+    }
+    sec.appendChild(grid);
+    const avg=document.createElement('div'); avg.className='avg-box';
+    avg.innerHTML=`<small>${type.toUpperCase()} Average</small><span id="avg-${prefix}-${zi}">—</span>`;
+    sec.appendChild(avg); card.appendChild(sec); gridEl.appendChild(card);
+  });
+}
+
+function recalcAvg(zi, type, prefix){
+  const vals=[];
+  for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${i}`); const n=parseFloat(el?el.value:''); if(!isNaN(n)) vals.push(n); }
+  const el=$(`avg-${prefix}-${zi}`); if(el) el.textContent=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';
+}
+
+function readGrid(type, prefix){
+  return ZONES.map((zone,zi)=>{
+    const vals=[]; for(let i=1;i<=6;i++){ const n=parseFloat($(`${prefix}-${zi}-${i}`)?.value||''); if(!isNaN(n)) vals.push(n); }
+    const entry=blankZone(zone);
+    entry[type]={ readings:vals, average:vals.length?Number((vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1)):null };
+    return entry;
+  });
+}
+
+function fillGrid(type, prefix, storedZones){
+  const norm=normalizeZones(storedZones);
+  norm.forEach((zone,zi)=>{
+    for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${i}`); if(el) el.value=zone[type]?.readings?.[i-1]??''; }
+    recalcAvg(zi,type,prefix);
+  });
+}
+
+function clearGrid(prefix){
+  ZONES.forEach((_,zi)=>{ for(let i=1;i<=6;i++){const el=$(`${prefix}-${zi}-${i}`);if(el)el.value='';} const av=$(`avg-${prefix}-${zi}`); if(av) av.textContent='—'; });
+}
+
+// ── per-tab meta ──────────────────────────────────────────────────────────────
+function getMeta(t){
+  const th=parseFloat($(t+'TempHigh').value); const tl=parseFloat($(t+'TempLow').value);
+  return { enteredBy:$(t+'EnteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$(t+'Weather').value||null, roof:$(t+'Roof').value||null, notes:$(t+'Notes').value.trim()||null, date:$(t+'ReadingDate').value||today() };
+}
+function setMeta(t,m){
+  $(t+'EnteredBy').value=m.enteredBy||''; $(t+'TempHigh').value=m.tempHigh??''; $(t+'TempLow').value=m.tempLow??'';
+  $(t+'Weather').value=m.weather||''; $(t+'Roof').value=m.roof||'';
+  $(t+'Notes').value=m.notes||''; $(t+'ReadingDate').value=m.date||today(); updateCharCount(t);
+}
+function updateCharCount(t){ const el=$(t+'Notes'); const c=$(t+'NotesCount'); if(el&&c) c.textContent=el.value.length; }
+
+// ── firebase ──────────────────────────────────────────────────────────────────
+function buildPayload(meta, zonesPayload, entryType){
+  return { readingDate:meta.date, date:fmtDate(meta.date), timestamp:Timestamp.fromDate(new Date(`${meta.date}T12:00:00`)), enteredBy:meta.enteredBy, tempHigh:meta.tempHigh, tempLow:meta.tempLow, weatherCondition:meta.weather, roofStatus:meta.roof, notes:meta.notes, zones:zonesPayload, entryType, zoneOrderVersion:2, updatedAt:Timestamp.now() };
+}
+
+async function submitEntry(type, prefix){
+  const meta=getMeta(type); const zones=readGrid(type,prefix);
+  if(!zones.some(z=>z[type].readings.length)) return toast(`Please enter at least one ${type.toUpperCase()} reading.`);
+  const p=buildPayload(meta,zones,type);
+  try{
+    if(editIds[type]){ await updateDoc(doc(db,'moistureReadings',editIds[type]),p); toast(`${type.toUpperCase()} reading updated.`); }
+    else { p.createdAt=Timestamp.now(); await addDoc(collection(db,'moistureReadings'),p); toast(`${type.toUpperCase()} reading saved.`); }
+    resetEditMode(type,prefix);
+  }catch(e){ console.error(e); toast('Save failed.'); }
+}
+
+// ── edit mode ─────────────────────────────────────────────────────────────────
+function resetEditMode(type, prefix){
+  editIds[type]=null;
+  clearGrid(prefix); setMeta(type,{date:today()});
+  $(type+'SubmitBtn').textContent=`Save ${type.toUpperCase()} Reading`;
+  $(type+'CancelEditBtn').style.display='none';
+  $(type+'StatusLabel').textContent=`New ${type.toUpperCase()} entry`;
+}
+
+function editReading(id){
+  const r=allReadings.find(x=>x.id===id); if(!r) return;
+  const type=r.entryType||'tdr';
+  const prefix=type[0].toUpperCase()+type.slice(1); // not used — we use type directly
+  const pfx = type==='tdr'?'tz':type==='shear'?'sz':'cz';
+  editIds[type]=id;
+  setMeta(type,{ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
+  fillGrid(type, pfx, r.zones||[]);
+  $(type+'SubmitBtn').textContent=`Update ${type.toUpperCase()}`;
+  $(type+'CancelEditBtn').style.display='inline-flex';
+  $(type+'StatusLabel').textContent=`Editing ${r.date}`;
+  activateTab(type); window.scrollTo({top:0,behavior:'smooth'});
+}
+
+async function deleteReading(id){
+  if(!confirm('Delete this reading? Cannot be undone.')) return;
+  try{ await deleteDoc(doc(db,'moistureReadings',id)); ENTRY_TYPES.forEach(t=>{ if(editIds[t]===id) resetEditMode(t,t==='tdr'?'tz':t==='shear'?'sz':'cz'); }); toast('Deleted.'); }
+  catch(e){ toast('Delete failed.'); }
+}
+
+// ── drafts ────────────────────────────────────────────────────────────────────
+async function saveDraft(type, pfx){
+  const meta=getMeta(type); const d={ meta, zoneData:{}, savedAt:Timestamp.now() };
+  ZONES.forEach((_,zi)=>{ d.zoneData[zi]={}; for(let i=1;i<=6;i++) d.zoneData[zi][i]=$(`${pfx}-${zi}-${i}`)?.value||''; });
+  try{ await setDoc(doc(db,'drafts',`draft-${type}`),d); toast(`${type.toUpperCase()} draft saved!`); showDraftBar(type,true); }
+  catch(e){ toast('Draft save failed.'); }
+}
+async function loadDraft(type, pfx){
+  try{
+    const snap=await getDoc(doc(db,'drafts',`draft-${type}`)); if(!snap.exists()) return toast('No draft found.');
+    const d=snap.data(); setMeta(type,d.meta||{});
+    if(d.zoneData){ ZONES.forEach((_,zi)=>{ for(let i=1;i<=6;i++){const el=$(`${pfx}-${zi}-${i}`);if(el)el.value=d.zoneData[zi]?.[i]||'';} recalcAvg(zi,type,pfx); }); }
+    toast(`${type.toUpperCase()} draft loaded!`);
+  }catch(e){ toast('Draft load failed.'); }
+}
+async function discardDraft(type){ try{ await deleteDoc(doc(db,'drafts',`draft-${type}`)); showDraftBar(type,false); toast('Draft discarded.'); }catch(e){ toast('Discard failed.'); } }
+async function checkDrafts(){ for(const t of ENTRY_TYPES){ try{ const s=await getDoc(doc(db,'drafts',`draft-${t}`)); showDraftBar(t,s.exists()); }catch(e){} } }
+function showDraftBar(type,show){ const el=$(type+'DraftBar'); if(el) el.classList.toggle('show',show); }
+
+// ── reporting ─────────────────────────────────────────────────────────────────
+function getVisible(type){
+  const s=$('filterStart').value, e=$('filterEnd').value;
+  const src=allReadings.filter(r=>r.entryType===type);
+  if(s&&e){ const st=new Date(`${s}T00:00:00`),en=new Date(`${e}T23:59:59`); return src.filter(r=>{ const d=new Date(`${r.readingDate||today()}T12:00:00`); return d>=st&&d<=en; }); }
+  return src.slice(0,7);
+}
+
 function renderTable(type, el){
-  const rows=getVisible(type==='clegg'?'clegg':'main');
+  const rows=getVisible(type);
   const cols=['Date','By','High','Low','Weather','Roof','Notes',...ZONES,'Actions'];
   const thead=`<thead><tr>${cols.map((h,i)=>`<th class="${i<2||h==='Notes'?'left':''}">${h}</th>`).join('')}</tr></thead>`;
   const tbody=rows.length?`<tbody>${rows.map(r=>{
     const zc=ZONES.map(z=>{ const v=zoneAvg(r,z,type); return `<td>${v==null?'—':Number(v).toFixed(1)}</td>`; }).join('');
-    return `<tr><td class="left">${esc(r.date||'—')}</td><td class="left">${esc(r.enteredBy||'—')}</td><td>${r.tempHigh??'—'}</td><td>${r.tempLow??'—'}</td><td>${esc(r.weatherCondition||'—')}</td><td>${esc(r.roofStatus||'—')}</td><td class="left" style="max-width:160px;white-space:normal;">${esc(r.notes||'—')}</td>${zc}<td><div class="inline-actions"><button class="text-link" data-view="${r.id}" data-type="${type}">View</button><button class="text-link" data-edit="${r.id}">Edit</button><button class="text-link danger-link" data-del="${r.id}">Delete</button></div></td></tr>`;
+    return `<tr><td class="left">${esc(r.date||'—')}</td><td class="left">${esc(r.enteredBy||'—')}</td><td>${r.tempHigh??'—'}</td><td>${r.tempLow??'—'}</td><td>${esc(r.weatherCondition||'—')}</td><td>${esc(r.roofStatus||'—')}</td><td class="left" style="max-width:100px;white-space:nowrap;overflow:hidden;">${r.notes&&r.notes.length>10?esc(r.notes.slice(0,10))+'…':esc(r.notes||'—')}</td>${zc}<td><div class="inline-actions"><button class="text-link" data-view="${r.id}" data-vtype="${type}">View</button><button class="text-link" data-edit="${r.id}">Edit</button><button class="text-link danger-link" data-del="${r.id}">Delete</button></div></td></tr>`;
   }).join('')}</tbody>`:`<tbody><tr><td colspan="${cols.length}" class="left" style="padding:16px;color:var(--muted);">No ${type.toUpperCase()} readings yet.</td></tr></tbody>`;
   el.innerHTML=thead+tbody;
 }
 
-function updateReportInfo(){
-  const mainCount=getVisible('main').length; const cleggCount=getVisible('clegg').length;
-  const s=$('filterStart').value, e=$('filterEnd').value;
-  $('reportInfo').textContent = s&&e ? `Showing readings from ${s} to ${e}` : `Showing last 7 readings per type`;
-}
-
-function renderAll(){ renderTable('tdr',$('tdrTable')); renderTable('shear',$('shearTable')); renderTable('clegg',$('cleggTable')); updateReportInfo(); attachActions(); renderChart(); }
+function renderAll(){ ENTRY_TYPES.forEach(t=>renderTable(t,$(t+'Table'))); attachActions(); renderChart(); updateReportInfo(); }
+function updateReportInfo(){ const s=$('filterStart').value,e=$('filterEnd').value; $('reportInfo').textContent=s&&e?`Showing ${s} to ${e}`:`Showing last 7 readings per type`; }
 
 function attachActions(){
   document.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editReading(b.dataset.edit));
   document.querySelectorAll('[data-del]').forEach(b=>b.onclick=()=>deleteReading(b.dataset.del));
-  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openDetail(b.dataset.view,b.dataset.type));
+  document.querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>openDetail(b.dataset.view,b.dataset.vtype));
 }
 
 // ── detail view ───────────────────────────────────────────────────────────────
@@ -501,21 +463,19 @@ function openDetail(id,type){
   const r=allReadings.find(x=>x.id===id); if(!r) return;
   const norm=normalizeZones(r.zones||[]);
   $('detailTitle').textContent=`${type.toUpperCase()} Details`;
-  $('detailMeta').textContent=`${r.date||'?'} • ${r.enteredBy||'No name'} • Temp: ${r.tempHigh??'?'}/${r.tempLow??'?'}°F • ${r.weatherCondition||''} ${r.roofStatus||''}`;
-  $('detailNotes').innerHTML=r.notes?`<div style="padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;"><strong>Notes:</strong> ${esc(r.notes)}</div>`:'';
+  $('detailMeta').textContent=`${r.date||'?'} • ${r.enteredBy||'No name'} • ${r.tempHigh??'?'}/${r.tempLow??'?'}°F • ${r.weatherCondition||''} ${r.roofStatus||''}`.trim();
+  $('detailNotes').innerHTML='';
   $('detailGrid').innerHTML=norm.map(zone=>{
-    let vals = 'No readings';
-    let avg = zoneAvg({ zones:[zone] }, zone.name, type);
-    if(type==='tdr'){
-      const arr = zone?.tdr?.readings?.length ? zone.tdr.readings : (Array.isArray(zone?.readings) ? zone.readings : []);
-      if(arr.length) vals = arr.map(v=>Number(v).toFixed(1)).join(', ');
-    } else {
-      const arr = zone?.[type]?.readings || [];
-      if(arr.length) vals = arr.map(v=>Number(v).toFixed(1)).join(', ');
-    }
-    const avgText = avg==null ? '—' : Number(avg).toFixed(1);
+    let vals='No readings';
+    if(type==='tdr'){ const arr=zone?.tdr?.readings?.length?zone.tdr.readings:(Array.isArray(zone?.readings)?zone.readings:[]); if(arr.length) vals=arr.map(v=>Number(v).toFixed(1)).join(', '); }
+    else { const arr=zone?.[type]?.readings||[]; if(arr.length) vals=arr.map(v=>Number(v).toFixed(1)).join(', '); }
+    const avg=zoneAvg({zones:[zone]},zone.name,type); const avgText=avg==null?'—':Number(avg).toFixed(1);
     return `<div class="detail-zone"><h4>${zone.name}</h4><div><strong>Avg:</strong> ${avgText}</div><div class="muted" style="margin-top:6px;font-size:12px;"><strong>All 6:</strong> ${vals}</div></div>`;
   }).join('');
+  const notesHtml = r.notes
+    ? `<div style="margin-top:16px;padding:12px 14px;background:var(--surface-2);border-radius:10px;border:1px solid var(--border);font-size:13px;"><strong style="display:block;margin-bottom:4px;color:var(--muted);font-size:11px;text-transform:uppercase;letter-spacing:.05em;">Notes</strong>${esc(r.notes)}</div>`
+    : '';
+  $('detailNotes').innerHTML = notesHtml;
   $('detailDrawer').classList.add('open');
 }
 
@@ -526,21 +486,10 @@ function buildLegend(){
     const b=document.createElement('button'); if(selectedZones.has(z)) b.classList.add('active');
     b.innerHTML=`<span class="legend-swatch" style="background:${ZONE_COLORS[z]}"></span>${z}`;
     b.onclick=()=>{
-      if(selectedZones.size===ZONES.length){
-        // all selected → isolate the clicked one
-        selectedZones=new Set([z]);
-      } else if(selectedZones.has(z)&&selectedZones.size===1){
-        // only this one selected → clicking it resets to all
-        selectedZones=new Set(ZONES);
-      } else if(selectedZones.has(z)){
-        // already in selection → remove it
-        selectedZones.delete(z);
-        // if that empties the set, reset to all
-        if(selectedZones.size===0) selectedZones=new Set(ZONES);
-      } else {
-        // not in selection → add it
-        selectedZones.add(z);
-      }
+      if(selectedZones.size===ZONES.length){ selectedZones=new Set([z]); }
+      else if(selectedZones.has(z)&&selectedZones.size===1){ selectedZones=new Set(ZONES); }
+      else if(selectedZones.has(z)){ selectedZones.delete(z); if(!selectedZones.size) selectedZones=new Set(ZONES); }
+      else { selectedZones.add(z); }
       renderChart();
     };
     $('chartLegend').appendChild(b);
@@ -549,15 +498,13 @@ function buildLegend(){
 
 function renderChart(){
   buildLegend();
-  const entryType=chartType==='clegg'?'clegg':'main';
-  const rows=[...getVisible(entryType)].reverse();
+  const rows=[...getVisible(chartType)].reverse();
   const labels=rows.map(r=>r.date||'—');
   const datasets=ZONES.filter(z=>selectedZones.has(z)).map(z=>({ label:z, data:rows.map(r=>zoneAvg(r,z,chartType)), borderColor:ZONE_COLORS[z], backgroundColor:ZONE_COLORS[z], tension:.25, spanGaps:true, pointRadius:4, pointHoverRadius:6 }));
   if(chart) chart.destroy();
   const isDark=window.matchMedia('(prefers-color-scheme:dark)').matches;
-  const gridColor=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)';
-  const tickColor=isDark?'#7a7876':'#6d7678';
-  chart=new Chart($('trendChart'),{ type:'line', data:{labels,datasets}, options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'nearest',intersect:false}, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:tickColor},grid:{color:gridColor}}, y:{ticks:{color:tickColor},grid:{color:gridColor},beginAtZero:false} } } });
+  const gc=isDark?'rgba(255,255,255,.08)':'rgba(0,0,0,.07)'; const tc=isDark?'#7a7876':'#6d7678';
+  chart=new Chart($('trendChart'),{ type:'line', data:{labels,datasets}, options:{ responsive:true, maintainAspectRatio:false, interaction:{mode:'nearest',intersect:false}, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:tc},grid:{color:gc}}, y:{ticks:{color:tc},grid:{color:gc},beginAtZero:false} } } });
 }
 
 // ── export / import ───────────────────────────────────────────────────────────
@@ -565,45 +512,56 @@ function exportCSV(){
   if(!allReadings.length) return toast('No data to export.');
   let csv='Date,Entered By,Entry Type,'+ZONES.join(',')+'\n';
   allReadings.forEach(r=>{
-    ALL_TYPES.forEach(type=>{
-      const row=[r.date,r.enteredBy||'',type,...ZONES.map(z=>{ const v=zoneAvg(r,z,type); return v==null?'':Number(v).toFixed(1); })];
-      csv+=row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')+'\n';
-    });
+    const type=r.entryType||'tdr';
+    const row=[r.date,r.enteredBy||'',type,...ZONES.map(z=>{ const v=zoneAvg(r,z,type); return v==null?'':Number(v).toFixed(1); })];
+    csv+=row.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')+'\n';
   });
-  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`field-readings-${new Date().toISOString().slice(0,10)}.csv`; document.body.appendChild(a); a.click(); setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },100); toast(`Exported ${allReadings.length} readings.`);
+  const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'}); const url=URL.createObjectURL(blob); const a=document.createElement('a'); a.href=url; a.download=`field-readings-${today()}.csv`; document.body.appendChild(a); a.click(); setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); },100); toast(`Exported ${allReadings.length} readings.`);
 }
 
 async function importData(e){
-  const file=e.target.files[0]; if(!file) return;
-  const text=await file.text(); e.target.value='';
+  const file=e.target.files[0]; if(!file) return; const text=await file.text(); e.target.value='';
   try{
     const arr=JSON.parse(text); if(!Array.isArray(arr)) throw new Error(); let count=0;
-    for(const r of arr){ await addDoc(collection(db,'moistureReadings'),{ timestamp:Timestamp.now(), date:r.date||new Date().toLocaleString(), readingDate:r.readingDate||today(), enteredBy:r.enteredBy||null, zones:r.zones||[], entryType:r.entryType||'main', createdAt:Timestamp.now(), updatedAt:Timestamp.now() }); count++; }
+    for(const r of arr){ await addDoc(collection(db,'moistureReadings'),{ timestamp:Timestamp.now(), date:r.date||new Date().toLocaleString(), readingDate:r.readingDate||today(), enteredBy:r.enteredBy||null, zones:r.zones||[], entryType:r.entryType||'tdr', createdAt:Timestamp.now(), updatedAt:Timestamp.now() }); count++; }
     toast(`Imported ${count} readings.`);
-  } catch(err){
-    toast('Invalid file. Only JSON exports are supported for import.');
-  }
+  }catch(e){ toast('Invalid file. Only JSON exports supported for import.'); }
 }
 
 // ── tabs ──────────────────────────────────────────────────────────────────────
 function activateTab(name){
   document.querySelectorAll('[data-top-tab]').forEach(b=>b.classList.toggle('active',b.dataset.topTab===name));
-  $('panel-main').classList.toggle('active',name==='main');
-  $('panel-clegg').classList.toggle('active',name==='clegg');
+  ENTRY_TYPES.forEach(t=>{ const p=$(`panel-${t}`); if(p) p.classList.toggle('active',t===name); });
 }
 
 // ── firestore listener ────────────────────────────────────────────────────────
+function normalizeEntryType(data){
+  // Legacy records saved as 'main' contained both TDR and shear in zones.
+  // We keep them as-is but map to entryType based on which data they have.
+  // New records are 'tdr', 'shear', or 'clegg'.
+  if(data.entryType && data.entryType !== 'main') return data.entryType;
+  // legacy 'main' records: surface them in both TDR and Shear by duplicating on read
+  return 'main';
+}
+
 function listen(){
   const q=query(collection(db,'moistureReadings'),orderBy('timestamp','desc'));
   onSnapshot(q,snap=>{
-    allReadings=snap.docs.map(d=>{
-      const data={id:d.id,...d.data()};
-      const ts=data.timestamp?.toDate ? data.timestamp.toDate() : null;
-      const legacyDate = ts ? new Date(ts.getTime()-ts.getTimezoneOffset()*60000).toISOString().slice(0,10) : today();
-      const readingDate = data.readingDate || (typeof data.date==='string' && /^\d{4}-\d{2}-\d{2}$/.test(data.date) ? data.date : legacyDate);
-      const prettyDate = data.date || fmtDate(readingDate);
-      const entryType = data.entryType || 'main';
-      return { ...data, readingDate, date: prettyDate, entryType };
+    const raw=snap.docs.map(d=>({id:d.id,...d.data()}));
+    allReadings=[];
+    raw.forEach(data=>{
+      const ts=data.timestamp?.toDate?data.timestamp.toDate():null;
+      const legacyDate=ts?new Date(ts.getTime()-ts.getTimezoneOffset()*60000).toISOString().slice(0,10):today();
+      const readingDate=data.readingDate||(typeof data.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(data.date)?data.date:legacyDate);
+      const prettyDate=data.date||fmtDate(readingDate);
+      const et=normalizeEntryType(data);
+      if(et==='main'){
+        // Legacy combined record: surface as both tdr and shear rows
+        allReadings.push({...data, readingDate, date:prettyDate, entryType:'tdr'});
+        allReadings.push({...data, readingDate, date:prettyDate, entryType:'shear', id:data.id+'_shear'});
+      } else {
+        allReadings.push({...data, readingDate, date:prettyDate, entryType:et});
+      }
     });
     renderAll();
   },err=>{ console.error(err); toast('Error loading data.'); });
@@ -613,38 +571,30 @@ function listen(){
 document.querySelectorAll('[data-top-tab]').forEach(b=>b.onclick=()=>activateTab(b.dataset.topTab));
 document.querySelectorAll('[data-chart-type]').forEach(b=>b.onclick=()=>{ chartType=b.dataset.chartType; document.querySelectorAll('[data-chart-type]').forEach(x=>x.className='button secondary'); b.className='button primary'; renderChart(); });
 
-$('submitBtn').onclick=submitMain;
-$('clearBtn').onclick=()=>clearMainForm(false);
-$('cancelEditBtn').onclick=resetMainEditMode;
-$('saveDraftBtn').onclick=saveDraftMain;
-$('loadDraftBtn').onclick=loadDraftMain;
-$('discardDraftBtn').onclick=discardDraftMain;
-
-$('cleggSubmitBtn').onclick=submitClegg;
-$('cleggClearBtn').onclick=()=>clearCleggForm(false);
-$('cancelCleggEditBtn').onclick=resetCleggEditMode;
-$('saveCleggDraftBtn').onclick=saveDraftClegg;
-$('cleggLoadDraftBtn').onclick=loadDraftClegg;
-$('cleggDiscardDraftBtn').onclick=discardDraftClegg;
+['tdr','shear','clegg'].forEach(t=>{
+  const pfx=t==='tdr'?'tz':t==='shear'?'sz':'cz';
+  $(t+'SubmitBtn').onclick=()=>submitEntry(t,pfx);
+  $(t+'ClearBtn').onclick=()=>{ clearGrid(pfx); setMeta(t,{date:today()}); };
+  $(t+'CancelEditBtn').onclick=()=>resetEditMode(t,pfx);
+  $(t+'SaveDraftBtn').onclick=()=>saveDraft(t,pfx);
+  $(t+'LoadDraftBtn').onclick=()=>loadDraft(t,pfx);
+  $(t+'DiscardDraftBtn').onclick=()=>discardDraft(t);
+  $(t+'Notes').oninput=()=>updateCharCount(t);
+});
 
 $('exportBtn').onclick=exportCSV;
 $('importBtn').onclick=()=>$('importFile').click();
 $('importFile').onchange=importData;
-
 $('applyFilterBtn').onclick=()=>{ if(!$('filterStart').value||!$('filterEnd').value) return toast('Select both dates.'); if($('filterStart').value>$('filterEnd').value) return toast('Start must be before end.'); renderAll(); };
 $('resetFilterBtn').onclick=()=>{ $('filterStart').value=''; $('filterEnd').value=''; renderAll(); };
-
-$('notes').oninput=()=>updateCharCount('notesCount','notes');
-$('cleggNotes').oninput=()=>updateCharCount('cleggNotesCount','cleggNotes');
-
 $('closeDetailBtn').onclick=()=>$('detailDrawer').classList.remove('open');
 $('detailDrawer').onclick=e=>{ if(e.target===$('detailDrawer')) $('detailDrawer').classList.remove('open'); };
 
 // ── boot ──────────────────────────────────────────────────────────────────────
-buildGrid($('zoneGrid'), MAIN_TYPES, 'mz');
-buildGrid($('cleggZoneGrid'), CLEGG_TYPES, 'cz');
-$('readingDate').value=today();
-$('cleggReadingDate').value=today();
+buildGrid($('tdrZoneGrid'),'tdr','tz');
+buildGrid($('shearZoneGrid'),'shear','sz');
+buildGrid($('cleggZoneGrid'),'clegg','cz');
+['tdr','shear','clegg'].forEach(t=>{ $(t+'ReadingDate').value=today(); });
 listen();
 checkDrafts();
 </script>
