@@ -107,68 +107,51 @@
   <p class="subtitle">Track TDR, Shear and Clegg readings independently across 6 field zones.</p>
 
   <div class="top-tabs">
-    <button class="top-tab active" data-top-tab="tdr">TDR</button>
-    <button class="top-tab" data-top-tab="shear">Shear</button>
+    <button class="top-tab active" data-top-tab="main">TDR / Shear</button>
     <button class="top-tab" data-top-tab="clegg">Clegg</button>
   </div>
 
-  <!-- ─── TDR TAB ─── -->
-  <div class="tab-panel active" id="panel-tdr">
+  <!-- ─── TDR / SHEAR TAB ─── -->
+  <div class="tab-panel active" id="panel-main">
     <div class="section">
+      <!-- Draft bars -->
       <div id="tdrDraftBar" class="draft-bar">📝 <strong>You have a saved TDR draft.</strong>
         <button class="button primary" style="padding:5px 12px;font-size:12px;" id="tdrLoadDraftBtn">Resume</button>
         <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="tdrDiscardDraftBtn">Discard</button>
       </div>
-      <div class="toolbar" style="margin-bottom:14px;">
-        <div class="field"><label for="tdrReadingDate">Reading date</label><input type="date" id="tdrReadingDate"/></div>
-        <div class="field grow"><label>Status</label><div class="pill" id="tdrStatusLabel">New TDR entry</div></div>
-      </div>
-      <div class="meta-grid" style="margin-bottom:14px;">
-        <div class="field"><label for="tdrEnteredBy">Entered by</label><input type="text" id="tdrEnteredBy" placeholder="First name"/></div>
-        <div class="field"><label for="tdrTempHigh">Temp High °F</label><input type="number" id="tdrTempHigh" step="0.1"/></div>
-        <div class="field"><label for="tdrTempLow">Temp Low °F</label><input type="number" id="tdrTempLow" step="0.1"/></div>
-        <div class="field"><label for="tdrWeather">Weather</label><select id="tdrWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
-        <div class="field"><label for="tdrRoof">Roof Status</label><select id="tdrRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
-      </div>
-      <div id="tdrZoneGrid" class="zone-grid"></div>
-      <div style="margin-top:14px;"><div class="field"><label for="tdrNotes">Notes (255 max)</label><textarea id="tdrNotes" maxlength="255"></textarea><div class="char-count"><span id="tdrNotesCount">0</span>/255</div></div></div>
-      <div class="button-row" style="margin-top:16px;">
-        <button class="button secondary" id="tdrClearBtn">Clear</button>
-        <button class="button secondary" id="tdrSaveDraftBtn">Save Draft</button>
-        <button class="button secondary" id="tdrCancelEditBtn" style="display:none;">Cancel Edit</button>
-        <button class="button primary" id="tdrSubmitBtn">Save TDR Reading</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ─── SHEAR TAB ─── -->
-  <div class="tab-panel" id="panel-shear">
-    <div class="section">
       <div id="shearDraftBar" class="draft-bar">📝 <strong>You have a saved Shear draft.</strong>
         <button class="button primary" style="padding:5px 12px;font-size:12px;" id="shearLoadDraftBtn">Resume</button>
         <button class="button secondary" style="padding:5px 12px;font-size:12px;" id="shearDiscardDraftBtn">Discard</button>
       </div>
+
+      <!-- Shared meta (one set for both TDR and Shear) -->
       <div class="toolbar" style="margin-bottom:14px;">
-        <div class="field"><label for="shearReadingDate">Reading date</label><input type="date" id="shearReadingDate"/></div>
-        <div class="field grow"><label>Status</label><div class="pill" id="shearStatusLabel">New Shear entry</div></div>
+        <div class="field"><label for="tdrReadingDate">Reading date</label><input type="date" id="tdrReadingDate"/></div>
+        <div class="field grow"><label>Status</label><div class="pill" id="mainStatusLabel">New reading</div></div>
       </div>
       <div class="meta-grid" style="margin-bottom:14px;">
-        <div class="field"><label for="shearEnteredBy">Entered by</label><input type="text" id="shearEnteredBy" placeholder="First name"/></div>
-        <div class="field"><label for="shearTempHigh">Temp High °F</label><input type="number" id="shearTempHigh" step="0.1"/></div>
-        <div class="field"><label for="shearTempLow">Temp Low °F</label><input type="number" id="shearTempLow" step="0.1"/></div>
-        <div class="field"><label for="shearWeather">Weather</label><select id="shearWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
-        <div class="field"><label for="shearRoof">Roof Status</label><select id="shearRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
+        <div class="field"><label for="mainEnteredBy">Entered by</label><input type="text" id="mainEnteredBy" placeholder="First name"/></div>
+        <div class="field"><label for="mainTempHigh">Temp High °F</label><input type="number" id="mainTempHigh" step="0.1"/></div>
+        <div class="field"><label for="mainTempLow">Temp Low °F</label><input type="number" id="mainTempLow" step="0.1"/></div>
+        <div class="field"><label for="mainWeather">Weather</label><select id="mainWeather"><option value="">Select...</option><option>Sunny</option><option>Cloudy</option><option>Rainy</option><option>Windy</option><option>Overcast</option></select></div>
+        <div class="field"><label for="mainRoof">Roof Status</label><select id="mainRoof"><option value="">Select...</option><option>Open</option><option>Closed</option></select></div>
       </div>
-      <div id="shearZoneGrid" class="zone-grid"></div>
-      <div style="margin-top:14px;"><div class="field"><label for="shearNotes">Notes (255 max)</label><textarea id="shearNotes" maxlength="255"></textarea><div class="char-count"><span id="shearNotesCount">0</span>/255</div></div></div>
+
+      <!-- Combined zone grid: each card has TDR + Shear sections -->
+      <div id="mainZoneGrid" class="zone-grid"></div>
+
+      <!-- Shared notes + buttons -->
+      <div style="margin-top:14px;">
+        <div class="field"><label for="mainNotes">Notes (255 max)</label><textarea id="mainNotes" maxlength="255"></textarea><div class="char-count"><span id="mainNotesCount">0</span>/255</div></div>
+      </div>
       <div class="button-row" style="margin-top:16px;">
-        <button class="button secondary" id="shearClearBtn">Clear</button>
-        <button class="button secondary" id="shearSaveDraftBtn">Save Draft</button>
-        <button class="button secondary" id="shearCancelEditBtn" style="display:none;">Cancel Edit</button>
-        <button class="button primary" id="shearSubmitBtn">Save Shear Reading</button>
+        <button class="button secondary" id="mainClearBtn">Clear</button>
+        <button class="button secondary" id="mainSaveDraftBtn">Save Draft</button>
+        <button class="button secondary" id="mainCancelEditBtn" style="display:none;">Cancel Edit</button>
+        <button class="button primary" id="mainSaveBtn">Save TDR &amp; Shear</button>
       </div>
     </div>
-  </div>
+  </div><!-- /panel-main -->
 
   <!-- ─── CLEGG TAB ─── -->
   <div class="tab-panel" id="panel-clegg">
@@ -327,6 +310,31 @@ function buildGrid(gridEl, type, prefix){
   });
 }
 
+function buildCombinedGrid(gridEl){
+  gridEl.innerHTML='';
+  ZONES.forEach((zone,zi)=>{
+    const card=document.createElement('div'); card.className='zone-card';
+    card.innerHTML=`<div class="zone-name">${zone}</div>`;
+    ['tdr','shear'].forEach(type=>{
+      const pfx=type==='tdr'?'tz':'sz';
+      const sec=document.createElement('div'); sec.className=`reading-type-section ${type}`;
+      sec.innerHTML=`<div class="reading-type-label ${type}">${type.toUpperCase()}</div>`;
+      const grid=document.createElement('div'); grid.className='reading-inputs';
+      for(let i=1;i<=6;i++){
+        const w=document.createElement('div'); w.className='reading-input';
+        w.innerHTML=`<label for="${pfx}-${zi}-${i}">Zone ${i}</label><input type="number" step="0.1" min="0" id="${pfx}-${zi}-${i}"/>`;
+        w.querySelector('input').addEventListener('input',()=>recalcAvg(zi,type,pfx));
+        grid.appendChild(w);
+      }
+      sec.appendChild(grid);
+      const avg=document.createElement('div'); avg.className='avg-box';
+      avg.innerHTML=`<small>${type.toUpperCase()} Average</small><span id="avg-${pfx}-${zi}">—</span>`;
+      sec.appendChild(avg); card.appendChild(sec);
+    });
+    gridEl.appendChild(card);
+  });
+}
+
 function recalcAvg(zi, type, prefix){
   const vals=[];
   for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${i}`); const n=parseFloat(el?el.value:''); if(!isNaN(n)) vals.push(n); }
@@ -356,10 +364,13 @@ function clearGrid(prefix){
 
 // ── per-tab meta ──────────────────────────────────────────────────────────────
 function getMeta(t){
+  // tdr and shear share the main form fields
+  if(t==='tdr'||t==='shear') return getMainMeta();
   const th=parseFloat($(t+'TempHigh').value); const tl=parseFloat($(t+'TempLow').value);
   return { enteredBy:$(t+'EnteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$(t+'Weather').value||null, roof:$(t+'Roof').value||null, notes:$(t+'Notes').value.trim()||null, date:$(t+'ReadingDate').value||today() };
 }
 function setMeta(t,m){
+  if(t==='tdr'||t==='shear'){ setMainMeta(m); return; }
   $(t+'EnteredBy').value=m.enteredBy||''; $(t+'TempHigh').value=m.tempHigh??''; $(t+'TempLow').value=m.tempLow??'';
   $(t+'Weather').value=m.weather||''; $(t+'Roof').value=m.roof||'';
   $(t+'Notes').value=m.notes||''; $(t+'ReadingDate').value=m.date||today(); updateCharCount(t);
@@ -384,6 +395,7 @@ async function submitEntry(type, prefix){
 
 // ── edit mode ─────────────────────────────────────────────────────────────────
 function resetEditMode(type, prefix){
+  if(type==='tdr'||type==='shear'){ cancelMainEdit(); return; }
   editIds[type]=null;
   clearGrid(prefix); setMeta(type,{date:today()});
   $(type+'SubmitBtn').textContent=`Save ${type.toUpperCase()} Reading`;
@@ -394,15 +406,27 @@ function resetEditMode(type, prefix){
 function editReading(id){
   const r=allReadings.find(x=>x.id===id); if(!r) return;
   const type=r.entryType||'tdr';
-  const prefix=type[0].toUpperCase()+type.slice(1); // not used — we use type directly
-  const pfx = type==='tdr'?'tz':type==='shear'?'sz':'cz';
-  editIds[type]=id;
-  setMeta(type,{ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
-  fillGrid(type, pfx, r.zones||[]);
-  $(type+'SubmitBtn').textContent=`Update ${type.toUpperCase()}`;
-  $(type+'CancelEditBtn').style.display='inline-flex';
-  $(type+'StatusLabel').textContent=`Editing ${r.date}`;
-  activateTab(type); window.scrollTo({top:0,behavior:'smooth'});
+  if(type==='clegg'){
+    editIds.clegg=id;
+    setMeta('clegg',{ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
+    fillGrid('clegg','cz',r.zones||[]);
+    $('cleggSubmitBtn').textContent='Update Clegg';
+    $('cleggCancelEditBtn').style.display='inline-flex';
+    $('cleggStatusLabel').textContent=`Editing ${r.date}`;
+    activateTab('clegg');
+  } else {
+    // TDR or Shear: load into shared form
+    mainEditType=type;
+    editIds[type]=id;
+    setMainMeta({ enteredBy:r.enteredBy, tempHigh:r.tempHigh, tempLow:r.tempLow, weather:r.weatherCondition, roof:r.roofStatus, notes:r.notes, date:r.readingDate||today() });
+    const pfx=type==='tdr'?'tz':'sz';
+    clearGrid(pfx); fillGrid(type,pfx,r.zones||[]);
+    $('mainSaveBtn').textContent=`Update ${type.toUpperCase()}`;
+    $('mainCancelEditBtn').style.display='inline-flex';
+    $('mainStatusLabel').textContent=`Editing ${type.toUpperCase()} — ${r.date}`;
+    activateTab('main');
+  }
+  window.scrollTo({top:0,behavior:'smooth'});
 }
 
 async function deleteReading(id){
@@ -531,7 +555,8 @@ async function importData(e){
 // ── tabs ──────────────────────────────────────────────────────────────────────
 function activateTab(name){
   document.querySelectorAll('[data-top-tab]').forEach(b=>b.classList.toggle('active',b.dataset.topTab===name));
-  ENTRY_TYPES.forEach(t=>{ const p=$(`panel-${t}`); if(p) p.classList.toggle('active',t===name); });
+  $('panel-main').classList.toggle('active', name==='main'||name==='tdr'||name==='shear');
+  $('panel-clegg').classList.toggle('active', name==='clegg');
 }
 
 // ── firestore listener ────────────────────────────────────────────────────────
@@ -567,20 +592,96 @@ function listen(){
   },err=>{ console.error(err); toast('Error loading data.'); });
 }
 
+// ── shared TDR/Shear form helpers ────────────────────────────────────────────
+let mainEditType = null; // 'tdr' or 'shear' or 'both' when editing
+
+function getMainMeta(){
+  const th=parseFloat($('mainTempHigh').value); const tl=parseFloat($('mainTempLow').value);
+  return { enteredBy:$('mainEnteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$('mainWeather').value||null, roof:$('mainRoof').value||null, notes:$('mainNotes').value.trim()||null, date:$('tdrReadingDate').value||today() };
+}
+
+function setMainMeta(m){
+  $('mainEnteredBy').value=m.enteredBy||''; $('mainTempHigh').value=m.tempHigh??''; $('mainTempLow').value=m.tempLow??'';
+  $('mainWeather').value=m.weather||''; $('mainRoof').value=m.roof||'';
+  $('mainNotes').value=m.notes||''; $('tdrReadingDate').value=m.date||today();
+  const c=$('mainNotesCount'); if(c) c.textContent=$('mainNotes').value.length;
+}
+
+function clearMainForm(){
+  clearGrid('tz'); clearGrid('sz'); setMainMeta({date:$('tdrReadingDate').value||today()});
+}
+
+function cancelMainEdit(){
+  editIds.tdr=null; editIds.shear=null; mainEditType=null;
+  $('mainSaveBtn').textContent='Save TDR & Shear';
+  $('mainCancelEditBtn').style.display='none';
+  $('mainStatusLabel').textContent='New reading';
+  clearMainForm();
+  $('tdrReadingDate').value=today();
+}
+
+async function saveMainDraft(){
+  const meta=getMainMeta();
+  const d={ meta, tdrZoneData:{}, shearZoneData:{}, savedAt:Timestamp.now() };
+  ZONES.forEach((_,zi)=>{
+    d.tdrZoneData[zi]={}; for(let i=1;i<=6;i++) d.tdrZoneData[zi][i]=$(`tz-${zi}-${i}`)?.value||'';
+    d.shearZoneData[zi]={}; for(let i=1;i<=6;i++) d.shearZoneData[zi][i]=$(`sz-${zi}-${i}`)?.value||'';
+  });
+  try{
+    await setDoc(doc(db,'drafts','draft-tdr'),{...d, zoneData:d.tdrZoneData});
+    await setDoc(doc(db,'drafts','draft-shear'),{...d, zoneData:d.shearZoneData});
+    toast('TDR & Shear draft saved!');
+    showDraftBar('tdr',true); showDraftBar('shear',true);
+  }catch(e){ toast('Draft save failed.'); }
+}
+
+async function submitMainBoth(){
+  const meta=getMainMeta();
+  const tdrZones=readGrid('tdr','tz'); const shearZones=readGrid('shear','sz');
+  const hasTdr=tdrZones.some(z=>z.tdr.readings.length);
+  const hasShear=shearZones.some(z=>z.shear.readings.length);
+  if(!hasTdr&&!hasShear) return toast('Please enter at least one reading.');
+
+  // If editing a single type, only save that one
+  const savingType = mainEditType; // 'tdr', 'shear', or null (new = save both)
+  try{
+    if((!savingType||savingType==='tdr') && hasTdr){
+      const p=buildPayload(meta,tdrZones,'tdr');
+      if(editIds.tdr){ await updateDoc(doc(db,'moistureReadings',editIds.tdr),p); }
+      else { p.createdAt=Timestamp.now(); await addDoc(collection(db,'moistureReadings'),p); }
+    }
+    if((!savingType||savingType==='shear') && hasShear){
+      const p=buildPayload(meta,shearZones,'shear');
+      if(editIds.shear){ await updateDoc(doc(db,'moistureReadings',editIds.shear),p); }
+      else { p.createdAt=Timestamp.now(); await addDoc(collection(db,'moistureReadings'),p); }
+    }
+    toast(hasTdr&&hasShear?'TDR & Shear saved!':hasTdr?'TDR saved!':'Shear saved!');
+    cancelMainEdit();
+  }catch(e){ console.error(e); toast('Save failed.'); }
+}
+
 // ── wire events ───────────────────────────────────────────────────────────────
 document.querySelectorAll('[data-top-tab]').forEach(b=>b.onclick=()=>activateTab(b.dataset.topTab));
 document.querySelectorAll('[data-chart-type]').forEach(b=>b.onclick=()=>{ chartType=b.dataset.chartType; document.querySelectorAll('[data-chart-type]').forEach(x=>x.className='button secondary'); b.className='button primary'; renderChart(); });
 
-['tdr','shear','clegg'].forEach(t=>{
-  const pfx=t==='tdr'?'tz':t==='shear'?'sz':'cz';
-  $(t+'SubmitBtn').onclick=()=>submitEntry(t,pfx);
-  $(t+'ClearBtn').onclick=()=>{ clearGrid(pfx); setMeta(t,{date:today()}); };
-  $(t+'CancelEditBtn').onclick=()=>resetEditMode(t,pfx);
-  $(t+'SaveDraftBtn').onclick=()=>saveDraft(t,pfx);
-  $(t+'LoadDraftBtn').onclick=()=>loadDraft(t,pfx);
-  $(t+'DiscardDraftBtn').onclick=()=>discardDraft(t);
-  $(t+'Notes').oninput=()=>updateCharCount(t);
-});
+// ── TDR/Shear shared form ─────────────────────────────────────────────────────
+$('mainSaveBtn').onclick=submitMainBoth;
+$('mainClearBtn').onclick=clearMainForm;
+$('mainCancelEditBtn').onclick=cancelMainEdit;
+$('mainSaveDraftBtn').onclick=saveMainDraft;
+$('tdrLoadDraftBtn').onclick=()=>loadDraft('tdr','tz');
+$('tdrDiscardDraftBtn').onclick=()=>discardDraft('tdr');
+$('shearLoadDraftBtn').onclick=()=>loadDraft('shear','sz');
+$('shearDiscardDraftBtn').onclick=()=>discardDraft('shear');
+$('mainNotes').oninput=()=>{ const c=$('mainNotesCount'); if(c) c.textContent=$('mainNotes').value.length; };
+// Clegg
+$('cleggSubmitBtn').onclick=()=>submitEntry('clegg','cz');
+$('cleggClearBtn').onclick=()=>{ clearGrid('cz'); setMeta('clegg',{date:$('cleggReadingDate').value||today()}); };
+$('cleggCancelEditBtn').onclick=()=>resetEditMode('clegg','cz');
+$('cleggSaveDraftBtn').onclick=()=>saveDraft('clegg','cz');
+$('cleggLoadDraftBtn').onclick=()=>loadDraft('clegg','cz');
+$('cleggDiscardDraftBtn').onclick=()=>discardDraft('clegg');
+$('cleggNotes').oninput=()=>updateCharCount('clegg');
 
 $('exportBtn').onclick=exportCSV;
 $('importBtn').onclick=()=>$('importFile').click();
@@ -591,10 +692,10 @@ $('closeDetailBtn').onclick=()=>$('detailDrawer').classList.remove('open');
 $('detailDrawer').onclick=e=>{ if(e.target===$('detailDrawer')) $('detailDrawer').classList.remove('open'); };
 
 // ── boot ──────────────────────────────────────────────────────────────────────
-buildGrid($('tdrZoneGrid'),'tdr','tz');
-buildGrid($('shearZoneGrid'),'shear','sz');
+buildCombinedGrid($('mainZoneGrid'));
 buildGrid($('cleggZoneGrid'),'clegg','cz');
-['tdr','shear','clegg'].forEach(t=>{ $(t+'ReadingDate').value=today(); });
+$('tdrReadingDate').value=today();
+$('cleggReadingDate').value=today();
 listen();
 checkDrafts();
 </script>
