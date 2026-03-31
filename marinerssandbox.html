@@ -282,7 +282,7 @@ function buildGrid(gridEl, types, prefix){
 }
 
 function recalcAvg(zi,type,prefix){
-  const vals=[]; for(let i=1;i<=6;i++){ const n=parseFloat($(` ${prefix}-${zi}-${type}-${i}`)?($(`${prefix}-${zi}-${type}-${i}`).value):''); if(!isNaN(n)) vals.push(n); }
+  const vals=[]; for(let i=1;i<=6;i++){ const el=$(`${prefix}-${zi}-${type}-${i}`); const n=parseFloat(el?el.value:''); if(!isNaN(n)) vals.push(n); }
   const el=$(`avg-${prefix}-${zi}-${type}`); if(el) el.textContent=vals.length?(vals.reduce((a,b)=>a+b,0)/vals.length).toFixed(1):'—';
 }
 
@@ -315,8 +315,8 @@ function clearGrid(types, prefix){
 // getMeta removed - using getMainMeta/getCleggMeta directly
 
 // simplified direct reads
-function getMainMeta(){ return { enteredBy:$('enteredBy').value.trim()||null, tempHigh:parseFloat($('tempHigh').value)||null, tempLow:parseFloat($('tempLow').value)||null, weather:$('weatherCondition').value||null, roof:$('roofStatus').value||null, notes:$('notes').value.trim()||null, date:$('readingDate').value||today() }; }
-function getCleggMeta(){ return { enteredBy:$('cleggEnteredBy').value.trim()||null, tempHigh:parseFloat($('cleggTempHigh').value)||null, tempLow:parseFloat($('cleggTempLow').value)||null, weather:$('cleggWeatherCondition').value||null, roof:$('cleggRoofStatus').value||null, notes:$('cleggNotes').value.trim()||null, date:$('cleggReadingDate').value||today() }; }
+function getMainMeta(){ const th=parseFloat($('tempHigh').value); const tl=parseFloat($('tempLow').value); return { enteredBy:$('enteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$('weatherCondition').value||null, roof:$('roofStatus').value||null, notes:$('notes').value.trim()||null, date:$('readingDate').value||today() }; }
+function getCleggMeta(){ const th=parseFloat($('cleggTempHigh').value); const tl=parseFloat($('cleggTempLow').value); return { enteredBy:$('cleggEnteredBy').value.trim()||null, tempHigh:isNaN(th)?null:th, tempLow:isNaN(tl)?null:tl, weather:$('cleggWeatherCondition').value||null, roof:$('cleggRoofStatus').value||null, notes:$('cleggNotes').value.trim()||null, date:$('cleggReadingDate').value||today() }; }
 
 function setMainMeta(m){
   $('enteredBy').value=m.enteredBy||''; $('tempHigh').value=m.tempHigh??''; $('tempLow').value=m.tempLow??'';
@@ -427,7 +427,49 @@ function getVisible(entryType){
   return src.slice(0,7);
 }
 
-function zoneAvg(reading,zoneName,type){ const norm=normalizeZones(reading.zones||[]); const z=norm.find(x=>x.name===zoneName)||blankZone(zoneName); return z[type]?.average??null; }
+function zoneAvg(reading,zoneName,type){
+  const zones = Array.isArray(reading.zones) ? reading.zones : [];
+
+  // Legacy zone order from original app (before Infield/3rd Base swap)
+  const legacyOrder = ['Left Field','Center Field','Right Field','1st Base Line','3rd Base Line','Infield'];
+  // Current index map (after swap)
+  const currentIndexMap = {'Left Field':0,'Center Field':1,'Right Field':2,'1st Base Line':3,'Infield':4,'3rd Base Line':5};
+
+  // 1. Try name match first (works for all newer records)
+  let z = zones.find(x => x && x.name === zoneName);
+
+  // 2. Fallback: match by legacy index order (for older records without names or using old order)
+  if (!z) {
+    const legacyIndex = legacyOrder.indexOf(zoneName);
+    if (legacyIndex !== -1 && zones[legacyIndex]) z = zones[legacyIndex];
+  }
+
+  // 3. Fallback: match by current index map
+  if (!z && currentIndexMap[zoneName] != null && zones[currentIndexMap[zoneName]]) {
+    z = zones[currentIndexMap[zoneName]];
+  }
+
+  if (!z) return null;
+
+  if(type==='tdr'){
+    if(z?.tdr?.average!=null) return z.tdr.average;
+    if(typeof z?.average==='number') return z.average;
+    if(Array.isArray(z?.tdr?.readings) && z.tdr.readings.length) return Number((z.tdr.readings.reduce((a,b)=>a+b,0)/z.tdr.readings.length).toFixed(1));
+    if(Array.isArray(z?.readings) && z.readings.length) return Number((z.readings.reduce((a,b)=>a+b,0)/z.readings.length).toFixed(1));
+    return null;
+  }
+  if(type==='shear'){
+    if(z?.shear?.average!=null) return z.shear.average;
+    if(Array.isArray(z?.shear?.readings) && z.shear.readings.length) return Number((z.shear.readings.reduce((a,b)=>a+b,0)/z.shear.readings.length).toFixed(1));
+    return null;
+  }
+  if(type==='clegg'){
+    if(z?.clegg?.average!=null) return z.clegg.average;
+    if(Array.isArray(z?.clegg?.readings) && z.clegg.readings.length) return Number((z.clegg.readings.reduce((a,b)=>a+b,0)/z.clegg.readings.length).toFixed(1));
+    return null;
+  }
+  return null;
+}
 
 function renderTable(type, el){
   const rows=getVisible(type==='clegg'?'clegg':'main');
@@ -462,9 +504,17 @@ function openDetail(id,type){
   $('detailMeta').textContent=`${r.date||'?'} • ${r.enteredBy||'No name'} • Temp: ${r.tempHigh??'?'}/${r.tempLow??'?'}°F • ${r.weatherCondition||''} ${r.roofStatus||''}`;
   $('detailNotes').innerHTML=r.notes?`<div style="padding:10px 14px;background:var(--surface-2);border-radius:8px;font-size:13px;"><strong>Notes:</strong> ${esc(r.notes)}</div>`:'';
   $('detailGrid').innerHTML=norm.map(zone=>{
-    const vals=zone[type]?.readings?.length?zone[type].readings.map(v=>Number(v).toFixed(1)).join(', '):'No readings';
-    const avg=zone[type]?.average==null?'—':Number(zone[type].average).toFixed(1);
-    return `<div class="detail-zone"><h4>${zone.name}</h4><div><strong>Avg:</strong> ${avg}</div><div class="muted" style="margin-top:6px;font-size:12px;"><strong>All 6:</strong> ${vals}</div></div>`;
+    let vals = 'No readings';
+    let avg = zoneAvg({ zones:[zone] }, zone.name, type);
+    if(type==='tdr'){
+      const arr = zone?.tdr?.readings?.length ? zone.tdr.readings : (Array.isArray(zone?.readings) ? zone.readings : []);
+      if(arr.length) vals = arr.map(v=>Number(v).toFixed(1)).join(', ');
+    } else {
+      const arr = zone?.[type]?.readings || [];
+      if(arr.length) vals = arr.map(v=>Number(v).toFixed(1)).join(', ');
+    }
+    const avgText = avg==null ? '—' : Number(avg).toFixed(1);
+    return `<div class="detail-zone"><h4>${zone.name}</h4><div><strong>Avg:</strong> ${avgText}</div><div class="muted" style="margin-top:6px;font-size:12px;"><strong>All 6:</strong> ${vals}</div></div>`;
   }).join('');
   $('detailDrawer').classList.add('open');
 }
@@ -545,7 +595,18 @@ function activateTab(name){
 // ── firestore listener ────────────────────────────────────────────────────────
 function listen(){
   const q=query(collection(db,'moistureReadings'),orderBy('timestamp','desc'));
-  onSnapshot(q,snap=>{ allReadings=snap.docs.map(d=>({id:d.id,...d.data()})); renderAll(); },err=>{ console.error(err); toast('Error loading data.'); });
+  onSnapshot(q,snap=>{
+    allReadings=snap.docs.map(d=>{
+      const data={id:d.id,...d.data()};
+      const ts=data.timestamp?.toDate ? data.timestamp.toDate() : null;
+      const legacyDate = ts ? new Date(ts.getTime()-ts.getTimezoneOffset()*60000).toISOString().slice(0,10) : today();
+      const readingDate = data.readingDate || (typeof data.date==='string' && /^\d{4}-\d{2}-\d{2}$/.test(data.date) ? data.date : legacyDate);
+      const prettyDate = data.date || fmtDate(readingDate);
+      const entryType = data.entryType || 'main';
+      return { ...data, readingDate, date: prettyDate, entryType };
+    });
+    renderAll();
+  },err=>{ console.error(err); toast('Error loading data.'); });
 }
 
 // ── wire events ───────────────────────────────────────────────────────────────
